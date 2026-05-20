@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import FlowArt, { FlowSection } from '@/components/ui/story-scroll';
 import { ZoomParallax } from '@/components/ui/zoom-parallax';
-import Lenis from '@studio-freight/lenis';
 
 const PARALLAX_IMAGES = [
   {
@@ -38,15 +37,6 @@ const PARALLAX_IMAGES = [
 ];
 
 export default function StoryPage() {
-  useEffect(() => {
-    const lenis = new Lenis();
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-    return () => lenis.destroy();
-  }, []);
 
   return (
     <>
