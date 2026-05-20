@@ -1,6 +1,6 @@
 "use client"
-
 import { useEffect, useRef, useCallback } from "react"
+import { Zap, Brain, Database, Eye } from "lucide-react"
 
 interface Particle {
   x: number
@@ -219,10 +219,10 @@ export function AntigravityField() {
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
         <div className="flex flex-col gap-4 w-72 pointer-events-auto">
           {[
-            { icon: "⚡", title: "AI Classifier", status: "Live", color: "#00cec9", progress: 100 },
-            { icon: "🧠", title: "LLM Pipeline", status: "In Review", color: "#fdcb6e", progress: 75 },
-            { icon: "📊", title: "Data Mesh", status: "Live", color: "#00cec9", progress: 100 },
-            { icon: "🔮", title: "Vision API", status: "Building", color: "#fd79a8", progress: 40 },
+            { icon: Zap, title: "AI Classifier", status: "Live", color: "#00cec9", progress: 100 },
+            { icon: Brain, title: "LLM Pipeline", status: "In Review", color: "#fdcb6e", progress: 75 },
+            { icon: Database, title: "Data Mesh", status: "Live", color: "#00cec9", progress: 100 },
+            { icon: Eye, title: "Vision API", status: "Building", color: "#fd79a8", progress: 40 },
           ].map((card, i) => (
             <div
               key={card.title}
@@ -236,7 +236,15 @@ export function AntigravityField() {
               }}
             >
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-xl">{card.icon}</span>
+                <div 
+                  className="flex h-8 w-8 items-center justify-center rounded-lg"
+                  style={{
+                    background: `${card.color}15`,
+                    color: card.color
+                  }}
+                >
+                  <card.icon className="h-4.5 w-4.5" />
+                </div>
                 <div className="flex-1">
                   <div className="font-semibold text-[#1a1a2e] text-sm">{card.title}</div>
                   <div className="text-xs font-medium" style={{ color: card.color }}>

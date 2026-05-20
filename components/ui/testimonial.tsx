@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { motion, PanInfo } from "framer-motion"
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 
 export interface TeamMember {
@@ -124,9 +125,11 @@ const TeamCarousel = React.forwardRef<HTMLDivElement, TeamCarouselProps>(
                 )}
 
                 <div className="p-6 pt-8 flex flex-col items-center gap-3">
-                  <img
+                  <Image
                     src={member.avatar}
                     alt={member.name}
+                    width={64}
+                    height={64}
                     className="w-16 h-16 rounded-full object-cover ring-2 ring-[#6c5ce7]/20"
                   />
                   <div className="text-center">
