@@ -53,7 +53,7 @@ export function DidYouKnow({ facts, interval = 6000, className }: DidYouKnowProp
             transition={{ type: "spring", stiffness: 260, damping: 22 }}
             className="relative max-w-xs overflow-hidden rounded-2xl p-[1px]"
             style={{
-              background: "linear-gradient(135deg, rgba(108,92,231,0.4), rgba(0,206,201,0.3), rgba(162,155,254,0.2))",
+              background: "linear-gradient(135deg, rgba(236,171,35,0.72), rgba(248,213,106,0.58), rgba(14,86,101,0.24))",
             }}
           >
             <div
@@ -67,7 +67,7 @@ export function DidYouKnow({ facts, interval = 6000, className }: DidYouKnowProp
               <div
                 className="absolute inset-0 rounded-2xl opacity-40 pointer-events-none"
                 style={{
-                  background: "radial-gradient(circle at 20% 30%, rgba(108,92,231,0.08) 0%, transparent 60%)",
+                  background: "radial-gradient(circle at 20% 30%, rgba(236,171,35,0.20) 0%, transparent 60%)",
                 }}
               />
 
@@ -75,7 +75,7 @@ export function DidYouKnow({ facts, interval = 6000, className }: DidYouKnowProp
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#f0effe] text-[#6c5ce7] transition-all hover:bg-[#6c5ce7] hover:text-white"
+                className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#FFF7E3] text-[#0E3846] transition-all hover:bg-[#ECAB23] hover:text-[#082F3A]"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -84,12 +84,12 @@ export function DidYouKnow({ facts, interval = 6000, className }: DidYouKnowProp
               <div className="mb-2 flex items-center gap-2">
                 <div
                   className="flex h-7 w-7 items-center justify-center rounded-lg"
-                  style={{ background: "linear-gradient(135deg, #6c5ce7, #a29bfe)" }}
+                  style={{ background: "linear-gradient(135deg, #ECAB23, #F8D56A)" }}
                 >
-                  <Lightbulb className="h-3.5 w-3.5 text-white" />
+                  <Lightbulb className="h-3.5 w-3.5 text-[#082F3A]" />
                 </div>
                 <span
-                  className="text-xs font-bold uppercase tracking-[0.15em] text-[#6c5ce7]"
+                  className="text-xs font-bold uppercase tracking-[0.15em] text-[#ECAB23]"
                   style={{ fontFamily: "var(--font-display)" }}
                 >
                   Did you know?
@@ -97,7 +97,7 @@ export function DidYouKnow({ facts, interval = 6000, className }: DidYouKnowProp
               </div>
 
               {/* Fact */}
-              <p className="pr-4 text-sm leading-relaxed text-[#1a1a2e]">
+              <p className="pr-4 text-sm leading-relaxed text-[#1F2A2E]">
                 {fact.text}
               </p>
 
@@ -106,12 +106,12 @@ export function DidYouKnow({ facts, interval = 6000, className }: DidYouKnowProp
                 <div
                   className="mt-2.5 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold"
                   style={{
-                    background: "rgba(108,92,231,0.08)",
-                    color: "#6c5ce7",
+                    background: "rgba(236,171,35,0.16)",
+                    color: "#0E3846",
                     fontFamily: "var(--font-mono)",
                   }}
                 >
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#00cec9]" />
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#0E5665]" />
                   {fact.highlight}
                 </div>
               )}
@@ -124,7 +124,7 @@ export function DidYouKnow({ facts, interval = 6000, className }: DidYouKnowProp
                     className="h-1 rounded-full transition-all duration-300"
                     style={{
                       width: i === index ? 16 : 6,
-                      background: i === index ? "#6c5ce7" : "rgba(108,92,231,0.15)",
+                      background: i === index ? "#ECAB23" : "rgba(236,171,35,0.22)",
                     }}
                   />
                 ))}
@@ -146,13 +146,13 @@ export function DidYouKnow({ facts, interval = 6000, className }: DidYouKnowProp
             }}
             className="group relative flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-all hover:scale-110 hover:shadow-xl"
             style={{
-              background: "linear-gradient(135deg, #6c5ce7, #a29bfe)",
-              boxShadow: "0 4px 20px rgba(108,92,231,0.35)",
+              background: "linear-gradient(135deg, #ECAB23, #F8D56A)",
+              boxShadow: "0 10px 30px rgba(236,171,35,0.35)",
             }}
           >
-            <Lightbulb className="h-5 w-5 text-white" />
+            <Lightbulb className="h-5 w-5 text-[#082F3A]" />
             {/* Ping animation */}
-            <span className="absolute inset-0 rounded-full animate-ping opacity-20" style={{ background: "#6c5ce7" }} />
+            <span className="absolute inset-0 rounded-full animate-ping opacity-25" style={{ background: "#ECAB23" }} />
           </motion.button>
         ) : null}
       </AnimatePresence>

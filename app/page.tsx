@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { AnimatePresence, motion, useInView } from "framer-motion"
 import { Activity, ArrowUpRight, BarChart3, CircleDot, Filter, RadioTower, Sparkles } from "lucide-react"
@@ -91,16 +92,16 @@ function DonutChart() {
     <div className="glass-card p-6">
       <div className="mb-5 flex items-center justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#6c5ce7]">Status mix</p>
-          <h3 className="text-lg font-bold text-[#1a1a2e]" style={{ fontFamily: "var(--font-display)" }}>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">Status mix</p>
+          <h3 className="text-lg font-bold text-[#1F2A2E]" style={{ fontFamily: "var(--font-display)" }}>
             POC status breakdown
           </h3>
         </div>
-        <CircleDot className="h-5 w-5 text-[#6c5ce7]" />
+        <CircleDot className="h-5 w-5 text-[#ECAB23]" />
       </div>
       <div className="grid gap-6 sm:grid-cols-[160px_1fr] sm:items-center">
         <svg viewBox="0 0 100 100" className="mx-auto h-40 w-40 -rotate-90">
-          <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(108,92,231,0.10)" strokeWidth="12" />
+          <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(236,171,35,0.16)" strokeWidth="12" />
           {segments.map((item) => {
             return (
               <circle
@@ -123,14 +124,14 @@ function DonutChart() {
             <div key={item.label} className="flex items-center justify-between gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full" style={{ background: item.color }} />
-                <span className="font-medium text-[#555580]">{item.label}</span>
+                <span className="font-medium text-[#5B6770]">{item.label}</span>
               </div>
-              <span className="font-bold text-[#1a1a2e]" style={{ fontFamily: "var(--font-mono)" }}>
+              <span className="font-bold text-[#1F2A2E]" style={{ fontFamily: "var(--font-mono)" }}>
                 {item.value}
               </span>
             </div>
           ))}
-          <p className="pt-2 text-xs leading-relaxed text-[#8888aa]">
+          <p className="pt-2 text-xs leading-relaxed text-[#5B6770]">
             Breakdown excludes explored-and-dropped items so the chart focuses on live, reviewed, building, and completed work.
           </p>
         </div>
@@ -146,28 +147,28 @@ function ImpactBars() {
     <div className="glass-card p-6">
       <div className="mb-5 flex items-center justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#6c5ce7]">Business impact</p>
-          <h3 className="text-lg font-bold text-[#1a1a2e]" style={{ fontFamily: "var(--font-display)" }}>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">Business impact</p>
+          <h3 className="text-lg font-bold text-[#1F2A2E]" style={{ fontFamily: "var(--font-display)" }}>
             POCs by market and unit
           </h3>
         </div>
-        <BarChart3 className="h-5 w-5 text-[#6c5ce7]" />
+        <BarChart3 className="h-5 w-5 text-[#ECAB23]" />
       </div>
       <div className="space-y-4">
         {BUSINESS_IMPACT.map((item) => (
           <div key={item.label}>
-            <div className="mb-1 flex items-center justify-between text-xs font-semibold text-[#555580]">
+            <div className="mb-1 flex items-center justify-between text-xs font-semibold text-[#5B6770]">
               <span>{item.label}</span>
               <span style={{ fontFamily: "var(--font-mono)" }}>{item.value}</span>
             </div>
-            <div className="h-3 overflow-hidden rounded-full bg-[#f0effe]">
+            <div className="h-3 overflow-hidden rounded-full bg-[#FFF7E3]">
               <motion.div
                 className="h-full rounded-full"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${(item.value / max) * 100}%` }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                style={{ background: `linear-gradient(90deg, ${item.color}, #a29bfe)` }}
+                style={{ background: `linear-gradient(90deg, ${item.color}, #F8D56A)` }}
               />
             </div>
           </div>
@@ -185,15 +186,15 @@ function ActivityHeatmap() {
     <div className="glass-card p-6">
       <div className="mb-5 flex items-center justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#6c5ce7]">Activity timeline</p>
-          <h3 className="text-lg font-bold text-[#1a1a2e]" style={{ fontFamily: "var(--font-display)" }}>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">Activity timeline</p>
+          <h3 className="text-lg font-bold text-[#1F2A2E]" style={{ fontFamily: "var(--font-display)" }}>
             Monthly-style POC activity
           </h3>
         </div>
-        <Activity className="h-5 w-5 text-[#6c5ce7]" />
+        <Activity className="h-5 w-5 text-[#ECAB23]" />
       </div>
       <div className="space-y-3">
-        <div className="grid grid-cols-[64px_repeat(4,minmax(0,1fr))] gap-2 text-xs font-semibold text-[#8888aa]">
+        <div className="grid grid-cols-[64px_repeat(4,minmax(0,1fr))] gap-2 text-xs font-semibold text-[#5B6770]">
           <span />
           {quarters.map((quarter) => (
             <span key={quarter} className="text-center">
@@ -203,7 +204,7 @@ function ActivityHeatmap() {
         </div>
         {ACTIVITY_HEATMAP.map((row) => (
           <div key={row.label} className="grid grid-cols-[64px_repeat(4,minmax(0,1fr))] gap-2">
-            <span className="self-center text-xs font-bold text-[#555580]" style={{ fontFamily: "var(--font-mono)" }}>
+            <span className="self-center text-xs font-bold text-[#5B6770]" style={{ fontFamily: "var(--font-mono)" }}>
               {row.label}
             </span>
             {row.values.map((value, index) => {
@@ -212,8 +213,8 @@ function ActivityHeatmap() {
                 <div
                   key={`${row.label}-${quarters[index]}`}
                   title={`${row.label} ${quarters[index]}: ${value} POCs`}
-                  className="h-10 rounded-lg border border-[#6c5ce7]/10"
-                  style={{ background: `rgba(108, 92, 231, ${opacity})` }}
+                  className="h-10 rounded-lg border border-[#ECAB23]/20"
+                  style={{ background: value === 0 ? "rgba(248, 213, 106, 0.12)" : `rgba(236, 171, 35, ${opacity})` }}
                 />
               )
             })}
@@ -238,8 +239,8 @@ function LiveTicker() {
     <div className="glass-card mb-8 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3">
         <span className="relative flex h-3 w-3">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00cec9] opacity-60" />
-          <span className="relative inline-flex h-3 w-3 rounded-full bg-[#00cec9]" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0E5665] opacity-60" />
+          <span className="relative inline-flex h-3 w-3 rounded-full bg-[#0E5665]" />
         </span>
         <AnimatePresence mode="wait">
           <motion.p
@@ -248,13 +249,13 @@ function LiveTicker() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -8, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="text-sm font-semibold text-[#1a1a2e]"
+            className="text-sm font-semibold text-[#1F2A2E]"
           >
             {TICKER_ITEMS[index]}
           </motion.p>
         </AnimatePresence>
       </div>
-      <span className="text-xs text-[#8888aa]" style={{ fontFamily: "var(--font-mono)" }}>
+      <span className="text-xs text-[#5B6770]" style={{ fontFamily: "var(--font-mono)" }}>
         live portfolio pulse
       </span>
     </div>
@@ -273,11 +274,11 @@ function PocGallery() {
     <div className="mb-12">
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#6c5ce7]">
+          <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">
             <Filter className="h-3.5 w-3.5" />
             Filterable gallery
           </p>
-          <h3 className="text-2xl font-bold text-[#1a1a2e]" style={{ fontFamily: "var(--font-display)" }}>
+          <h3 className="text-2xl font-bold text-[#1F2A2E]" style={{ fontFamily: "var(--font-display)" }}>
             Recent POCs from the portfolio
           </h3>
         </div>
@@ -289,9 +290,9 @@ function PocGallery() {
               onClick={() => setActiveFilter(filter)}
               className="cursor-pointer rounded-full border px-4 py-2 text-xs font-bold transition-all"
               style={{
-                background: activeFilter === filter ? "#6c5ce7" : "rgba(255,255,255,0.72)",
-                borderColor: activeFilter === filter ? "#6c5ce7" : "rgba(108,92,231,0.18)",
-                color: activeFilter === filter ? "#fff" : "#555580",
+                background: activeFilter === filter ? "#ECAB23" : "rgba(255,255,255,0.86)",
+                borderColor: activeFilter === filter ? "#ECAB23" : "rgba(236,171,35,0.34)",
+                color: activeFilter === filter ? "#082F3A" : "#5B6770",
               }}
             >
               {filter}
@@ -310,18 +311,18 @@ function PocGallery() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: -16 }}
               transition={{ duration: 0.25 }}
-              className={`glass-card group cursor-pointer p-6 transition-all hover:-translate-y-1 hover:shadow-[0_18px_60px_rgba(108,92,231,0.18)] ${
+              className={`glass-card group cursor-pointer p-6 transition-all hover:-translate-y-1 hover:shadow-[0_18px_60px_rgba(236,171,35,0.22)] ${
                 poc.featured ? "md:col-span-2" : ""
               }`}
             >
               {poc.featured && (
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#1a1a2e] px-3 py-1 text-xs font-bold text-white">
-                  <Sparkles className="h-3.5 w-3.5 text-[#fdcb6e]" />
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#FFF7E3] px-3 py-1 text-xs font-bold text-[#0E3846] ring-1 ring-[#ECAB23]/35">
+                  <Sparkles className="h-3.5 w-3.5 text-[#ECAB23]" />
                   Featured POC
                 </div>
               )}
               <div className="mb-3 flex items-start justify-between gap-4">
-                <h4 className="text-base font-bold text-[#1a1a2e] transition-colors group-hover:text-[#6c5ce7]">
+                <h4 className="text-base font-bold text-[#1F2A2E] transition-colors group-hover:text-[#0E5665]">
                   {poc.name}
                 </h4>
                 <span
@@ -334,12 +335,12 @@ function PocGallery() {
                   {poc.status}
                 </span>
               </div>
-              <p className="mb-4 text-sm leading-relaxed text-[#555580]">{poc.desc}</p>
+              <p className="mb-4 text-sm leading-relaxed text-[#5B6770]">{poc.desc}</p>
               <div className="mb-4 flex flex-wrap gap-1.5">
                 {poc.tech.map((tech) => (
                   <span
                     key={tech}
-                    className="rounded-full bg-[#f0effe] px-2 py-0.5 text-[10px] font-medium text-[#6c5ce7]"
+                    className="rounded-full bg-[#FFF7E3] px-2 py-0.5 text-[10px] font-medium text-[#0E5665]"
                     style={{ fontFamily: "var(--font-mono)" }}
                   >
                     {tech}
@@ -347,8 +348,8 @@ function PocGallery() {
                 ))}
               </div>
               <div className="flex items-center justify-between gap-4 text-xs">
-                <span className="text-[#555580]">{poc.unit}</span>
-                <span className="font-semibold text-[#6c5ce7]">{poc.impact}</span>
+                <span className="text-[#5B6770]">{poc.unit}</span>
+                <span className="font-semibold text-[#0E5665]">{poc.impact}</span>
               </div>
             </motion.article>
           ))}
@@ -361,31 +362,27 @@ function PocGallery() {
 export default function Home() {
   return (
     <main className="grain bg-aurora min-h-screen overflow-x-hidden">
-      <nav className="glass-card fixed left-0 right-0 top-0 z-50 flex items-center justify-between rounded-none border-x-0 border-t-0 px-8 py-4">
-        <div className="flex items-center gap-2">
-          <div
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-sm font-bold text-white"
-            style={{ background: "linear-gradient(135deg, #6c5ce7, #00cec9)" }}
-          >
-            IH
-          </div>
-          <span className="text-lg font-bold text-[#1a1a2e]" style={{ fontFamily: "var(--font-display)" }}>
+      <nav className="glass-card fixed left-0 right-0 top-0 z-50 flex items-center justify-between rounded-none border-x-0 border-t-0 px-8 py-3">
+        <div className="flex items-center gap-4">
+          <Image src="/sunlife-logo.png" alt="Sun Life" width={154} height={40} className="h-10 w-auto" priority />
+          <span className="hidden h-8 w-px bg-[#ECAB23]/50 sm:block" />
+          <span className="text-lg font-bold text-[#1F2A2E]" style={{ fontFamily: "var(--font-display)" }}>
             Innovation Hub
           </span>
         </div>
 
-        <div className="hidden items-center gap-8 text-sm font-medium text-[#555580] md:flex">
+        <div className="hidden items-center gap-8 text-sm font-medium text-[#5B6770] md:flex">
           {[
             { label: "Team", href: "#team" },
             { label: "Dashboard", href: "#dashboard" },
             { label: "Our Story", href: "/story" },
           ].map((item) =>
             item.href.startsWith("/") ? (
-              <Link key={item.label} href={item.href} className="transition-colors hover:text-[#6c5ce7]">
+              <Link key={item.label} href={item.href} className="transition-colors hover:text-[#0E5665]">
                 {item.label}
               </Link>
             ) : (
-              <a key={item.label} href={item.href} className="transition-colors hover:text-[#6c5ce7]">
+              <a key={item.label} href={item.href} className="transition-colors hover:text-[#0E5665]">
                 {item.label}
               </a>
             ),
@@ -411,9 +408,9 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[#555580]">
+        <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-[#5B6770]">
           <span className="text-xs font-medium uppercase tracking-widest">Scroll to explore</span>
-          <div className="h-12 w-px bg-gradient-to-b from-[#6c5ce7]/50 to-transparent" />
+          <div className="h-12 w-px bg-gradient-to-b from-[#ECAB23] to-transparent" />
         </div>
       </section>
 
@@ -423,17 +420,17 @@ export default function Home() {
             <div
               className="mb-4 inline-block rounded-full px-4 py-1.5 text-xs font-semibold"
               style={{
-                background: "linear-gradient(135deg, #f0effe, #e8f8f8)",
-                color: "#6c5ce7",
-                border: "1px solid rgba(108,92,231,0.15)",
+                background: "linear-gradient(135deg, #FFF7E3, #FFF7E3)",
+                color: "#0E3846",
+                border: "1px solid rgba(236,171,35,0.35)",
               }}
             >
               Innovation Is For Everyone
             </div>
-            <h2 className="mb-4 text-4xl font-bold text-[#1a1a2e] md:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+            <h2 className="mb-4 text-4xl font-bold text-[#1F2A2E] md:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
               Your Idea Could Be <span className="gradient-text">Next</span>
             </h2>
-            <p className="mx-auto max-w-xl text-[#555580]">
+            <p className="mx-auto max-w-xl text-[#5B6770]">
               Innovation isn&apos;t reserved for a special team — it starts with you. Got a bold idea that could change how we work? We&apos;ll help you build it.
             </p>
           </div>
@@ -459,17 +456,17 @@ export default function Home() {
             <div
               className="mb-4 inline-block rounded-full px-4 py-1.5 text-xs font-semibold"
               style={{
-                background: "linear-gradient(135deg, #f0effe, #e8f8f8)",
-                color: "#6c5ce7",
-                border: "1px solid rgba(108,92,231,0.15)",
+                background: "linear-gradient(135deg, #FFF7E3, #FFF7E3)",
+                color: "#0E3846",
+                border: "1px solid rgba(236,171,35,0.35)",
               }}
             >
               The Numbers
             </div>
-            <h2 className="mb-4 text-4xl font-bold text-[#1a1a2e] md:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+            <h2 className="mb-4 text-4xl font-bold text-[#1F2A2E] md:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
               Impact <span className="gradient-text">Dashboard</span>
             </h2>
-            <p className="mx-auto max-w-xl text-[#555580]">
+            <p className="mx-auto max-w-xl text-[#5B6770]">
               Real portfolio signals shaped into an interactive leadership view.
             </p>
           </div>
@@ -483,7 +480,7 @@ export default function Home() {
                   <p className="text-xs font-bold uppercase tracking-[0.18em]" style={{ color: badge.tone }}>
                     {badge.value}
                   </p>
-                  <p className="text-sm font-semibold text-[#1a1a2e]">{badge.label}</p>
+                  <p className="text-sm font-semibold text-[#1F2A2E]">{badge.label}</p>
                 </div>
                 <ArrowUpRight className="h-5 w-5" style={{ color: badge.tone }} />
               </div>
@@ -496,7 +493,7 @@ export default function Home() {
                 <div className="mb-1 text-3xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
                   <CountUp value={metric.value} suffix={metric.suffix} color={metric.color} />
                 </div>
-                <div className="text-xs font-medium text-[#555580]">{metric.label}</div>
+                <div className="text-xs font-medium text-[#5B6770]">{metric.label}</div>
               </div>
             ))}
           </div>
@@ -517,12 +514,12 @@ export default function Home() {
           <div className="glass-card mt-12 p-8">
             <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#6c5ce7]">Trend line</p>
-                <h3 className="text-xl font-bold text-[#1a1a2e]" style={{ fontFamily: "var(--font-display)" }}>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">Trend line</p>
+                <h3 className="text-xl font-bold text-[#1F2A2E]" style={{ fontFamily: "var(--font-display)" }}>
                   POCs Delivered - Year over Year
                 </h3>
               </div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#00cec9]/10 px-3 py-1 text-xs font-bold text-[#008f8b]">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#0E5665]/10 px-3 py-1 text-xs font-bold text-[#0E5665]">
                 <RadioTower className="h-3.5 w-3.5" />
                 2025 portfolio peak
               </div>
@@ -535,7 +532,7 @@ export default function Home() {
                 { year: "2026", count: 14, pct: 18, label: "YTD" },
               ].map((bar) => (
                 <div key={bar.year} className="flex flex-1 flex-col items-center gap-2">
-                  <span className="text-sm font-bold text-[#6c5ce7]" style={{ fontFamily: "var(--font-mono)" }}>
+                  <span className="text-sm font-bold text-[#0E3846]" style={{ fontFamily: "var(--font-mono)" }}>
                     {bar.count}
                   </span>
                   <motion.div
@@ -545,11 +542,11 @@ export default function Home() {
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     style={{
-                      background: "linear-gradient(180deg, #6c5ce7 0%, #a29bfe 100%)",
+                      background: "linear-gradient(180deg, #ECAB23 0%, #F8D56A 52%, #0E5665 100%)",
                       minHeight: 20,
                     }}
                   />
-                  <span className="text-xs font-medium text-[#555580]">
+                  <span className="text-xs font-medium text-[#5B6770]">
                     {bar.year}
                     {bar.label ? ` ${bar.label}` : ""}
                   </span>
@@ -564,7 +561,7 @@ export default function Home() {
       <section
         className="overflow-hidden py-6"
         style={{
-          background: "linear-gradient(135deg, #1a1a2e 0%, #2d1b69 50%, #1a1a2e 100%)",
+          background: "linear-gradient(135deg, #0E3846 0%, #0E5665 58%, #ECAB23 100%)",
         }}
       >
         <div className="flex gap-12 whitespace-nowrap animate-marquee">
@@ -582,7 +579,7 @@ export default function Home() {
                 className="inline-flex items-center gap-3 text-sm font-medium text-white/80"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
-                <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: i % 2 === 0 ? "#6c5ce7" : "#00cec9" }} />
+                <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: i % 2 === 0 ? "#ECAB23" : "#F8D56A" }} />
                 {item}
               </span>
             )),
@@ -592,23 +589,19 @@ export default function Home() {
 
       <DidYouKnow facts={FUN_FACTS} interval={6000} />
 
-      <footer className="border-t border-[#6c5ce7]/10 px-8 py-16">
+      <footer className="border-t border-[#0E3846]/10 px-8 py-16">
         <div className="container mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 md:flex-row">
-          <div className="flex items-center gap-2">
-            <div
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-sm font-bold text-white"
-              style={{ background: "linear-gradient(135deg, #6c5ce7, #00cec9)" }}
-            >
-              IH
-            </div>
-            <span className="font-bold text-[#1a1a2e]" style={{ fontFamily: "var(--font-display)" }}>
+          <div className="flex items-center gap-4">
+            <Image src="/sunlife-logo.png" alt="Sun Life" width={140} height={36} className="h-9 w-auto" />
+            <span className="h-8 w-px bg-[#ECAB23]/45" />
+            <span className="font-bold text-[#1F2A2E]" style={{ fontFamily: "var(--font-display)" }}>
               Innovation Hub
             </span>
           </div>
 
-          <p className="text-sm text-[#555580]">Built by the Innovation Lab - portfolio view, May 2026</p>
+          <p className="text-sm text-[#5B6770]">Built by the Innovation Lab - portfolio view, May 2026</p>
 
-          <div className="rounded-full bg-[#f0effe] px-3 py-1 text-xs font-medium text-[#6c5ce7]" style={{ fontFamily: "var(--font-mono)" }}>
+          <div className="rounded-full bg-[#FFF7E3] px-3 py-1 text-xs font-medium text-[#0E3846]" style={{ fontFamily: "var(--font-mono)" }}>
             v1.1.0
           </div>
         </div>

@@ -83,10 +83,10 @@ const TeamCarousel = React.forwardRef<HTMLDivElement, TeamCarouselProps>(
                     ? "rgba(255,255,255,0.90)"
                     : "rgba(255,255,255,0.65)",
                   backdropFilter: "blur(16px)",
-                  border: `1px solid rgba(108,92,231,${isCurrentCard ? "0.20" : "0.10"})`,
+                  border: `1px solid rgba(236,171,35,${isCurrentCard ? "0.34" : "0.16"})`,
                   boxShadow: isCurrentCard
-                    ? "0 8px 40px rgba(108,92,231,0.12), 0 2px 8px rgba(0,0,0,0.06)"
-                    : "0 4px 16px rgba(108,92,231,0.06)",
+                    ? "0 18px 52px rgba(236,171,35,0.18), 0 2px 8px rgba(0,0,0,0.05)"
+                    : "0 4px 18px rgba(236,171,35,0.10)",
                 }}
                 drag={isCurrentCard ? "x" : false}
                 dragConstraints={{ left: 0, right: 0 }}
@@ -111,13 +111,13 @@ const TeamCarousel = React.forwardRef<HTMLDivElement, TeamCarouselProps>(
                   <div className="absolute inset-x-0 top-3 flex justify-between px-4 z-10">
                     <button
                       onClick={prev}
-                      className="w-7 h-7 rounded-full flex items-center justify-center text-[#6c5ce7] bg-[#f0effe] hover:bg-[#e4e0fd] transition-colors text-sm"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-[#082F3A] bg-[#F8D56A] hover:bg-[#ECAB23] transition-colors text-sm"
                     >
                       ←
                     </button>
                     <button
                       onClick={next}
-                      className="w-7 h-7 rounded-full flex items-center justify-center text-[#6c5ce7] bg-[#f0effe] hover:bg-[#e4e0fd] transition-colors text-sm"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-[#082F3A] bg-[#F8D56A] hover:bg-[#ECAB23] transition-colors text-sm"
                     >
                       →
                     </button>
@@ -130,11 +130,11 @@ const TeamCarousel = React.forwardRef<HTMLDivElement, TeamCarouselProps>(
                     alt={member.name}
                     width={64}
                     height={64}
-                    className="w-16 h-16 rounded-full object-cover ring-2 ring-[#6c5ce7]/20"
+                    className="w-16 h-16 rounded-full object-cover ring-2 ring-[#ECAB23]/45"
                   />
                   <div className="text-center">
                     <h3
-                      className="font-bold text-[#1a1a2e] text-base"
+                      className="font-bold text-[#1F2A2E] text-base"
                       style={{ fontFamily: "var(--font-display)" }}
                     >
                       {member.name}
@@ -142,14 +142,14 @@ const TeamCarousel = React.forwardRef<HTMLDivElement, TeamCarouselProps>(
                     <div
                       className="text-xs font-medium mt-0.5 px-3 py-0.5 rounded-full inline-block"
                       style={{
-                        background: "linear-gradient(135deg, #f0effe, #e8f8f8)",
-                        color: "#6c5ce7",
+                        background: "linear-gradient(135deg, #FFF7E3, #F8D56A)",
+                        color: "#0E3846",
                       }}
                     >
                       {member.role}
                     </div>
                   </div>
-                  <p className="text-center text-sm text-[#555580] leading-relaxed line-clamp-3">
+                  <p className="text-center text-sm text-[#5B6770] leading-relaxed line-clamp-3">
                     {member.description}
                   </p>
                 </div>
@@ -169,8 +169,8 @@ const TeamCarousel = React.forwardRef<HTMLDivElement, TeamCarouselProps>(
                     className={cn(
                       "rounded-full transition-all",
                       index === currentIndex
-                        ? "w-6 h-2 bg-[#6c5ce7]"
-                        : "w-2 h-2 bg-[#6c5ce7]/25 hover:bg-[#6c5ce7]/50",
+                        ? "w-6 h-2 bg-[#ECAB23]"
+                        : "w-2 h-2 bg-[#ECAB23]/30 hover:bg-[#ECAB23]/55",
                     )}
                   />
                 </button>

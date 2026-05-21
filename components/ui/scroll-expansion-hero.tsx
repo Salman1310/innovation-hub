@@ -29,16 +29,16 @@ function ScrollExpandMedia({
   return (
     <div className="relative overflow-hidden">
       <AuroraBackground className="min-h-0 px-6 py-24">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(108,92,231,0.22),transparent_34%),radial-gradient(circle_at_82%_70%,rgba(0,206,201,0.18),transparent_34%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(236,171,35,0.34),transparent_34%),radial-gradient(circle_at_82%_70%,rgba(14,86,101,0.14),transparent_34%)]" />
         <div className="relative z-10 grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-120px" }}
             transition={{ duration: 0.55, ease: "easeOut" }}
-            className="text-[#1a1a2e]"
+            className="text-[#1F2A2E]"
           >
-            <p className="mb-4 inline-flex rounded-full border border-[#6c5ce7]/20 bg-[#f0effe] px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#6c5ce7] backdrop-blur">
+            <p className="mb-4 inline-flex rounded-full border border-[#ECAB23]/40 bg-[#FFF7E3] px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#0E3846] backdrop-blur">
               {date}
             </p>
             <h2
@@ -47,11 +47,11 @@ function ScrollExpandMedia({
             >
               {title}
             </h2>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-[#555580] md:text-lg">
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-[#5B6770] md:text-lg">
               Scroll into a live-feeling portfolio view with POC signals, production status,
               market impact, and activity trends.
             </p>
-            <p className="mt-6 text-sm font-semibold text-[#6c5ce7]">{scrollToExpand}</p>
+            <p className="mt-6 text-sm font-semibold text-[#ECAB23]">{scrollToExpand}</p>
           </motion.div>
 
           <motion.div
@@ -59,7 +59,7 @@ function ScrollExpandMedia({
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             viewport={{ once: true, margin: "-120px" }}
             transition={{ duration: 0.65, ease: "easeOut", delay: 0.08 }}
-            className="relative min-h-[360px] overflow-hidden rounded-[28px] border border-white/20 bg-black/20 shadow-[0_34px_110px_rgba(0,206,201,0.22)]"
+            className="relative min-h-[360px] overflow-hidden rounded-[28px] border border-[#ECAB23]/35 bg-white shadow-[0_34px_110px_rgba(236,171,35,0.24)]"
           >
             {mediaType === "video" ? (
               <video
@@ -84,7 +84,7 @@ function ScrollExpandMedia({
                 className="object-cover"
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#050516]/78 via-[#0b1025]/42 to-[#00cec9]/20" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#082F3A]/58 via-[#0E3846]/24 to-[#ECAB23]/24" />
             <div className="absolute inset-x-5 bottom-5 grid gap-3 sm:grid-cols-3">
               {[
                 ["80", "POCs tracked"],

@@ -58,27 +58,27 @@ export const TEAM_MEMBERS: TeamMember[] = [
 ]
 
 export const METRICS = [
-  { value: 80, label: "Total POCs", suffix: "", color: "#6c5ce7" },
-  { value: 12, label: "In Production", suffix: "", color: "#00cec9" },
-  { value: 6, label: "Prototyping", suffix: "", color: "#a29bfe" },
-  { value: 8, label: "Markets", suffix: "", color: "#fd79a8" },
-  { value: 5, label: "Core Leaders", suffix: "", color: "#fdcb6e" },
-  { value: 8, label: "Tech Streams", suffix: "+", color: "#00cec9" },
+  { value: 80, label: "Total POCs", suffix: "", color: "#ECAB23" },
+  { value: 12, label: "In Production", suffix: "", color: "#0E5665" },
+  { value: 6, label: "Prototyping", suffix: "", color: "#F8D56A" },
+  { value: 8, label: "Markets", suffix: "", color: "#ECAB23" },
+  { value: 5, label: "Core Leaders", suffix: "", color: "#0E3846" },
+  { value: 8, label: "Tech Streams", suffix: "+", color: "#0E5665" },
 ]
 
 export const STATUS_BREAKDOWN = [
-  { label: "Live", value: 12, color: "#00cec9" },
-  { label: "In Review", value: 4, color: "#fdcb6e" },
-  { label: "Building", value: 7, color: "#a29bfe" },
-  { label: "Completed", value: 26, color: "#6c5ce7" },
+  { label: "Live", value: 12, color: "#0E5665" },
+  { label: "In Review", value: 4, color: "#ECAB23" },
+  { label: "Building", value: 7, color: "#F8D56A" },
+  { label: "Completed", value: 26, color: "#0E3846" },
 ]
 
 export const BUSINESS_IMPACT = [
-  { label: "Asia", value: 29, color: "#6c5ce7" },
-  { label: "Canada / CAN", value: 15, color: "#00cec9" },
-  { label: "SLGS", value: 13, color: "#fd79a8" },
-  { label: "US Ops", value: 4, color: "#fdcb6e" },
-  { label: "Other Markets", value: 19, color: "#a29bfe" },
+  { label: "Asia", value: 29, color: "#ECAB23" },
+  { label: "Canada / CAN", value: 15, color: "#0E5665" },
+  { label: "SLGS", value: 13, color: "#F8D56A" },
+  { label: "US Ops", value: 4, color: "#0E3846" },
+  { label: "Other Markets", value: 19, color: "#ECAB23" },
 ]
 
 export const ACTIVITY_HEATMAP = [
@@ -95,7 +95,7 @@ export const POCS: PocCard[] = [
     name: "Audio Analytics - Pinnacle Care",
     desc: "AI-powered call analytics for advisor coaching and contact-center quality assurance.",
     status: "Production",
-    statusColor: "#00cec9",
+    statusColor: "#0E5665",
     unit: "US Pinnacle Care",
     tech: ["AI/ML", "NLP", "Python"],
     impact: "Live in production",
@@ -106,7 +106,7 @@ export const POCS: PocCard[] = [
     name: "E-KYC with Onfido",
     desc: "Electronic customer verification with automated identity document processing.",
     status: "Production",
-    statusColor: "#00cec9",
+    statusColor: "#ECAB23",
     unit: "Singapore",
     tech: ["Computer Vision", "AI/ML"],
     impact: "Faster onboarding",
@@ -116,7 +116,7 @@ export const POCS: PocCard[] = [
     name: "CSR Automation",
     desc: "Automates customer service request handling to reduce repetitive manual work.",
     status: "Production",
-    statusColor: "#00cec9",
+    statusColor: "#0E5665",
     unit: "Asia",
     tech: ["Gen AI", "Python"],
     impact: "60% less manual work",
@@ -126,7 +126,7 @@ export const POCS: PocCard[] = [
     name: "Fastrack Business Insights",
     desc: "Data virtualization layer unifying siloed sources for faster business intelligence.",
     status: "Production",
-    statusColor: "#00cec9",
+    statusColor: "#0E5665",
     unit: "Asia",
     tech: ["Denodo", "Data", "Python"],
     impact: "Real-time BI",
@@ -136,7 +136,7 @@ export const POCS: PocCard[] = [
     name: "Asset Tokenization",
     desc: "Blockchain experiment for asset tokenization and new business model exploration.",
     status: "Completed",
-    statusColor: "#6c5ce7",
+    statusColor: "#0E3846",
     unit: "CAN",
     tech: ["Blockchain", "Web3"],
     impact: "New model validated",
@@ -146,7 +146,7 @@ export const POCS: PocCard[] = [
     name: "Knowledge Management Q&A",
     desc: "Gen AI search over internal documents to speed up knowledge discovery.",
     status: "Bookshelf",
-    statusColor: "#a29bfe",
+    statusColor: "#0E5665",
     unit: "CAN",
     tech: ["Gen AI", "RAG"],
     impact: "Productivity lift",
@@ -156,7 +156,7 @@ export const POCS: PocCard[] = [
     name: "Sun Canvas",
     desc: "Solar energy planning and visualization tool for sustainable infrastructure projects.",
     status: "Production",
-    statusColor: "#00cec9",
+    statusColor: "#0E5665",
     unit: "Asia",
     tech: ["Computer Vision", "Python"],
     impact: "Green planning",
@@ -166,7 +166,7 @@ export const POCS: PocCard[] = [
     name: "Low Code Data API Platform",
     desc: "Reusable platform for exposing governed data APIs across teams.",
     status: "Bookshelf",
-    statusColor: "#a29bfe",
+    statusColor: "#0E5665",
     unit: "Asia",
     tech: ["API", "Platform"],
     impact: "Reusable infra",
@@ -176,7 +176,7 @@ export const POCS: PocCard[] = [
     name: "Agentic AI Evaluation",
     desc: "Exploration of autonomous workflow agents for complex operational tasks.",
     status: "Prototyping",
-    statusColor: "#fdcb6e",
+    statusColor: "#ECAB23",
     unit: "SLGS",
     tech: ["Agentic AI", "Automation"],
     impact: "Next-gen workflow",
@@ -185,9 +185,9 @@ export const POCS: PocCard[] = [
 ]
 
 export const TREND_BADGES = [
-  { label: "Portfolio scaled from a 2020 team foundation", value: "up", tone: "#00cec9" },
-  { label: "15 active production-scale signals", value: "live", tone: "#6c5ce7" },
-  { label: "Gen AI leads the portfolio", value: "27", tone: "#fd79a8" },
+  { label: "Portfolio scaled from a 2020 team foundation", value: "up", tone: "#ECAB23" },
+  { label: "15 active production-scale signals", value: "live", tone: "#0E5665" },
+  { label: "Gen AI leads the portfolio", value: "27", tone: "#0E3846" },
 ]
 
 export const TICKER_ITEMS = [

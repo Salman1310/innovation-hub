@@ -47,8 +47,8 @@ export default function StoryPage() {
         style={{
           background: 'rgba(255,255,255,0.85)',
           backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(108,92,231,0.2)',
-          color: '#6c5ce7',
+          border: '1px solid rgba(236,171,35,0.45)',
+          color: '#0E3846',
         }}
       >
         Back to Hub
@@ -58,10 +58,10 @@ export default function StoryPage() {
         {/* Chapter 1 — Origin */}
         <FlowSection
           aria-label="The Beginning"
-          style={{ backgroundColor: '#6c5ce7', color: '#fff' }}
+          style={{ backgroundColor: '#FFFFFF', color: '#1F2A2E' }}
         >
           <p className="text-xs font-bold uppercase tracking-[0.2em]">01 — The Beginning</p>
-          <hr className="my-[2vw] border-none border-t border-white/30" />
+          <hr className="my-[2vw] border-none border-t border-[#ECAB23]/40" />
           <div>
             <h1 className="text-[clamp(2.25rem,6.5vw,6.5rem)] font-bold leading-[0.9] uppercase tracking-tight">
               It
@@ -71,7 +71,7 @@ export default function StoryPage() {
               Here.
             </h1>
           </div>
-          <hr className="my-[2vw] border-none border-t border-white/30" />
+          <hr className="my-[2vw] border-none border-t border-[#ECAB23]/40" />
           <p className="mt-auto max-w-[50ch] text-[clamp(0.9rem,1.8vw,1.35rem)] font-normal leading-relaxed">
             In 2020, the Innovation Hub team started with a simple question — what if we could
             move promising ideas from discussion to proof faster, with the right leadership and design discipline?
@@ -81,10 +81,10 @@ export default function StoryPage() {
         {/* Chapter 2 — First POCs */}
         <FlowSection
           aria-label="First Proofs of Concept"
-          style={{ backgroundColor: '#1a1a2e', color: '#fff' }}
+          style={{ backgroundColor: '#ECAB23', color: '#082F3A' }}
         >
           <p className="text-xs font-bold uppercase tracking-[0.2em]">02 — First Sparks</p>
-          <hr className="my-[2vw] border-none border-t border-white/20" />
+          <hr className="my-[2vw] border-none border-t border-black/20" />
           <div>
             <h2 className="text-[clamp(2.25rem,6.5vw,6.5rem)] font-bold leading-[0.9] uppercase tracking-tight">
               From
@@ -94,12 +94,12 @@ export default function StoryPage() {
               To POC
             </h2>
           </div>
-          <hr className="my-[2vw] border-none border-t border-white/20" />
+          <hr className="my-[2vw] border-none border-t border-black/20" />
           <p className="max-w-[50ch] text-[clamp(0.9rem,1.8vw,1.35rem)] font-normal leading-relaxed">
             Our first three proof-of-concepts shipped in under 8 weeks. AI-powered document
             classification, automated field reporting, and a real-time safety dashboard.
           </p>
-          <hr className="my-[2vw] border-none border-t border-white/20" />
+          <hr className="my-[2vw] border-none border-t border-black/20" />
           <div className="flex flex-wrap gap-[3vw]">
             <div className="min-w-[180px] flex-1">
               <p className="mb-2 text-sm font-bold uppercase tracking-wider">Doc Classifier</p>
@@ -128,7 +128,7 @@ export default function StoryPage() {
         {/* Chapter 3 — Scale */}
         <FlowSection
           aria-label="Scaling Up"
-          style={{ backgroundColor: '#f8f9fc', color: '#1a1a2e' }}
+          style={{ backgroundColor: '#FFF7E3', color: '#1F2A2E' }}
         >
           <p className="text-xs font-bold uppercase tracking-[0.2em]">03 — Scaling Up</p>
           <hr className="my-[2vw] border-none border-t border-black/15" />
@@ -197,10 +197,10 @@ export default function StoryPage() {
         {/* Chapter 4 — Impact */}
         <FlowSection
           aria-label="The Impact"
-          style={{ backgroundColor: '#00cec9', color: '#1a1a2e' }}
+          style={{ backgroundColor: '#0E5665', color: '#FFFFFF' }}
         >
           <p className="text-xs font-bold uppercase tracking-[0.2em]">04 — The Impact</p>
-          <hr className="my-[2vw] border-none border-t border-black/20" />
+          <hr className="my-[2vw] border-none border-t border-white/24" />
           <div>
             <h2 className="text-[clamp(2.25rem,6.5vw,6.5rem)] font-bold leading-[0.9] uppercase tracking-tight">
               Numbers
@@ -210,7 +210,7 @@ export default function StoryPage() {
               Lie.
             </h2>
           </div>
-          <hr className="my-[2vw] border-none border-t border-black/20" />
+          <hr className="my-[2vw] border-none border-t border-white/24" />
           <div className="flex flex-wrap gap-[3vw]">
             <div className="min-w-[180px] flex-1">
               <p className="mb-2 text-sm font-bold uppercase tracking-wider">78 POCs</p>
@@ -231,7 +231,7 @@ export default function StoryPage() {
               </p>
             </div>
           </div>
-          <hr className="my-[2vw] border-none border-t border-black/20" />
+          <hr className="my-[2vw] border-none border-t border-white/24" />
           <p className="mt-auto ml-auto max-w-[50ch] text-right text-[clamp(0.9rem,1.8vw,1.35rem)] font-normal leading-relaxed">
             Every metric maps back to one thing — real problems solved for real teams.
           </p>
@@ -240,10 +240,10 @@ export default function StoryPage() {
         {/* Chapter 5 — Future */}
         <FlowSection
           aria-label="What's Next"
-          style={{ backgroundColor: '#1a1a2e', color: '#fff' }}
+          style={{ backgroundColor: '#FFF7E3', color: '#1F2A2E' }}
         >
           <p className="text-xs font-bold uppercase tracking-[0.2em]">05 — What&apos;s Next</p>
-          <hr className="my-[2vw] border-none border-t border-white/20" />
+          <hr className="my-[2vw] border-none border-t border-[#ECAB23]/40" />
           <div>
             <h2 className="text-[clamp(2.25rem,6.5vw,6.5rem)] font-bold leading-[0.9] uppercase tracking-tight">
               The
@@ -255,12 +255,12 @@ export default function StoryPage() {
               Ahead.
             </h2>
           </div>
-          <hr className="my-[2vw] border-none border-t border-white/20" />
+          <hr className="my-[2vw] border-none border-t border-[#ECAB23]/40" />
           <p className="max-w-[50ch] text-[clamp(0.9rem,1.8vw,1.35rem)] font-normal leading-relaxed">
             2026 and beyond — we&apos;re expanding into agentic AI, edge computing for field ops,
             and building the next generation of internal tools.
           </p>
-          <hr className="my-[2vw] border-none border-t border-white/20" />
+          <hr className="my-[2vw] border-none border-t border-[#ECAB23]/40" />
           <div className="flex flex-wrap gap-[3vw]">
             <div className="min-w-[180px] flex-1">
               <p className="mb-2 text-sm font-bold uppercase tracking-wider">Agentic AI</p>
@@ -281,7 +281,7 @@ export default function StoryPage() {
               </p>
             </div>
           </div>
-          <hr className="my-[2vw] border-none border-t border-white/20" />
+          <hr className="my-[2vw] border-none border-t border-[#ECAB23]/40" />
           <p className="mt-auto max-w-[50ch] text-[clamp(0.9rem,1.8vw,1.35rem)] font-normal leading-relaxed">
             Got an idea? We build what doesn&apos;t exist yet. Let&apos;s make it happen.
           </p>
@@ -289,15 +289,15 @@ export default function StoryPage() {
       </FlowArt>
 
       {/* Zoom Parallax — POC Showcase */}
-      <div className="relative bg-[#1a1a2e]">
+      <div className="relative bg-[#0E3846]">
         <div className="flex h-[50vh] items-center justify-center">
           <div className="text-center">
             <p
               className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-6"
               style={{
-                background: 'rgba(108,92,231,0.2)',
-                color: '#a29bfe',
-                border: '1px solid rgba(108,92,231,0.3)',
+                background: 'rgba(236,171,35,0.18)',
+                color: '#F8D56A',
+                border: '1px solid rgba(236,171,35,0.35)',
               }}
             >
               ✦ The Team Behind The Innovation
@@ -319,8 +319,9 @@ export default function StoryPage() {
             href="/"
             className="px-8 py-4 rounded-full text-lg font-semibold text-white transition-all hover:scale-105"
             style={{
-              background: 'linear-gradient(135deg, #6c5ce7, #00cec9)',
-              boxShadow: '0 4px 24px rgba(108,92,231,0.4)',
+              background: 'linear-gradient(135deg, #ECAB23, #F8D56A)',
+              color: '#082F3A',
+              boxShadow: '0 12px 34px rgba(236,171,35,0.34)',
             }}
           >
             Back to Innovation Hub

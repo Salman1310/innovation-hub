@@ -1,0 +1,47 @@
+Sun Life Style Reference
+
+Fonts
+
+Display:
+"Sun Life New Display Regular", "Helvetica Neue", Calibri, sans-serif
+
+Body:
+"Sun Life New Text Regular", "Helvetica Neue", Calibri, sans-serif
+
+Bold body / CTA:
+"Sun Life New Text Bold", "Helvetica Neue", Calibri, sans-serif
+
+Font files used by sunlife.com:
+https://cdn.sunlife.com/content/dam/sunlife/global/fonts/SunLifeNewDisplay-Regular.woff2
+https://cdn.sunlife.com/content/dam/sunlife/global/fonts/SunLifeNewText-Regular.woff2
+https://cdn.sunlife.com/content/dam/sunlife/global/fonts/SunLifeNewText-Bold.woff2
+
+
+Color Palette
+
+Sun Life navy:
+#0E3846
+
+Dark navy:
+#082F3A
+
+Teal:
+#0E5665
+
+Sun Life yellow:
+#ECAB23
+
+Light yellow:
+#F8D56A
+
+Cream:
+#FFF7E3
+
+White:
+#FFFFFF
+
+Text:
+#1F2A2E
+
+Muted text:
+#5B6770

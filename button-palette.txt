@@ -1,0 +1,15 @@
+Share Your Idea Button Color Palette
+
+Default state
+- Top gradient: #ead18b (--sunlife-yellow-light)
+- Bottom gradient: #d99a24 (--sunlife-yellow)
+- Text color: #1f2a2e (--sunlife-text)
+- Border: rgba(14, 56, 70, 0.08)
+- Outer shadow: rgba(0, 0, 0, 0.22)
+- Inset highlight: rgba(255, 255, 255, 0.34)
+
+Hover state
+- Top gradient: #efd895
+- Bottom gradient: #dca23a
+- Outer shadow: rgba(0, 0, 0, 0.22)
+- Glow: rgba(217, 154, 36, 0.12)

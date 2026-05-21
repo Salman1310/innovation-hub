@@ -25,8 +25,8 @@ function AnimatedHero() {
       <div>
         <Button variant="secondary" size="sm" className="gap-3">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#6c5ce7] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#6c5ce7]"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ECAB23] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ECAB23]"></span>
           </span>
           Now open for innovations
           <MoveRight className="w-4 h-4" />
@@ -35,7 +35,7 @@ function AnimatedHero() {
 
       <div className="flex gap-3 flex-col">
         <h1
-          className="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight text-[#1a1a2e]"
+          className="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight text-[#1F2A2E]"
           style={{ fontFamily: "var(--font-display)" }}
         >
           <span className="block">We build</span>
@@ -46,7 +46,7 @@ function AnimatedHero() {
                 key={index}
                 className="absolute left-0 top-0 whitespace-nowrap font-extrabold"
                 style={{
-                  background: "linear-gradient(135deg, #6c5ce7 0%, #a29bfe 50%, #00cec9 100%)",
+                  background: "linear-gradient(135deg, #ECAB23 0%, #F8D56A 46%, #0E5665 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -66,7 +66,7 @@ function AnimatedHero() {
         </h1>
 
         <p
-          className="text-lg md:text-xl leading-relaxed text-[#555580] max-w-xl"
+          className="text-lg md:text-xl leading-relaxed text-[#5B6770] max-w-xl"
           style={{ fontFamily: "var(--font-main)" }}
         >
           Sun Life&apos;s Innovation Hub is where breakthrough ideas become real products — fast.
@@ -88,7 +88,7 @@ function AnimatedHero() {
         />
       </div>
 
-      <div className="flex gap-8 pt-4 border-t border-[#6c5ce7]/15 w-full">
+      <div className="flex gap-8 pt-4 border-t border-[#ECAB23]/35 w-full">
         {[
           { value: "80", label: "POCs Tracked" },
           { value: "12", label: "In Production" },
@@ -96,12 +96,12 @@ function AnimatedHero() {
         ].map((stat) => (
           <div key={stat.label} className="flex flex-col gap-1">
             <span
-              className="text-2xl font-bold text-[#6c5ce7]"
+              className="text-2xl font-bold text-[#ECAB23]"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {stat.value}
             </span>
-            <span className="text-sm text-[#555580]">{stat.label}</span>
+            <span className="text-sm text-[#5B6770]">{stat.label}</span>
           </div>
         ))}
       </div>
