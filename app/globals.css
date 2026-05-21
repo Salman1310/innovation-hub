@@ -1,168 +1,66 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
-/* Hanshika Design System — Light Gen Z Theme */
+/* ── Sun Life fonts ─────────────────────────────────────────────── */
+@font-face {
+  font-family: "SunLifeDisplay";
+  src: url("https://cdn.sunlife.com/content/dam/sunlife/global/fonts/SunLifeNewDisplay-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SunLifeText";
+  src: url("https://cdn.sunlife.com/content/dam/sunlife/global/fonts/SunLifeNewText-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SunLifeText";
+  src: url("https://cdn.sunlife.com/content/dam/sunlife/global/fonts/SunLifeNewText-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Sun Life design tokens ─────────────────────────────────────── */
 :root {
-  --bg: #f8f9fc;
-  --bg-2: #ffffff;
-  --text: #1a1a2e;
-  --text-2: #555580;
-  --text-3: #8888aa;
-  --accent-1: #6c5ce7;
-  --accent-2: #a29bfe;
-  --accent-3: #00cec9;
-  --accent-4: #fd79a8;
-  --accent-5: #fdcb6e;
-  --glass: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(108, 92, 231, 0.15);
-  --radius: 16px;
-  --radius-sm: 10px;
-  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --font-main: "Inter", sans-serif;
-  --font-display: "Space Grotesk", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-  --aurora-white: rgba(255,255,255,0.96);
-  --aurora-transparent: rgba(255,255,255,0);
-  --aurora-black: rgba(9,9,27,0.95);
-  --aurora-blue-500: #3b82f6;
-  --aurora-indigo-300: #a5b4fc;
-  --aurora-blue-300: #7dd3fc;
-  --aurora-violet-200: #ddd6fe;
-  --aurora-blue-400: #38bdf8;
+  --sl-navy:        #0E3846;
+  --sl-navy-dark:   #082F3A;
+  --sl-teal:        #0E5665;
+  --sl-yellow:      #ECAB23;
+  --sl-yellow-light:#F8D56A;
+  --sl-cream:       #FFF7E3;
+  --sl-white:       #FFFFFF;
+  --sl-text:        #1F2A2E;
+  --sl-muted:       #5B6770;
+
+  --background: var(--sl-cream);
+  --foreground: var(--sl-text);
+
+  --font-display: "SunLifeDisplay", "Helvetica Neue", Calibri, sans-serif;
+  --font-body:    "SunLifeText",    "Helvetica Neue", Calibri, sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--bg);
-  --color-foreground: var(--text);
-  --color-primary: var(--accent-1);
-  --color-primary-foreground: #ffffff;
-  --color-secondary: var(--accent-2);
-  --color-secondary-foreground: var(--accent-1);
-  --color-muted: #f0effe;
-  --color-muted-foreground: var(--text-2);
-  --color-accent: var(--accent-3);
-  --color-accent-foreground: #ffffff;
-  --color-border: var(--glass-border);
-  --color-ring: var(--accent-1);
-  --font-sans: var(--font-main);
-  --font-display: var(--font-display);
-  --font-mono: var(--font-mono);
-  --animate-aurora: aurora 60s linear infinite;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
+html, body {
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-main);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
 }
 
-/* Dot grid background pattern */
-.bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(108,92,231,0.12) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-
-/* Aurora gradient background */
-.bg-aurora {
-  background:
-    radial-gradient(ellipse 80% 60% at 20% -10%, rgba(108,92,231,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 85% 30%, rgba(0,206,201,0.08) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 60% at 50% 100%, rgba(253,121,168,0.07) 0%, transparent 60%),
-    #f8f9fc;
-}
-
-.aurora-layer {
-  --white-gradient: repeating-linear-gradient(
-    100deg,
-    var(--aurora-white) 0%,
-    var(--aurora-white) 7%,
-    var(--aurora-transparent) 10%,
-    var(--aurora-transparent) 12%,
-    var(--aurora-white) 16%
-  );
-  --dark-gradient: repeating-linear-gradient(
-    100deg,
-    var(--aurora-black) 0%,
-    var(--aurora-black) 7%,
-    transparent 10%,
-    transparent 12%,
-    var(--aurora-black) 16%
-  );
-  --aurora: repeating-linear-gradient(
-    100deg,
-    var(--aurora-blue-500) 10%,
-    var(--aurora-indigo-300) 15%,
-    var(--aurora-blue-300) 20%,
-    var(--aurora-violet-200) 25%,
-    var(--aurora-blue-400) 30%
-  );
-  background-image: var(--dark-gradient), var(--aurora);
-  background-size: 300%, 200%;
-  background-position: 50% 50%, 50% 50%;
-  animation: aurora 60s linear infinite;
-  mix-blend-mode: difference;
-}
-
-@keyframes aurora {
-  from {
-    background-position: 50% 50%, 50% 50%;
-  }
-  to {
-    background-position: 350% 50%, 350% 50%;
-  }
-}
-
-/* Glass card */
-.glass-card {
-  background: var(--glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-}
-
-/* Gradient text utility */
-.gradient-text {
-  background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 50%, var(--accent-3) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Noise grain overlay */
-.grain::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1000;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-}
-
-/* Marquee animation */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-33.333%); }
-}
-.animate-marquee {
-  animation: marquee 20s linear infinite;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(108,92,231,0.3); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(108,92,231,0.5); }
+/* ── Scrollbar ──────────────────────────────────────────────────── */
+.overflow-y-auto::-webkit-scrollbar        { width: 4px; }
+.overflow-y-auto::-webkit-scrollbar-track  { background: transparent; }
+.overflow-y-auto::-webkit-scrollbar-thumb  { background: #c9d0d4; border-radius: 4px; }
+.overflow-y-auto::-webkit-scrollbar-thumb:hover { background: var(--sl-muted); }
