@@ -1,20 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
-/* Hanshika Design System — Light Gen Z Theme */
+/* Sun Life inspired system - bright, premium, digital */
 :root {
-  --bg: #f8f9fc;
+  --bg: #FFFFFF;
   --bg-2: #ffffff;
-  --text: #1a1a2e;
-  --text-2: #555580;
-  --text-3: #8888aa;
-  --accent-1: #6c5ce7;
-  --accent-2: #a29bfe;
-  --accent-3: #00cec9;
-  --accent-4: #fd79a8;
-  --accent-5: #fdcb6e;
-  --glass: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(108, 92, 231, 0.15);
+  --text: #1F2A2E;
+  --text-2: #5B6770;
+  --text-3: #5B6770;
+  --accent-1: #ECAB23;
+  --accent-2: #F8D56A;
+  --accent-3: #0E5665;
+  --accent-4: #0E3846;
+  --accent-5: #082F3A;
+  --cream: #FFF7E3;
+  --glass: rgba(255, 255, 255, 0.86);
+  --glass-border: rgba(236, 171, 35, 0.28);
   --radius: 16px;
   --radius-sm: 10px;
   --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -23,22 +24,22 @@
   --font-mono: "JetBrains Mono", monospace;
   --aurora-white: rgba(255,255,255,0.96);
   --aurora-transparent: rgba(255,255,255,0);
-  --aurora-black: rgba(9,9,27,0.95);
-  --aurora-blue-500: #3b82f6;
-  --aurora-indigo-300: #a5b4fc;
-  --aurora-blue-300: #7dd3fc;
-  --aurora-violet-200: #ddd6fe;
-  --aurora-blue-400: #38bdf8;
+  --aurora-black: rgba(8,47,58,0.92);
+  --aurora-blue-500: #ECAB23;
+  --aurora-indigo-300: #F8D56A;
+  --aurora-blue-300: #0E5665;
+  --aurora-violet-200: #FFFFFF;
+  --aurora-blue-400: #0E5665;
 }
 
 @theme inline {
   --color-background: var(--bg);
   --color-foreground: var(--text);
   --color-primary: var(--accent-1);
-  --color-primary-foreground: #ffffff;
+  --color-primary-foreground: #082F3A;
   --color-secondary: var(--accent-2);
   --color-secondary-foreground: var(--accent-1);
-  --color-muted: #f0effe;
+  --color-muted: var(--cream);
   --color-muted-foreground: var(--text-2);
   --color-accent: var(--accent-3);
   --color-accent-foreground: #ffffff;
@@ -69,17 +70,17 @@ body {
 
 /* Dot grid background pattern */
 .bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(108,92,231,0.12) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(236,171,35,0.18) 1px, transparent 1px);
   background-size: 28px 28px;
 }
 
 /* Aurora gradient background */
 .bg-aurora {
   background:
-    radial-gradient(ellipse 80% 60% at 20% -10%, rgba(108,92,231,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 85% 30%, rgba(0,206,201,0.08) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 60% at 50% 100%, rgba(253,121,168,0.07) 0%, transparent 60%),
-    #f8f9fc;
+    radial-gradient(ellipse 72% 55% at 18% -10%, rgba(248,213,106,0.46) 0%, transparent 62%),
+    radial-gradient(ellipse 56% 44% at 88% 24%, rgba(14,86,101,0.10) 0%, transparent 58%),
+    radial-gradient(ellipse 64% 50% at 50% 105%, rgba(236,171,35,0.18) 0%, transparent 62%),
+    #FFFFFF;
 }
 
 .aurora-layer {
@@ -130,11 +131,12 @@ body {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius);
+  box-shadow: 0 18px 60px rgba(14, 56, 70, 0.08);
 }
 
 /* Gradient text utility */
 .gradient-text {
-  background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 50%, var(--accent-3) 100%);
+  background: linear-gradient(135deg, #FFCD00 0%, #ECAB23 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -164,5 +166,5 @@ body {
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(108,92,231,0.3); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(108,92,231,0.5); }
+::-webkit-scrollbar-thumb { background: rgba(236,171,35,0.55); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(236,171,35,0.75); }

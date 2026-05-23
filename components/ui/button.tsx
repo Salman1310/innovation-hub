@@ -11,15 +11,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-[#6c5ce7] text-white hover:bg-[#5a4bd1] shadow-[0_4px_20px_rgba(108,92,231,0.3)] hover:shadow-[0_6px_24px_rgba(108,92,231,0.45)]",
+          "bg-[#ECAB23] text-[#082F3A] hover:bg-[#F8D56A] shadow-[0_4px_20px_rgba(236,171,35,0.34)] hover:shadow-[0_6px_24px_rgba(236,171,35,0.48)]",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90",
         outline:
-          "border-2 border-[#6c5ce7] text-[#6c5ce7] bg-transparent hover:bg-[#6c5ce7]/10",
+          "border-2 border-[#ECAB23] text-[#0E3846] bg-white hover:bg-[#FFF7E3]",
         secondary:
-          "bg-[#f0effe] text-[#6c5ce7] hover:bg-[#e4e0fd]",
-        ghost: "hover:bg-[#6c5ce7]/10 hover:text-[#6c5ce7]",
-        link: "text-[#6c5ce7] underline-offset-4 hover:underline",
+          "bg-[#FFF7E3] text-[#0E3846] hover:bg-[#F8D56A]",
+        ghost: "hover:bg-[#FFF7E3] hover:text-[#0E3846]",
+        link: "text-[#0E5665] underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-6 py-2",

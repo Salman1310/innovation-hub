@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLGS Capacity Analysis Dashboard — Sun Life Theme</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --bg-card-alt: #F8F9FC;
+      --bg-cream: #FFF7E3;
+      --text-primary: #1F2A2E;
+      --text-secondary: #5B6770;
+      --text-muted: #8A9299;
+      --accent-yellow: #FFCD00;
+      --accent-gold: #ECAB23;
+      --accent-teal: #0E5665;
+      --accent-navy: #002855;
+      --status-growing: #0E5665;
+      --status-stable: #ECAB23;
+      --status-declining: #D63031;
+      --border-default: rgba(236, 171, 35, 0.12);
+      --border-subtle: rgba(236, 171, 35, 0.06);
+      --shadow-card: 0 8px 32px rgba(14, 56, 70, 0.06);
+      --shadow-card-hover: 0 12px 40px rgba(14, 56, 70, 0.10);
+      --glass-border: rgba(236, 171, 35, 0.18);
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-main: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background:
+        radial-gradient(ellipse 72% 55% at 18% -10%, rgba(248, 213, 106, 0.38) 0%, transparent 62%),
+        radial-gradient(ellipse 56% 44% at 88% 24%, rgba(14, 86, 101, 0.07) 0%, transparent 58%),
+        radial-gradient(ellipse 64% 50% at 50% 105%, rgba(236, 171, 35, 0.14) 0%, transparent 62%),
+        #FFF9EE;
+      background-attachment: fixed;
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+
+    /* Noise grain */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.02;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+
+    /* === NAV === */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-default);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav__left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav__logo {
+      height: 36px;
+      width: auto;
+    }
+    .nav__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text-primary);
+    }
+    .nav__badge {
+      background: var(--accent-yellow);
+      color: var(--accent-navy);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .nav__filters {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav__select {
+      background: #FFFFFF;
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-family: var(--font-main);
+      color: var(--text-primary);
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .nav__select:focus {
+      box-shadow: 0 0 0 2px rgba(255, 205, 0, 0.3);
+    }
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav__info {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .nav__info strong {
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+    }
+
+    /* === MAIN === */
+    .main {
+      padding: 88px 32px 32px;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    /* === SECTION LABELS === */
+    .section-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-teal);
+      font-family: var(--font-main);
+    }
+    .section-label--gold { color: var(--accent-gold); }
+    .section-badge {
+      background: var(--accent-teal);
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 8px;
+    }
+    .section-badge--gold {
+      background: var(--accent-gold);
+      color: #FFFFFF;
+    }
+
+    /* === KPI AURORA WRAPPER === */
+    .kpi-aurora {
+      position: relative;
+      border-radius: 24px;
+      padding: 32px 28px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #FFFDF5 0%, #FFF8E8 40%, #FFFBF0 100%);
+      border: 1px solid rgba(236, 171, 35, 0.15);
+    }
+    .kpi-aurora::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          100deg,
+          rgba(255, 205, 0, 0.06) 0%,
+          rgba(255, 205, 0, 0.02) 7%,
+          transparent 10%,
+          transparent 12%,
+          rgba(255, 205, 0, 0.04) 16%
+        ),
+        repeating-linear-gradient(
+          100deg,
+          rgba(236, 171, 35, 0.08) 10%,
+          rgba(248, 213, 106, 0.05) 15%,
+          rgba(14, 86, 101, 0.03) 20%,
+          rgba(255, 255, 255, 0.02) 25%,
+          rgba(236, 171, 35, 0.06) 30%
+        );
+      background-size: 300% 200%;
+      animation: kpi-aurora-flow 60s linear infinite;
+      opacity: 0.9;
+    }
+    .kpi-aurora::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 10% 50%, rgba(255, 205, 0, 0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 90% 30%, rgba(236, 171, 35, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 50% 90%, rgba(14, 86, 101, 0.04) 0%, transparent 60%);
+      animation: kpi-aurora-pulse 12s ease-in-out infinite alternate;
+    }
+    @keyframes kpi-aurora-flow {
+      from { background-position: 50% 50%, 50% 50%; }
+      to { background-position: 350% 50%, 350% 50%; }
+    }
+    @keyframes kpi-aurora-pulse {
+      0% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    /* === KPI CARDS === */
+    .kpi-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
+    }
+    .kpi-grid--row2 {
+      grid-template-columns: repeat(5, 1fr);
+      margin-top: 16px;
+    }
+    @media (max-width: 1200px) {
+      .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+      .kpi-grid--row2 { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi-grid--row2 { grid-template-columns: repeat(2, 1fr); }
+    }
+    .kpi-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(236, 171, 35, 0.12);
+      border-left: 4px solid var(--accent-gold);
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 4px 16px rgba(14, 56, 70, 0.06);
+      transition: all 0.2s ease;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(14, 56, 70, 0.10);
+    }
+    .kpi-card--gold { border-left-color: #ECAB23; }
+    .kpi-card--yellow { border-left-color: #FFCD00; }
+    .kpi-card--green { border-left-color: #4A8C5C; }
+    .kpi-card--green .kpi-card__value { color: #2D6A3F; }
+    .kpi-card--green .kpi-card__label { color: #4A8C5C; }
+    .kpi-card--brown { border-left-color: #8B6914; }
+    .kpi-card--brown .kpi-card__value { color: #8B6914; }
+    .kpi-card--brown .kpi-card__label { color: #A67C1A; }
+    .kpi-card--red { border-left-color: #C94C4C; }
+    .kpi-card--red .kpi-card__value { color: #C94C4C; }
+    .kpi-card--red .kpi-card__label { color: #D65C5C; }
+    .kpi-card--teal { border-left-color: #0E5665; }
+    .kpi-card--teal .kpi-card__value { color: #0E5665; }
+    .kpi-card--teal .kpi-card__label { color: #1A7A8A; }
+    .kpi-card__label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .kpi-card--gold .kpi-card__label { color: #A67C1A; }
+    .kpi-card--yellow .kpi-card__label { color: #A67C1A; }
+    .kpi-card__value {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+    .kpi-card__value--small {
+      font-size: 20px;
+    }
+    .kpi-card__sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .kpi-card__bar {
+      height: 6px;
+      border-radius: 3px;
+      margin-top: 8px;
+      background: #F0F0F0;
+      overflow: hidden;
+    }
+    .kpi-card__bar-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+    .kpi-card__delta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .kpi-card__delta--up { color: #2D6A3F; }
+    .kpi-card__delta--down { color: #C94C4C; }
+
+    /* === SECONDARY METRICS === */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow-card);
+      transition: all 0.2s ease;
+    }
+    .metric-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card-hover);
+    }
+    .metric-card__label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .metric-card__value {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .metric-card__value--green { color: var(--status-growing); }
+    .metric-card__value--gold { color: var(--accent-gold); }
+    .metric-card__suffix {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* === TABLE GRID (side-by-side) === */
+    .table-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .table-row .table-section { margin-bottom: 0; }
+    @media (max-width: 1000px) {
+      .table-row { grid-template-columns: 1fr; }
+    }
+
+    /* === TABLE === */
+    .table-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 32px;
+    }
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .table-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .table-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead tr {
+      background: var(--bg-card-alt);
+    }
+    thead th {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-secondary);
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-default);
+    }
+    thead th:not(:first-child) { text-align: right; }
+    tbody td {
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    tbody td:not(:first-child) {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-weight: 500;
+    }
+    tbody tr:hover { background: var(--bg-cream); }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .status-pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-pill--growing {
+      background: rgba(14, 86, 101, 0.08);
+      color: var(--status-growing);
+    }
+    .status-pill--stable {
+      background: rgba(236, 171, 35, 0.12);
+      color: var(--status-stable);
+    }
+    .status-pill--declining {
+      background: rgba(214, 48, 49, 0.08);
+      color: var(--status-declining);
+    }
+
+    /* === TICKER === */
+    .ticker-wrap {
+      width: 100%;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1F2A2E 0%, #0E3846 50%, #1F2A2E 100%);
+      padding: 14px 0;
+      margin-bottom: 0;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 48px;
+      white-space: nowrap;
+      animation: ticker-scroll 25s linear infinite;
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    .ticker-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .ticker-dot--yellow { background: #FFCD00; }
+    .ticker-dot--teal { background: #0E5665; }
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-33.333%); }
+    }
+
+    /* === FOOTER === */
+    .footer {
+      background: var(--bg-card-alt);
+      border-top: 1px solid var(--border-default);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer__brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+    .footer__brand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #FFCD00, #0E5665);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .footer__copy {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .footer__version {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg-cream);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    /* === DID YOU KNOW === */
+    .dyk-bubble {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 90;
+      font-family: var(--font-main);
+    }
+    .dyk-card {
+      background: #FFFFFF;
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      max-width: 300px;
+      box-shadow: 0 12px 40px rgba(14, 56, 70, 0.12);
+      animation: dyk-fade-in 0.3s ease;
+    }
+    .dyk-card__label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+    }
+    .dyk-card__highlight {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .dyk-card__text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .dyk-card__dismiss {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: color 0.2s;
+    }
+    .dyk-card__dismiss:hover { color: var(--text-primary); }
+    .dyk-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent-yellow);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(255, 205, 0, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-size: 18px;
+    }
+    .dyk-circle:hover {
+      transform: scale(1.08);
+      box-shadow: 0 8px 28px rgba(255, 205, 0, 0.45);
+    }
+    .dyk-hidden { display: none; }
+    @keyframes dyk-fade-in {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 1200px) {
+      .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+      .metrics-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 12px 16px; }
+      .nav__filters { display: none; }
+      .main { padding: 80px 16px 24px; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi-card__value { font-size: 28px; }
+      .table-section { padding: 16px; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav__left">
+      <div class="footer__brand-icon">SL</div>
+      <span class="nav__title">SLGS Capacity Analysis Dashboard</span>
+      <span class="nav__badge">Live</span>
+    </div>
+    <div class="nav__filters">
+      <select class="nav__select">
+        <option>Region: All</option>
+        <option>Asia</option>
+        <option>Canada</option>
+        <option>US</option>
+        <option>SLGS</option>
+      </select>
+      <select class="nav__select">
+        <option>Function: All</option>
+        <option>Technology</option>
+        <option>Operations</option>
+        <option>Procurement</option>
+        <option>BEST</option>
+      </select>
+      <select class="nav__select">
+        <option>Period: All</option>
+        <option>Q1 2026</option>
+        <option>Q2 2026</option>
+      </select>
+    </div>
+    <div class="nav__right">
+      <span class="nav__info">As of: <strong>May 2026</strong></span>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- KPI Aurora Section -->
+    <div class="kpi-aurora">
+      <div class="section-row" style="position:relative;z-index:2;">
+        <span class="section-label" style="color:#0E5665;">Capacity Creation Leadership Dashboard</span>
+        <span class="section-badge" style="background:rgba(14,86,101,0.08);color:#0E5665;">As-of Q4 2026</span>
+      </div>
+
+      <!-- ROW 1: 6 primary KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-card__label">SLGS Overall HC</div>
+          <div class="kpi-card__value">5,535</div>
+          <div class="kpi-card__sub">From SLGS HC Data baseline</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__label">Capacity To Be Created</div>
+          <div class="kpi-card__value kpi-card__value--small">137 vs 1,384</div>
+          <div class="kpi-card__sub">Target: 9.9% of plan</div>
+          <div class="kpi-card__bar"><div class="kpi-card__bar-fill" style="width:70%;background:#4A8C5C"></div><div class="kpi-card__bar-fill" style="width:30%;background:#8B6914"></div></div>
+          <div class="kpi-card__delta" style="color:#4A8C5C">Green: 97 FTE</div>
+          <div class="kpi-card__delta" style="color:#8B6914">Brown: 40 FTE</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__label">Capacity Plan %</div>
+          <div class="kpi-card__value kpi-card__value--small">2% vs 25%</div>
+          <div class="kpi-card__sub">Capacity / HC &times; 25%</div>
+          <div class="kpi-card__delta" style="color:#4A8C5C">&ge;25% On Target</div>
+          <div class="kpi-card__delta" style="color:#ECAB23">20-24.9% Approaching</div>
+          <div class="kpi-card__delta" style="color:#C94C4C">&lt;20% At Risk</div>
+        </div>
+        <div class="kpi-card kpi-card--green">
+          <div class="kpi-card__label">Capacity Realized</div>
+          <div class="kpi-card__value">70</div>
+          <div class="kpi-card__sub">Actual Realization - Quarter</div>
+          <div class="kpi-card__bar"><div class="kpi-card__bar-fill" style="width:94%;background:#4A8C5C"></div><div class="kpi-card__bar-fill" style="width:6%;background:#8B6914"></div></div>
+          <div class="kpi-card__delta" style="color:#2D6A3F">G: 66</div>
+          <div class="kpi-card__delta" style="color:#8B6914">B: 4</div>
+        </div>
+        <div class="kpi-card kpi-card--brown">
+          <div class="kpi-card__label">Capacity Pipeline</div>
+          <div class="kpi-card__value">67</div>
+          <div class="kpi-card__sub">Identified not yet realized (FTE)</div>
+        </div>
+        <div class="kpi-card kpi-card--teal">
+          <div class="kpi-card__label">Redeployed FTEs</div>
+          <div class="kpi-card__value">22</div>
+          <div class="kpi-card__sub">(31%) Avg TAT: 8.7 days</div>
+          <div class="kpi-card__delta kpi-card__delta--up">15 reinvested in AI role (68%)</div>
+        </div>
+      </div>
+
+      <!-- ROW 2: 5 secondary KPIs -->
+      <div class="kpi-grid kpi-grid--row2">
+        <div class="kpi-card kpi-card--teal">
+          <div class="kpi-card__label">Redeployed FTEs</div>
+          <div class="kpi-card__value kpi-card__value--small">22 <span style="font-size:14px;color:var(--text-secondary)">(31%)</span></div>
+          <div class="kpi-card__sub">TAT: 9 days</div>
+          <div class="kpi-card__delta kpi-card__delta--up">Moved to a new role</div>
+        </div>
+        <div class="kpi-card kpi-card--green">
+          <div class="kpi-card__label">Active Pool</div>
+          <div class="kpi-card__value kpi-card__value--small">12 <span style="font-size:14px;color:var(--text-secondary)">(17%)</span></div>
+          <div class="kpi-card__sub">In Pipeline Capacity Creation</div>
+        </div>
+        <div class="kpi-card kpi-card--gold">
+          <div class="kpi-card__label">Planned Attrition / Contract Ended</div>
+          <div class="kpi-card__value kpi-card__value--small">31 <span style="font-size:14px;color:var(--text-secondary)">(44%)</span></div>
+          <div class="kpi-card__sub">Not to be backfilled</div>
+        </div>
+        <div class="kpi-card kpi-card--red">
+          <div class="kpi-card__label">Let Go</div>
+          <div class="kpi-card__value kpi-card__value--small">1 <span style="font-size:14px;color:var(--text-secondary)">(1%)</span></div>
+          <div class="kpi-card__sub">Fallout Pool</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-card__label">Green Impact Share %</div>
+          <div class="kpi-card__value kpi-card__value--small" style="color:#2D6A3F">70.8%</div>
+          <div class="kpi-card__sub">Green mix vs total capacity</div>
+          <div class="kpi-card__bar"><div class="kpi-card__bar-fill" style="width:70.8%;background:#4A8C5C"></div></div>
+        </div>
+      </div>
+    </div><!-- end kpi-aurora -->
+
+    <!-- Secondary Metrics - Row 2 -->
+    <div class="section-row">
+      <span class="section-label section-label--gold">Demand &amp; Placement</span>
+      <span class="section-badge section-badge--gold">158 Open Positions</span>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-card__label">Placement Rate</div>
+        <div class="metric-card__value metric-card__value--green">68%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Net Pipeline (Demand)</div>
+        <div class="metric-card__value metric-card__value--green">+312.5</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">AI Reinvestment</div>
+        <div class="metric-card__value metric-card__value--gold">31.5%</div>
+        <div class="metric-card__suffix">34 of 108 roles</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">% Capacity To Be Created</div>
+        <div class="metric-card__value metric-card__value--gold">68.3%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Bench Pool (Active)</div>
+        <div class="metric-card__value">20</div>
+      </div>
+    </div>
+
+    <!-- Open Positions Breakdown -->
+    <div class="section-row">
+      <span class="section-label">Open Positions</span>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-card__label">Total Open Positions</div>
+        <div class="metric-card__value">158</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">PH Open Demand (DRF)</div>
+        <div class="metric-card__value">38</div>
+        <div class="metric-card__suffix">12 Backfill &middot; 26 New</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">India TA Open</div>
+        <div class="metric-card__value">107</div>
+        <div class="metric-card__suffix">67 Open &middot; 30 Offered &middot; 10 TBO</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">India Contractor Open</div>
+        <div class="metric-card__value">13</div>
+        <div class="metric-card__suffix">4 Shortlisted &middot; 8 Open</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Niche Skills</div>
+        <div class="metric-card__value metric-card__value--gold">62</div>
+        <div class="metric-card__suffix">58% of India TA demand</div>
+      </div>
+    </div>
+
+    <!-- Pipeline by Function Table (from SLGS Pipeline Apr'26) -->
+    <div class="table-section">
+      <div class="table-header">
+        <div>
+          <div class="table-title">Pipeline by Function</div>
+          <div class="table-subtitle">Hot + Warm + Cold positions across SLGS</div>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Function</th>
+            <th>Hot</th>
+            <th>Warm</th>
+            <th>Cold</th>
+            <th>Ramp Down</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Technology</td>
+            <td>84</td>
+            <td>2,109</td>
+            <td>20</td>
+            <td>32</td>
+            <td><span class="status-pill status-pill--growing">Growing</span></td>
+          </tr>
+          <tr>
+            <td>Operations</td>
+            <td>51.5</td>
+            <td>&mdash;</td>
+            <td>&mdash;</td>
+            <td>59.5</td>
+            <td><span class="status-pill status-pill--declining">Net -8</span></td>
+          </tr>
+          <tr>
+            <td>Procurement</td>
+            <td>14</td>
+            <td>&mdash;</td>
+            <td>&mdash;</td>
+            <td>0</td>
+            <td><span class="status-pill status-pill--growing">Growing</span></td>
+          </tr>
+          <tr>
+            <td>BEST</td>
+            <td>6</td>
+            <td>4</td>
+            <td>3</td>
+            <td>0</td>
+            <td><span class="status-pill status-pill--stable">Stable</span></td>
+          </tr>
+          <tr>
+            <td>Risk &amp; Compliance</td>
+            <td>11</td>
+            <td>&mdash;</td>
+            <td>&mdash;</td>
+            <td>0</td>
+            <td><span class="status-pill status-pill--stable">Stable</span></td>
+          </tr>
+          <tr>
+            <td>Investment Ops</td>
+            <td>9</td>
+            <td>&mdash;</td>
+            <td>&mdash;</td>
+            <td>0</td>
+            <td><span class="status-pill status-pill--stable">Stable</span></td>
+          </tr>
+          <tr>
+            <td>Finance</td>
+            <td>6</td>
+            <td>&mdash;</td>
+            <td>&mdash;</td>
+            <td>0</td>
+            <td><span class="status-pill status-pill--stable">Stable</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Capacity Creation - Side by Side -->
+    <div class="table-row">
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <div class="table-title">Capacity Creation &mdash; India Ops</div>
+            <div class="table-subtitle">309 FTE &middot; 311 initiatives</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Category</th><th>FTE</th><th>%</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>AI / Gen AI / Agentic AI</td><td>140</td><td>45.3%</td></tr>
+            <tr><td>BPR / CI / Automation</td><td>60</td><td>19.4%</td></tr>
+            <tr><td>No Backfill / Proficiency</td><td>38</td><td>12.3%</td></tr>
+            <tr><td>Others</td><td>32</td><td>10.4%</td></tr>
+            <tr><td>Tech Transformation</td><td>29</td><td>9.4%</td></tr>
+            <tr><td>SL Org Mandate</td><td>10</td><td>3.2%</td></tr>
+          </tbody>
+        </table>
+        <table style="margin-top:16px">
+          <thead><tr><th>Quarter</th><th>FTE</th><th>Confidence</th></tr></thead>
+          <tbody>
+            <tr><td>Q1 2026</td><td>26</td><td><span class="status-pill status-pill--growing">High</span></td></tr>
+            <tr><td>Q2 2026</td><td>42</td><td><span class="status-pill status-pill--growing">High</span></td></tr>
+            <tr><td>Q3 2026</td><td>58</td><td><span class="status-pill status-pill--stable">Medium</span></td></tr>
+            <tr><td>Q4 2026</td><td>183</td><td><span class="status-pill status-pill--declining">Requires Focus</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <div class="table-title">Capacity Creation &mdash; CD &amp; US Tech</div>
+            <div class="table-subtitle">137 FTE &middot; 161 initiatives</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Category</th><th>FTE</th><th>%</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>No Backfill / Proficiency</td><td>45</td><td>32.8%</td></tr>
+            <tr><td>Unknown / TBD</td><td>37</td><td>27.0%</td></tr>
+            <tr><td>BPR / CI / Automation</td><td>22</td><td>16.1%</td></tr>
+            <tr><td>Tech Transformation</td><td>18</td><td>13.1%</td></tr>
+            <tr><td>Others</td><td>12</td><td>8.8%</td></tr>
+            <tr><td>AI / Gen AI / Agentic AI</td><td>3</td><td>2.2%</td></tr>
+          </tbody>
+        </table>
+        <table style="margin-top:16px">
+          <thead><tr><th>Quarter</th><th>FTE</th><th>Confidence</th></tr></thead>
+          <tbody>
+            <tr><td>Q1 2026</td><td>14.1</td><td><span class="status-pill status-pill--growing">High</span></td></tr>
+            <tr><td>Q2 2026</td><td>80.3</td><td><span class="status-pill status-pill--growing">Peak</span></td></tr>
+            <tr><td>Q3 2026</td><td>25.3</td><td><span class="status-pill status-pill--stable">Medium</span></td></tr>
+            <tr><td>Q4 2026</td><td>17.3</td><td><span class="status-pill status-pill--growing">High</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Risk Assessment -->
+    <div class="section-row">
+      <span class="section-label">Risk Assessment</span>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-card__label">Will Materialize</div>
+        <div class="metric-card__value metric-card__value--green">71</div>
+        <div class="metric-card__suffix">Ops 59 + Tech 12</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Should Materialize</div>
+        <div class="metric-card__value metric-card__value--gold">170</div>
+        <div class="metric-card__suffix">Ops 83 + Tech 87</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Requires Org Focus</div>
+        <div class="metric-card__value">166</div>
+        <div class="metric-card__suffix">Ops 163 + Tech 3</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">High Dependency</div>
+        <div class="metric-card__value" style="color:var(--status-declining)">181</div>
+        <div class="metric-card__suffix">Ops 172 + Tech 9</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Low Dependency</div>
+        <div class="metric-card__value metric-card__value--green">96</div>
+        <div class="metric-card__suffix">Ops 37 + Tech 59</div>
+      </div>
+    </div>
+
+    <!-- Headcount + India TA - Side by Side -->
+    <div class="table-row">
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <div class="table-title">SLGS Headcount by Function</div>
+            <div class="table-subtitle">Total: 5,690 (as of Dec 2025)</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Location</th>
+              <th>Function</th>
+              <th>HC</th>
+              <th>%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>SLGSI</td><td>Canada &amp; US Ops</td><td>1,571</td><td>27.6%</td></tr>
+            <tr><td>SLGSP</td><td>Asia Tech</td><td>1,184</td><td>20.8%</td></tr>
+            <tr><td>SLGSI</td><td>Canada &amp; US Tech</td><td>1,118</td><td>19.6%</td></tr>
+            <tr><td>SLGSP</td><td>CCC</td><td>918</td><td>16.1%</td></tr>
+            <tr><td>SLGS</td><td>BEST</td><td>198</td><td>3.5%</td></tr>
+            <tr><td>SLGS</td><td>Hosted</td><td>155</td><td>2.7%</td></tr>
+            <tr><td>SLGSI</td><td>Finance</td><td>86</td><td>1.5%</td></tr>
+            <tr><td>SLGSI</td><td>HR / Actuarial / Others</td><td>460</td><td>8.1%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <div class="table-title">India TA Open Positions</div>
+            <div class="table-subtitle">107 positions &middot; 62 Niche, 45 Vanilla</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Count</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Open (Searching)</td><td>67</td><td><span class="status-pill status-pill--growing">Active</span></td></tr>
+            <tr><td>Offered (Awaiting Join)</td><td>30</td><td><span class="status-pill status-pill--stable">Offered</span></td></tr>
+            <tr><td>To Be Offered</td><td>10</td><td><span class="status-pill status-pill--stable">In Progress</span></td></tr>
+            <tr><td>New Hiring</td><td>76</td><td><span class="status-pill status-pill--growing">Growth</span></td></tr>
+            <tr><td>Replacement</td><td>29</td><td><span class="status-pill status-pill--declining">Backfill</span></td></tr>
+            <tr><td>IJP (Internal)</td><td>34</td><td><span class="status-pill status-pill--stable">Internal</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Skill Intelligence Section -->
+    <div class="section-row">
+      <span class="section-label">Skill Intelligence &mdash; Role Matching</span>
+    </div>
+
+    <div class="metrics-grid" style="margin-bottom:20px">
+      <div class="metric-card">
+        <div class="metric-card__label">People in Pool</div>
+        <div class="metric-card__value metric-card__value--green">38</div>
+        <div class="metric-card__suffix">Active &amp; pipeline</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Open Roles Analyzed</div>
+        <div class="metric-card__value">158</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Roles Matched</div>
+        <div class="metric-card__value metric-card__value--green">24</div>
+        <div class="metric-card__suffix">Internal candidates found</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Needs External Hiring</div>
+        <div class="metric-card__value" style="color:var(--status-declining)">134</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">AI Reinvested</div>
+        <div class="metric-card__value metric-card__value--gold">15</div>
+        <div class="metric-card__suffix">68% of redeployed</div>
+      </div>
+    </div>
+
+    <div class="table-row">
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <div class="table-title">Top Skill Matches (Internal Pool)</div>
+            <div class="table-subtitle">Rule-based + AI semantic matching</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Open Role</th>
+              <th>Candidate</th>
+              <th>Score</th>
+              <th>Basis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>GenAI Engineer</td>
+              <td>Nikita Mohan</td>
+              <td><span class="status-pill status-pill--growing">95%</span></td>
+              <td>Direct: Gen AI skill tag</td>
+            </tr>
+            <tr>
+              <td>GenAI Engineer</td>
+              <td>Martand Mishra</td>
+              <td><span class="status-pill status-pill--growing">95%</span></td>
+              <td>Direct: Gen AI skill tag</td>
+            </tr>
+            <tr>
+              <td>GenAI Engineer</td>
+              <td>Vivek Kumar Goswami</td>
+              <td><span class="status-pill status-pill--stable">72%</span></td>
+              <td>Adjacent: AWS + Python → GenAI infra</td>
+            </tr>
+            <tr>
+              <td>ETL / Data Engineer</td>
+              <td>Sumeet Khanna</td>
+              <td><span class="status-pill status-pill--growing">88%</span></td>
+              <td>Direct: AWS Glue, PySpark, ETL</td>
+            </tr>
+            <tr>
+              <td>Cloud Automation</td>
+              <td>Rakesh Sharma</td>
+              <td><span class="status-pill status-pill--growing">85%</span></td>
+              <td>Direct: AWS Cloud Automation</td>
+            </tr>
+            <tr>
+              <td>Java Full Stack</td>
+              <td>Shiwangi Rathore</td>
+              <td><span class="status-pill status-pill--growing">90%</span></td>
+              <td>Direct: Java, Spring Boot, REST APIs</td>
+            </tr>
+            <tr>
+              <td>Java Full Stack</td>
+              <td>Vishal Srinivasan</td>
+              <td><span class="status-pill status-pill--growing">85%</span></td>
+              <td>Direct: Java, Spring Boot</td>
+            </tr>
+            <tr>
+              <td>QE / Testing Lead</td>
+              <td>Shubha Agarwal</td>
+              <td><span class="status-pill status-pill--growing">82%</span></td>
+              <td>Direct: Hybrid Testing (Manual + Automation)</td>
+            </tr>
+            <tr>
+              <td>Scrum Master / PM</td>
+              <td>Nehha Sharma</td>
+              <td><span class="status-pill status-pill--stable">78%</span></td>
+              <td>Direct: Project Mgmt, Agile</td>
+            </tr>
+            <tr>
+              <td>Scrum Master / PM</td>
+              <td>Manish Chakraborty</td>
+              <td><span class="status-pill status-pill--stable">75%</span></td>
+              <td>Direct: Scrum Master, Delivery Mgmt</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+          <div>
+            <div class="table-title">Pipeline Pool (Awaiting Match)</div>
+            <div class="table-subtitle">12 active &middot; available for redeployment</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Primary Skill</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Vishal Srinivasan</td><td>Java, Spring Boot</td><td><span class="status-pill status-pill--growing">Available</span></td></tr>
+            <tr><td>Vikash Kumar</td><td>Java, Spring Boot, REST</td><td><span class="status-pill status-pill--growing">Available</span></td></tr>
+            <tr><td>Kushal Srivastava</td><td>Java, Spring Boot, Python</td><td><span class="status-pill status-pill--growing">Available</span></td></tr>
+            <tr><td>Srashti Gupta</td><td>Java, Spring Boot, REST</td><td><span class="status-pill status-pill--growing">Available</span></td></tr>
+            <tr><td>Megha Gupta</td><td>Java, Spring Boot, REST</td><td><span class="status-pill status-pill--growing">Available</span></td></tr>
+            <tr><td>Sachin V. M.</td><td>Java, Spring Boot, Python</td><td><span class="status-pill status-pill--growing">Available</span></td></tr>
+            <tr><td>Kapil Kumar</td><td>Java, Spring Boot, Python</td><td><span class="status-pill status-pill--growing">Available</span></td></tr>
+            <tr><td>Rijul Bhatnagar</td><td>PM, Scrum, Agile</td><td><span class="status-pill status-pill--stable">In Pipeline</span></td></tr>
+            <tr><td>Sathish Ranjan</td><td>BSA, RPA (UiPath)</td><td><span class="status-pill status-pill--stable">In Pipeline</span></td></tr>
+            <tr><td>Rachit Goyal</td><td>Data Science</td><td><span class="status-pill status-pill--stable">In Pipeline</span></td></tr>
+            <tr><td>Rachna Vashisth</td><td>RPA Automation</td><td><span class="status-pill status-pill--stable">In Pipeline</span></td></tr>
+            <tr><td>Harman Sandhu</td><td>Java, Spring Boot, REST</td><td><span class="status-pill status-pill--growing">Available</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- TICKER TAPE -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>5,690 SLGS headcount</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>446 FTEs realized</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>141.5 FTEs in pipeline</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>158 open positions</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>68% placement rate</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>62 niche skill roles</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>31.5% AI reinvestment</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>38 PH DRF open</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>5,690 SLGS headcount</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>446 FTEs realized</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>141.5 FTEs in pipeline</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>158 open positions</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>68% placement rate</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>62 niche skill roles</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>31.5% AI reinvestment</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>38 PH DRF open</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>5,690 SLGS headcount</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>446 FTEs realized</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>141.5 FTEs in pipeline</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>158 open positions</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>68% placement rate</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>62 niche skill roles</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--yellow"></span>31.5% AI reinvestment</span>
+      <span class="ticker-item"><span class="ticker-dot ticker-dot--teal"></span>38 PH DRF open</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer__brand">
+      <div class="footer__brand-icon">SL</div>
+      Sun Life SLGS
+    </div>
+    <span class="footer__copy">Capacity Analysis Dashboard &middot; May 2026</span>
+    <span class="footer__version">v1.0.0</span>
+  </div>
+
+  <!-- DID YOU KNOW BUBBLE -->
+  <div class="dyk-bubble" id="dykBubble">
+    <div class="dyk-card dyk-hidden" id="dykCard">
+      <div class="dyk-card__label">Did you know?</div>
+      <div class="dyk-card__highlight" id="dykHighlight"></div>
+      <div class="dyk-card__text" id="dykText"></div>
+      <button class="dyk-card__dismiss" id="dykDismiss">Dismiss</button>
+    </div>
+    <button class="dyk-circle dyk-hidden" id="dykCircle">&#128161;</button>
+  </div>
+
+  <script>
+  (function() {
+    var facts = [
+      { highlight: "5,690 total headcount", text: "SLGS spans 21 functions across India and Philippines — Canada & US Ops leads at 1,571 HC (27.6%)." },
+      { highlight: "158 open positions", text: "Active hiring across 3 channels: 38 PH DRF demands, 107 India TA roles, and 13 contractor positions." },
+      { highlight: "62 niche skill roles", text: "58% of India TA demand requires niche skills — GenAI, Legal, Analytics, and specialized engineering." },
+      { highlight: "31.5% AI reinvestment", text: "34 out of 108 India TA roles are tagged for AI/IJP reinvestment — signalling the shift toward intelligent automation." },
+      { highlight: "Technology leads demand", text: "Technology function accounts for the largest ramp-up at 187 FTEs, followed by Operations at 163." },
+      { highlight: "68% placement rate", text: "More than two-thirds of confirmed capacity has been placed into active engagements across all functions." },
+      { highlight: "446 FTEs realized", text: "31.3% of the 1,422.5 planned capacity has been created — on track for Q2 targets." },
+      { highlight: "GenAI hiring surge", text: "Multiple GenAI Engineer positions open across SLGSP — Agentic AI and AWS Lambda are top-demand skills." },
+    ];
+
+    var currentIndex = 0;
+    var cycleTimer = null;
+    var card = document.getElementById('dykCard');
+    var circle = document.getElementById('dykCircle');
+    var highlight = document.getElementById('dykHighlight');
+    var text = document.getElementById('dykText');
+    var dismiss = document.getElementById('dykDismiss');
+
+    function showFact(index) {
+      highlight.textContent = facts[index].highlight;
+      text.textContent = facts[index].text;
+      card.style.animation = 'none';
+      card.offsetHeight;
+      card.style.animation = 'dyk-fade-in 0.3s ease';
+    }
+
+    function startCycle() {
+      cycleTimer = setInterval(function() {
+        currentIndex = (currentIndex + 1) % facts.length;
+        showFact(currentIndex);
+      }, 6000);
+    }
+
+    function collapse() {
+      card.classList.add('dyk-hidden');
+      circle.classList.remove('dyk-hidden');
+      clearInterval(cycleTimer);
+    }
+
+    function expand() {
+      currentIndex = (currentIndex + 1) % facts.length;
+      showFact(currentIndex);
+      circle.classList.add('dyk-hidden');
+      card.classList.remove('dyk-hidden');
+      startCycle();
+    }
+
+    dismiss.addEventListener('click', collapse);
+    circle.addEventListener('click', expand);
+
+    setTimeout(function() {
+      showFact(0);
+      card.classList.remove('dyk-hidden');
+      startCycle();
+    }, 3000);
+  })();
+  </script>
+
+</body>
+</html>

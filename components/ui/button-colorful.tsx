@@ -18,23 +18,20 @@ function ButtonColorful({
   return (
     <Button
       className={cn(
-        "group relative h-11 overflow-hidden px-5",
-        "bg-zinc-900 text-white hover:bg-zinc-900",
-        "transition-all duration-200 hover:scale-[1.03]",
+        "group relative h-11 overflow-hidden rounded-lg border-0 px-6 text-[#002855] font-semibold",
+        "bg-[#FFCD00]",
+        "shadow-[0_4px_16px_rgba(255,205,0,0.3)]",
+        "transition-all duration-200 hover:bg-[#E5B800]",
+        "hover:shadow-[0_6px_20px_rgba(255,205,0,0.4)]",
         className,
       )}
       {...props}
     >
-      <div
-        className={cn(
-          "absolute inset-0",
-          "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500",
-          "opacity-45 blur transition-opacity duration-500 group-hover:opacity-85",
-        )}
-      />
       <div className="relative flex items-center justify-center gap-2">
-        <span className="text-white">{label}</span>
-        <ArrowUpRight className="h-3.5 w-3.5 text-white/90" />
+        <span className="text-[#002855]">{label}</span>
+        <div className="flex h-5 w-5 items-center justify-center rounded-full border border-[#002855]/30">
+          <ArrowUpRight className="h-3 w-3 text-[#002855]" />
+        </div>
       </div>
     </Button>
   )

@@ -8,7 +8,7 @@ const POC_CARDS = [
     icon: "⚡",
     title: "AI Classifier",
     status: "Live",
-    statusColor: "#00cec9",
+    statusColor: "#0E5665",
     progress: 100,
     delay: 0,
   },
@@ -16,7 +16,7 @@ const POC_CARDS = [
     icon: "🧠",
     title: "LLM Pipeline",
     status: "In Review",
-    statusColor: "#fdcb6e",
+    statusColor: "#ECAB23",
     progress: 75,
     delay: 0.4,
   },
@@ -24,7 +24,7 @@ const POC_CARDS = [
     icon: "📊",
     title: "Data Mesh",
     status: "Live",
-    statusColor: "#00cec9",
+    statusColor: "#0E5665",
     progress: 100,
     delay: 0.8,
   },
@@ -32,18 +32,18 @@ const POC_CARDS = [
     icon: "🔮",
     title: "Vision API",
     status: "Building",
-    statusColor: "#fd79a8",
+    statusColor: "#F8D56A",
     progress: 40,
     delay: 1.2,
   },
 ]
 
 const SHAPES = [
-  { cx: 60, cy: 80, r: 55, color: "#6c5ce7", opacity: 0.08, delay: 0 },
-  { cx: 200, cy: 40, r: 35, color: "#00cec9", opacity: 0.10, delay: 0.5 },
-  { cx: 280, cy: 160, r: 45, color: "#fd79a8", opacity: 0.08, delay: 1.0 },
-  { cx: 130, cy: 220, r: 28, color: "#6c5ce7", opacity: 0.12, delay: 1.5 },
-  { cx: 320, cy: 80, r: 22, color: "#fdcb6e", opacity: 0.10, delay: 0.8 },
+  { cx: 60, cy: 80, r: 55, color: "#ECAB23", opacity: 0.12, delay: 0 },
+  { cx: 200, cy: 40, r: 35, color: "#F8D56A", opacity: 0.16, delay: 0.5 },
+  { cx: 280, cy: 160, r: 45, color: "#0E5665", opacity: 0.08, delay: 1.0 },
+  { cx: 130, cy: 220, r: 28, color: "#ECAB23", opacity: 0.14, delay: 1.5 },
+  { cx: 320, cy: 80, r: 22, color: "#F8D56A", opacity: 0.14, delay: 0.8 },
 ]
 
 function HexShape({ x, y, size, color, delay }: { x: number; y: number; size: number; color: string; delay: number }) {
@@ -113,7 +113,7 @@ export function FloatingGeometry() {
             height: 300,
             top: "10%",
             left: "20%",
-            background: "radial-gradient(circle, rgba(108,92,231,0.15) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(236,171,35,0.18) 0%, transparent 70%)",
           }}
         />
         <div
@@ -123,7 +123,7 @@ export function FloatingGeometry() {
             height: 200,
             bottom: "20%",
             right: "15%",
-            background: "radial-gradient(circle, rgba(0,206,201,0.12) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(14,86,101,0.12) 0%, transparent 70%)",
           }}
         />
         <div
@@ -133,7 +133,7 @@ export function FloatingGeometry() {
             height: 150,
             top: "50%",
             right: "25%",
-            background: "radial-gradient(circle, rgba(253,121,168,0.10) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(248,213,106,0.10) 0%, transparent 70%)",
           }}
         />
       </div>
@@ -163,16 +163,16 @@ export function FloatingGeometry() {
           ))}
 
           {/* Hexagons */}
-          <HexShape x={80} y={100} size={50} color="#6c5ce7" delay={0} />
-          <HexShape x={280} y={280} size={38} color="#00cec9" delay={0.7} />
-          <HexShape x={320} y={120} size={28} color="#fd79a8" delay={1.3} />
-          <HexShape x={160} y={340} size={22} color="#6c5ce7" delay={0.4} />
+          <HexShape x={80} y={100} size={50} color="#ECAB23" delay={0} />
+          <HexShape x={280} y={280} size={38} color="#0E5665" delay={0.7} />
+          <HexShape x={320} y={120} size={28} color="#F8D56A" delay={1.3} />
+          <HexShape x={160} y={340} size={22} color="#ECAB23" delay={0.4} />
 
           {/* Triangle outlines */}
           <motion.polygon
             points="200,50 260,150 140,150"
             fill="none"
-            stroke="#a29bfe"
+            stroke="#0E5665"
             strokeWidth="1"
             opacity={0.3}
             animate={{ opacity: [0.15, 0.4, 0.15], rotate: [0, 360] }}
@@ -188,7 +188,7 @@ export function FloatingGeometry() {
                 cx={50 + col * 75}
                 cy={50 + row * 75}
                 r={2}
-                fill="#6c5ce7"
+                fill="#0E3846"
                 opacity={0.2}
                 animate={{ opacity: [0.1, 0.35, 0.1] }}
                 transition={{
@@ -231,14 +231,14 @@ export function FloatingGeometry() {
               style={{
                 background: "rgba(255,255,255,0.75)",
                 backdropFilter: "blur(16px)",
-                border: "1px solid rgba(108,92,231,0.15)",
-                boxShadow: "0 4px 24px rgba(108,92,231,0.08), 0 1px 4px rgba(0,0,0,0.04)",
+                border: "1px solid rgba(236,171,35,0.28)",
+                boxShadow: "0 18px 42px rgba(236,171,35,0.14), 0 1px 4px rgba(0,0,0,0.04)",
               }}
             >
               <div className="flex items-center gap-3 mb-3">
                 <span className="text-2xl">{card.icon}</span>
                 <div className="flex-1">
-                  <div className="font-semibold text-[#1a1a2e] text-sm">{card.title}</div>
+                  <div className="font-semibold text-[#1F2A2E] text-sm">{card.title}</div>
                   <div
                     className="text-xs font-medium mt-0.5"
                     style={{ color: card.statusColor }}
@@ -249,7 +249,7 @@ export function FloatingGeometry() {
               </div>
 
               {/* Progress bar */}
-              <div className="h-1.5 rounded-full bg-[#f0effe] overflow-hidden">
+              <div className="h-1.5 rounded-full bg-[#FFF7E3] overflow-hidden">
                 <motion.div
                   className="h-full rounded-full"
                   style={{ background: card.statusColor }}
@@ -270,10 +270,10 @@ export function FloatingGeometry() {
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       >
         <div
-          className="px-4 py-2 rounded-full text-xs font-semibold text-white"
+          className="px-4 py-2 rounded-full text-xs font-semibold text-[#082F3A]"
           style={{
-            background: "linear-gradient(135deg, #6c5ce7, #00cec9)",
-            boxShadow: "0 4px 16px rgba(108,92,231,0.35)",
+            background: "linear-gradient(135deg, #ECAB23, #F8D56A)",
+            boxShadow: "0 10px 26px rgba(236,171,35,0.32)",
           }}
         >
           ✦ Innovation Lab

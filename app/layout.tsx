@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Innovation Hub",
-  description: "Interactive Innovation Hub dashboard and POC showcase.",
+  title: "SLGS Innovation",
+  description: "Interactive SLGS Innovation dashboard and POC showcase.",
 };
 
 export default function RootLayout({

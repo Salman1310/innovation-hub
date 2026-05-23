@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLGS Innovation Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --text: #1F2A2E;
+      --text-2: #5B6770;
+      --accent-1: #ECAB23;
+      --accent-2: #F8D56A;
+      --accent-3: #0E5665;
+      --accent-4: #0E3846;
+      --accent-5: #082F3A;
+      --cream: #FFF7E3;
+      --glass: rgba(255, 255, 255, 0.86);
+      --glass-border: rgba(236, 171, 35, 0.28);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-main: "Inter", sans-serif;
+      --font-display: "Space Grotesk", sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-bg {
+      background:
+        radial-gradient(ellipse 72% 55% at 18% -10%, rgba(248,213,106,0.46) 0%, transparent 62%),
+        radial-gradient(ellipse 56% 44% at 88% 24%, rgba(14,86,101,0.10) 0%, transparent 58%),
+        radial-gradient(ellipse 64% 50% at 50% 105%, rgba(236,171,35,0.18) 0%, transparent 62%),
+        #FFFFFF;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+
+    .glass-card {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      box-shadow: 0 18px 60px rgba(14, 56, 70, 0.08);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ECAB23 0%, #F8D56A 40%, #0E5665 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .bg-dot-grid {
+      background-image: radial-gradient(circle, rgba(236,171,35,0.18) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .nav-brand { display: flex; align-items: center; gap: 0.5rem; }
+
+    .nav-logo {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, #ECAB23, #0E5665);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: white;
+      font-family: var(--font-display);
+    }
+
+    .nav-title {
+      font-size: 1.125rem; font-weight: 700;
+      color: var(--text); font-family: var(--font-display);
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2rem;
+      font-size: 0.875rem; font-weight: 500; color: var(--text-2);
+    }
+
+    .nav-links a { text-decoration: none; color: inherit; transition: color var(--transition); }
+    .nav-links a:hover { color: var(--accent-1); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ECAB23, #0E5665);
+      color: white; border: none; border-radius: 9999px;
+      padding: 0.5rem 1.25rem; font-size: 0.875rem; font-weight: 600;
+      cursor: pointer; font-family: var(--font-main); text-decoration: none;
+    }
+
+    .btn-secondary {
+      background: var(--cream); color: var(--accent-1);
+      border: 1px solid rgba(236,171,35,0.15); border-radius: 9999px;
+      padding: 0.375rem 1rem; font-size: 0.75rem; font-weight: 600;
+      cursor: pointer; font-family: var(--font-main);
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh; padding-top: 6rem; padding-bottom: 3rem;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: 3rem; align-items: center; min-height: calc(100vh - 9rem);
+    }
+
+    @media (min-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr 1fr; }
+      .hero-visual { display: block; }
+    }
+
+    .hero-title {
+      font-size: 3.5rem; font-weight: 700; line-height: 1.1;
+      color: var(--text); font-family: var(--font-display);
+      margin: 0 0 1.5rem 0;
+    }
+
+    @media (min-width: 768px) { .hero-title { font-size: 4.5rem; } }
+
+    .hero-desc {
+      font-size: 1.125rem; line-height: 1.7;
+      color: var(--text-2); max-width: 36rem; margin-bottom: 2rem;
+    }
+
+    .hero-stats {
+      display: flex; gap: 2rem; padding-top: 1rem;
+      border-top: 1px solid rgba(236,171,35,0.35);
+    }
+
+    .hero-stat-value {
+      font-size: 1.5rem; font-weight: 700; color: var(--accent-1);
+      font-family: var(--font-display);
+    }
+
+    .hero-stat-label { font-size: 0.875rem; color: var(--text-2); }
+
+    .hero-buttons { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+
+    .hero-visual {
+      display: none; border-radius: 24px; overflow: hidden;
+      background: var(--cream); height: 420px;
+      position: relative;
+    }
+
+    .hero-visual-inner {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(236,171,35,0.2) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(14,86,101,0.15) 0%, transparent 50%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 1.5rem;
+      font-weight: 600; color: var(--text-2); opacity: 0.6;
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%;
+      transform: translateX(-50%); text-align: center;
+      color: var(--text-2);
+    }
+
+    .scroll-hint span {
+      font-size: 0.75rem; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.15em;
+    }
+
+    .scroll-line {
+      width: 1px; height: 48px; margin: 0.5rem auto 0;
+      background: linear-gradient(to bottom, rgba(236,171,35,0.5), transparent);
+    }
+
+    /* Rotating words */
+    .rotating-word {
+      display: inline-block;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ECAB23 0%, #F8D56A 46%, #0E5665 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: wordRotate 10s infinite;
+    }
+
+    @keyframes wordRotate {
+      0%, 18% { content: "future."; }
+      20%, 38% { content: "AI-first."; }
+      40%, 58% { content: "useful."; }
+      60%, 78% { content: "live."; }
+      80%, 100% { content: "scalable."; }
+    }
+
+    /* Section common */
+    .section { padding: 6rem 0; }
+
+    .section-badge {
+      display: inline-block; border-radius: 9999px;
+      padding: 0.375rem 1rem; font-size: 0.75rem; font-weight: 600;
+      background: var(--cream); color: var(--accent-1);
+      border: 1px solid rgba(236,171,35,0.15); margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem; font-weight: 700; color: var(--text);
+      font-family: var(--font-display); margin: 0 0 1rem 0;
+    }
+
+    @media (min-width: 768px) { .section-title { font-size: 3rem; } }
+
+    .section-desc { color: var(--text-2); max-width: 36rem; margin: 0 auto; }
+
+    .overline {
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.18em; color: var(--accent-1); margin-bottom: 0.25rem;
+    }
+
+    /* Team */
+    .team-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem; margin-top: 2rem;
+    }
+
+    .team-card {
+      padding: 1.5rem; text-align: center;
+      transition: transform var(--transition);
+    }
+
+    .team-card:hover { transform: translateY(-4px); }
+
+    .team-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      object-fit: cover; margin: 0 auto 1rem;
+      border: 3px solid rgba(236,171,35,0.35);
+    }
+
+    .team-name {
+      font-size: 1rem; font-weight: 700; color: var(--text);
+      font-family: var(--font-display); margin: 0 0 0.25rem;
+    }
+
+    .team-role {
+      display: inline-block; font-size: 0.7rem; font-weight: 600;
+      background: linear-gradient(135deg, #FFF7E3, #F8D56A);
+      color: var(--accent-4); border-radius: 9999px;
+      padding: 0.2rem 0.6rem; margin-bottom: 0.75rem;
+    }
+
+    .team-desc {
+      font-size: 0.8rem; color: var(--text-2); line-height: 1.5;
+    }
+
+    /* Metrics */
+    .metrics-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+    }
+
+    @media (min-width: 768px) { .metrics-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .metrics-grid { grid-template-columns: repeat(6, 1fr); } }
+
+    .metric-card { padding: 1.25rem; text-align: center; transition: transform var(--transition); }
+    .metric-card:hover { transform: scale(1.05); }
+
+    .metric-value {
+      font-size: 1.875rem; font-weight: 700;
+      font-family: var(--font-display); margin-bottom: 0.25rem;
+    }
+
+    .metric-label { font-size: 0.75rem; font-weight: 500; color: var(--text-2); }
+
+    /* Ticker */
+    .ticker {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem; margin-bottom: 2rem; flex-wrap: wrap; gap: 0.75rem;
+    }
+
+    .ticker-left { display: flex; align-items: center; gap: 0.75rem; }
+
+    .ticker-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent-3); position: relative;
+    }
+
+    .ticker-dot::before {
+      content: ""; position: absolute; inset: -3px; border-radius: 50%;
+      background: var(--accent-3); opacity: 0.3;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .ticker-text { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+    .ticker-meta { font-size: 0.75rem; color: var(--text-2); font-family: var(--font-mono); }
+
+    /* Trend badges */
+    .trend-grid {
+      display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-bottom: 2rem;
+    }
+
+    @media (min-width: 768px) { .trend-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .trend-badge {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem; gap: 1rem;
+    }
+
+    .trend-value {
+      font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.18em;
+    }
+
+    .trend-label { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+
+    /* Filter */
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+
+    .filter-btn {
+      border-radius: 9999px; padding: 0.5rem 1rem;
+      font-size: 0.75rem; font-weight: 700;
+      border: 1px solid rgba(236,171,35,0.18);
+      background: rgba(255,255,255,0.72); color: var(--text-2);
+      cursor: pointer; transition: all var(--transition);
+      font-family: var(--font-main);
+    }
+
+    .filter-btn.active { background: var(--accent-1); border-color: var(--accent-1); color: white; }
+    .filter-btn:hover:not(.active) { border-color: var(--accent-1); color: var(--accent-1); }
+
+    /* Gallery */
+    .gallery-grid {
+      display: grid; grid-template-columns: 1fr; gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .gallery-card {
+      padding: 1.5rem; transition: transform var(--transition), box-shadow var(--transition);
+      cursor: default;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 60px rgba(236, 171, 35, 0.18);
+    }
+
+    .gallery-card.featured { grid-column: span 1; }
+    @media (min-width: 768px) { .gallery-card.featured { grid-column: span 2; } }
+
+    .card-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 1rem; margin-bottom: 0.75rem;
+    }
+
+    .card-title { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0; }
+
+    .status-pill {
+      white-space: nowrap; border-radius: 9999px;
+      padding: 0.125rem 0.5rem; font-size: 0.75rem; font-weight: 600;
+    }
+
+    .card-desc { font-size: 0.875rem; color: var(--text-2); line-height: 1.6; margin-bottom: 1rem; }
+
+    .card-tags { display: flex; flex-wrap: wrap; gap: 0.375rem; margin-bottom: 1rem; }
+
+    .tag {
+      background: var(--cream); color: var(--accent-1);
+      border-radius: 9999px; padding: 0.125rem 0.5rem;
+      font-size: 10px; font-weight: 500; font-family: var(--font-mono);
+    }
+
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 0.75rem;
+    }
+
+    .card-unit { color: var(--text-2); }
+    .card-impact { font-weight: 600; color: var(--accent-1); }
+
+    .featured-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--text); color: white; border-radius: 9999px;
+      padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    /* Widgets */
+    .widget-grid {
+      display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 3rem;
+    }
+
+    @media (min-width: 1024px) { .widget-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .widget-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .widget-title {
+      font-size: 1.125rem; font-weight: 700; color: var(--text);
+      font-family: var(--font-display); margin: 0.25rem 0 0 0;
+    }
+
+    .widget-icon { width: 20px; height: 20px; color: var(--accent-1); }
+
+    /* Progress bars */
+    .progress-item { margin-bottom: 1rem; }
+
+    .progress-header {
+      display: flex; justify-content: space-between;
+      font-size: 0.75rem; font-weight: 600; color: var(--text-2);
+      margin-bottom: 0.25rem;
+    }
+
+    .progress-track { height: 0.75rem; border-radius: 9999px; background: var(--cream); overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 9999px; }
+
+    /* Legend */
+    .legend-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.375rem 0; font-size: 0.875rem;
+    }
+
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 0.5rem; display: inline-block; }
+    .legend-label { display: flex; align-items: center; color: var(--text-2); font-weight: 500; }
+    .legend-value { font-weight: 700; color: var(--text); font-family: var(--font-mono); }
+
+    /* Heatmap */
+    .heatmap-grid { display: grid; grid-template-columns: 64px repeat(4, 1fr); gap: 0.5rem; }
+
+    .heatmap-label {
+      font-size: 0.75rem; font-weight: 700; color: var(--text-2);
+      font-family: var(--font-mono); align-self: center;
+    }
+
+    .heatmap-header { font-size: 0.75rem; font-weight: 600; color: var(--text-2); text-align: center; }
+
+    .heatmap-cell {
+      height: 2.5rem; border-radius: var(--radius-sm);
+      border: 1px solid rgba(236,171,35,0.1);
+    }
+
+    /* Bar chart */
+    .bar-chart {
+      display: flex; align-items: flex-end; gap: 1.5rem;
+      height: 12rem; padding: 1.5rem 0;
+    }
+
+    .bar-col {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 0.5rem; height: 100%;
+      justify-content: flex-end;
+    }
+
+    .bar-value { font-size: 0.875rem; font-weight: 700; color: var(--accent-1); font-family: var(--font-mono); }
+
+    .bar {
+      width: 100%; border-radius: 8px 8px 0 0;
+      background: linear-gradient(180deg, #ECAB23 0%, #F8D56A 100%);
+      min-height: 20px;
+    }
+
+    .bar-label { font-size: 0.75rem; font-weight: 500; color: var(--text-2); }
+
+    /* Marquee band */
+    .marquee-band {
+      background: linear-gradient(135deg, #1F2A2E 0%, #0E3846 50%, #1F2A2E 100%);
+      padding: 1.5rem 2rem; overflow: hidden;
+    }
+
+    .marquee-content {
+      display: flex; gap: 3rem; white-space: nowrap;
+      font-size: 0.875rem; font-weight: 500;
+      color: rgba(255,255,255,0.8); font-family: var(--font-mono);
+      animation: marquee 20s linear infinite;
+    }
+
+    .marquee-dot {
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 50%; margin-right: 0.75rem;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-33.333%); }
+    }
+
+    /* Did You Know */
+    .dyk {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 40;
+      max-width: 320px;
+    }
+
+    .dyk-card {
+      padding: 1.25rem; position: relative;
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    .dyk-label {
+      font-size: 0.625rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.15em; color: var(--accent-1); margin-bottom: 0.5rem;
+    }
+
+    .dyk-text { font-size: 0.8rem; color: var(--text-2); line-height: 1.5; margin-bottom: 0.75rem; }
+
+    .dyk-highlight {
+      font-size: 0.7rem; font-weight: 700; color: var(--accent-3);
+      font-family: var(--font-mono);
+    }
+
+    .dyk-close {
+      position: absolute; top: 0.75rem; right: 0.75rem;
+      background: none; border: none; cursor: pointer;
+      color: var(--text-2); font-size: 1.25rem; line-height: 1;
+    }
+
+    .dyk-dot {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #ECAB23, #0E5665);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: white; font-weight: 700; font-size: 0.875rem;
+      box-shadow: 0 4px 16px rgba(236,171,35,0.3);
+      margin-left: auto;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid rgba(236,171,35,0.1);
+      padding: 4rem 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+
+    .footer-text { font-size: 0.875rem; color: var(--text-2); }
+
+    .footer-version {
+      background: var(--cream); color: var(--accent-1);
+      border-radius: 9999px; padding: 0.25rem 0.75rem;
+      font-size: 0.75rem; font-weight: 500; font-family: var(--font-mono);
+    }
+
+    /* Responsive nav */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav .btn-primary { display: none; }
+    }
+  </style>
+</head>
+<body class="page-bg">
+
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">IH</div>
+      <span class="nav-title">SLGS Innovation</span>
+    </div>
+    <div class="nav-links">
+      <a href="#team">Team</a>
+      <a href="#dashboard">Dashboard</a>
+    </div>
+    <a href="#dashboard" class="btn-primary">Launch Dashboard</a>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="bg-dot-grid" style="position: absolute; inset: 0; opacity: 0.4; pointer-events: none;"></div>
+    <div class="container" style="position: relative; z-index: 1;">
+      <div class="hero-grid">
+        <div style="padding: 5rem 0 3rem;">
+          <div class="btn-secondary" style="margin-bottom: 1.5rem;">
+            <span style="position: relative; display: inline-flex; width: 8px; height: 8px;">
+              <span style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background: #ECAB23; opacity: 0.75; animation: pulse 2s infinite;"></span>
+              <span style="position: relative; width: 8px; height: 8px; border-radius: 50%; background: #ECAB23;"></span>
+            </span>
+            Now open for innovations
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+
+          <h1 class="hero-title">
+            We build<br>what's<br>
+            <span class="rotating-word" id="rotatingWord">future.</span>
+          </h1>
+
+          <p class="hero-desc">
+            Sun Life's SLGS Innovation is where breakthrough ideas become real products — fast.
+            We experiment, prototype, and scale solutions that make insurance smarter, advisors
+            sharper, and client experiences effortless.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#dashboard" class="btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem;">Explore POCs</a>
+            <a href="#dashboard" class="btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem;">View Dashboard</a>
+          </div>
+
+          <div class="hero-stats">
+            <div>
+              <div class="hero-stat-value">80</div>
+              <div class="hero-stat-label">POCs Tracked</div>
+            </div>
+            <div>
+              <div class="hero-stat-value">12</div>
+              <div class="hero-stat-label">In Production</div>
+            </div>
+            <div>
+              <div class="hero-stat-value">8+</div>
+              <div class="hero-stat-label">Tech Streams</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-visual-inner">Innovation Hub</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll to explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- TEAM SECTION -->
+  <section id="team" class="section">
+    <div class="container">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <div class="section-badge">Innovation Is For Everyone</div>
+        <h2 class="section-title">Your Idea Could Be <span class="gradient-text">Next</span></h2>
+        <p class="section-desc">
+          Innovation isn't reserved for a special team — it starts with you. Got a bold idea that could change how we work? We'll help you build it.
+        </p>
+      </div>
+
+      <div class="team-grid">
+        <div class="glass-card team-card">
+          <img class="team-avatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face" alt="Sachin Mathur">
+          <h3 class="team-name">Sachin Mathur</h3>
+          <span class="team-role">Innovation Team Leader</span>
+          <p class="team-desc">Guiding the SLGS Innovation vision and helping the team turn promising ideas into practical enterprise impact.</p>
+        </div>
+        <div class="glass-card team-card">
+          <img class="team-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face" alt="Prashant Agarwal">
+          <h3 class="team-name">Prashant Agarwal</h3>
+          <span class="team-role">Principal Solution Designer</span>
+          <p class="team-desc">Designing solution paths that connect business problems, emerging technology, and scalable delivery patterns.</p>
+        </div>
+        <div class="glass-card team-card">
+          <img class="team-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face" alt="Shelza Jindal">
+          <h3 class="team-name">Shelza Jindal</h3>
+          <span class="team-role">SLGS Innovation Owner</span>
+          <p class="team-desc">Leading high-impact Gen AI and automation POCs from intake through production readiness.</p>
+        </div>
+        <div class="glass-card team-card">
+          <img class="team-avatar" src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=150&h=150&fit=crop&crop=face" alt="Karthik Ramadurai">
+          <h3 class="team-name">Karthik Ramadurai</h3>
+          <span class="team-role">SLGS Innovation Owner</span>
+          <p class="team-desc">Scaling AI, analytics, and workflow modernization concepts across multiple markets.</p>
+        </div>
+        <div class="glass-card team-card">
+          <img class="team-avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face" alt="Chandan Singh">
+          <h3 class="team-name">Chandan Singh</h3>
+          <span class="team-role">SLGS Innovation Owner</span>
+          <p class="team-desc">Supporting emerging technology experiments and cross-functional delivery momentum.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD SECTION -->
+  <section id="dashboard" class="section" style="padding-top: 3rem;">
+    <div class="container">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <div class="section-badge">The Numbers</div>
+        <h2 class="section-title">Impact <span class="gradient-text">Dashboard</span></h2>
+        <p class="section-desc">Real portfolio signals shaped into an interactive leadership view.</p>
+      </div>
+
+      <!-- Live Ticker -->
+      <div class="glass-card ticker">
+        <div class="ticker-left">
+          <div class="ticker-dot"></div>
+          <span class="ticker-text" id="tickerText">Live pulse: 12 POCs in production</span>
+        </div>
+        <span class="ticker-meta">live portfolio pulse</span>
+      </div>
+
+      <!-- Trend Badges -->
+      <div class="trend-grid">
+        <div class="glass-card trend-badge">
+          <div>
+            <div class="trend-value" style="color: #0E5665;">UP</div>
+            <div class="trend-label">Portfolio scaled from a 2020 team foundation</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E5665" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </div>
+        <div class="glass-card trend-badge">
+          <div>
+            <div class="trend-value" style="color: #ECAB23;">LIVE</div>
+            <div class="trend-label">15 active production-scale signals</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ECAB23" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </div>
+        <div class="glass-card trend-badge">
+          <div>
+            <div class="trend-value" style="color: #F8D56A;">27</div>
+            <div class="trend-label">Gen AI leads the portfolio</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F8D56A" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="metrics-grid" style="margin-bottom: 3rem;">
+        <div class="glass-card metric-card">
+          <div class="metric-value" style="color: #ECAB23;">80</div>
+          <div class="metric-label">Total POCs</div>
+        </div>
+        <div class="glass-card metric-card">
+          <div class="metric-value" style="color: #0E5665;">12</div>
+          <div class="metric-label">In Production</div>
+        </div>
+        <div class="glass-card metric-card">
+          <div class="metric-value" style="color: #F8D56A;">6</div>
+          <div class="metric-label">Prototyping</div>
+        </div>
+        <div class="glass-card metric-card">
+          <div class="metric-value" style="color: #F8D56A;">8</div>
+          <div class="metric-label">Markets</div>
+        </div>
+        <div class="glass-card metric-card">
+          <div class="metric-value" style="color: #F8D56A;">5</div>
+          <div class="metric-label">Core Leaders</div>
+        </div>
+        <div class="glass-card metric-card">
+          <div class="metric-value" style="color: #0E5665;">8+</div>
+          <div class="metric-label">Tech Streams</div>
+        </div>
+      </div>
+
+      <!-- POC Gallery -->
+      <div style="margin-bottom: 3rem;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem;">
+          <div>
+            <div class="overline" style="display: flex; align-items: center; gap: 0.5rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              Filterable gallery
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text); font-family: var(--font-display); margin: 0.25rem 0 0;">
+              Recent POCs from the portfolio
+            </h3>
+          </div>
+          <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterCards('All')">All</button>
+            <button class="filter-btn" onclick="filterCards('AI-ML')">AI-ML</button>
+            <button class="filter-btn" onclick="filterCards('Web3')">Web3</button>
+            <button class="filter-btn" onclick="filterCards('Data')">Data</button>
+            <button class="filter-btn" onclick="filterCards('Infra')">Infra</button>
+          </div>
+        </div>
+
+        <div class="gallery-grid" id="pocGallery">
+          <!-- Audio Analytics -->
+          <div class="glass-card gallery-card featured" data-category="AI-ML">
+            <div class="featured-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#F8D56A" stroke="#F8D56A" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Featured POC
+            </div>
+            <div class="card-header">
+              <h4 class="card-title">Audio Analytics - Pinnacle Care</h4>
+              <span class="status-pill" style="color: #0E5665; background: rgba(14,86,101,0.1);">Production</span>
+            </div>
+            <p class="card-desc">AI-powered call analytics for advisor coaching and contact-center quality assurance.</p>
+            <div class="card-tags">
+              <span class="tag">AI/ML</span>
+              <span class="tag">NLP</span>
+              <span class="tag">Python</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-unit">US Pinnacle Care</span>
+              <span class="card-impact">Live in production</span>
+            </div>
+          </div>
+
+          <!-- E-KYC -->
+          <div class="glass-card gallery-card" data-category="AI-ML">
+            <div class="card-header">
+              <h4 class="card-title">E-KYC with Onfido</h4>
+              <span class="status-pill" style="color: #0E5665; background: rgba(14,86,101,0.1);">Production</span>
+            </div>
+            <p class="card-desc">Electronic customer verification with automated identity document processing.</p>
+            <div class="card-tags">
+              <span class="tag">Computer Vision</span>
+              <span class="tag">AI/ML</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-unit">Singapore</span>
+              <span class="card-impact">Faster onboarding</span>
+            </div>
+          </div>
+
+          <!-- CSR Automation -->
+          <div class="glass-card gallery-card" data-category="AI-ML">
+            <div class="card-header">
+              <h4 class="card-title">CSR Automation</h4>
+              <span class="status-pill" style="color: #0E5665; background: rgba(14,86,101,0.1);">Production</span>
+            </div>
+            <p class="card-desc">Automates customer service request handling to reduce repetitive manual work.</p>
+            <div class="card-tags">
+              <span class="tag">Gen AI</span>
+              <span class="tag">Python</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-unit">Asia</span>
+              <span class="card-impact">60% less manual work</span>
+            </div>
+          </div>
+
+          <!-- Fastrack -->
+          <div class="glass-card gallery-card" data-category="Data">
+            <div class="card-header">
+              <h4 class="card-title">Fastrack Business Insights</h4>
+              <span class="status-pill" style="color: #0E5665; background: rgba(14,86,101,0.1);">Production</span>
+            </div>
+            <p class="card-desc">Data virtualization layer unifying siloed sources for faster business intelligence.</p>
+            <div class="card-tags">
+              <span class="tag">Denodo</span>
+              <span class="tag">Data</span>
+              <span class="tag">Python</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-unit">Asia</span>
+              <span class="card-impact">Real-time BI</span>
+            </div>
+          </div>
+
+          <!-- Asset Tokenization -->
+          <div class="glass-card gallery-card" data-category="Web3">
+            <div class="card-header">
+              <h4 class="card-title">Asset Tokenization</h4>
+              <span class="status-pill" style="color: #ECAB23; background: rgba(236,171,35,0.1);">Completed</span>
+            </div>
+            <p class="card-desc">Blockchain experiment for asset tokenization and new business model exploration.</p>
+            <div class="card-tags">
+              <span class="tag">Blockchain</span>
+              <span class="tag">Web3</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-unit">CAN</span>
+              <span class="card-impact">New model validated</span>
+            </div>
+          </div>
+
+          <!-- Knowledge Management -->
+          <div class="glass-card gallery-card" data-category="AI-ML">
+            <div class="card-header">
+              <h4 class="card-title">Knowledge Management Q&A</h4>
+              <span class="status-pill" style="color: #F8D56A; background: rgba(248,213,106,0.15);">Bookshelf</span>
+            </div>
+            <p class="card-desc">Gen AI search over internal documents to speed up knowledge discovery.</p>
+            <div class="card-tags">
+              <span class="tag">Gen AI</span>
+              <span class="tag">RAG</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-unit">CAN</span>
+              <span class="card-impact">Productivity lift</span>
+            </div>
+          </div>
+
+          <!-- Sun Canvas -->
+          <div class="glass-card gallery-card" data-category="Data">
+            <div class="card-header">
+              <h4 class="card-title">Sun Canvas</h4>
+              <span class="status-pill" style="color: #0E5665; background: rgba(14,86,101,0.1);">Production</span>
+            </div>
+            <p class="card-desc">Solar energy planning and visualization tool for sustainable infrastructure projects.</p>
+            <div class="card-tags">
+              <span class="tag">Computer Vision</span>
+              <span class="tag">Python</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-unit">Asia</span>
+              <span class="card-impact">Green planning</span>
+            </div>
+          </div>
+
+          <!-- Low Code -->
+          <div class="glass-card gallery-card" data-category="Infra">
+            <div class="card-header">
+              <h4 class="card-title">Low Code Data API Platform</h4>
+              <span class="status-pill" style="color: #F8D56A; background: rgba(248,213,106,0.15);">Bookshelf</span>
+            </div>
+            <p class="card-desc">Reusable platform for exposing governed data APIs across teams.</p>
+            <div class="card-tags">
+              <span class="tag">API</span>
+              <span class="tag">Platform</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-unit">Asia</span>
+              <span class="card-impact">Reusable infra</span>
+            </div>
+          </div>
+
+          <!-- Agentic AI -->
+          <div class="glass-card gallery-card" data-category="AI-ML">
+            <div class="card-header">
+              <h4 class="card-title">Agentic AI Evaluation</h4>
+              <span class="status-pill" style="color: #F8D56A; background: rgba(248,213,106,0.15);">Prototyping</span>
+            </div>
+            <p class="card-desc">Exploration of autonomous workflow agents for complex operational tasks.</p>
+            <div class="card-tags">
+              <span class="tag">Agentic AI</span>
+              <span class="tag">Automation</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-unit">SLGS</span>
+              <span class="card-impact">Next-gen workflow</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Widgets -->
+      <div class="widget-grid">
+        <!-- Donut Chart -->
+        <div class="glass-card" style="padding: 1.5rem;">
+          <div class="widget-header">
+            <div>
+              <div class="overline">Status mix</div>
+              <h3 class="widget-title">POC Status Breakdown</h3>
+            </div>
+            <svg class="widget-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 1.5rem; align-items: center;">
+            <svg viewBox="0 0 100 100" style="width: 140px; height: 140px; transform: rotate(-90deg);">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(236,171,35,0.1)" stroke-width="12"/>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#0E5665" stroke-width="12" stroke-dasharray="65.0 198.9" stroke-dashoffset="0" stroke-linecap="round"/>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#F8D56A" stroke-width="12" stroke-dasharray="21.7 242.2" stroke-dashoffset="-65.0" stroke-linecap="round"/>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#F8D56A" stroke-width="12" stroke-dasharray="37.9 226.0" stroke-dashoffset="-86.7" stroke-linecap="round"/>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#ECAB23" stroke-width="12" stroke-dasharray="140.8 123.2" stroke-dashoffset="-124.6" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <div class="legend-item">
+                <span class="legend-label"><span class="legend-dot" style="background: #0E5665;"></span>Live</span>
+                <span class="legend-value">12</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-label"><span class="legend-dot" style="background: #F8D56A;"></span>In Review</span>
+                <span class="legend-value">4</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-label"><span class="legend-dot" style="background: #F8D56A;"></span>Building</span>
+                <span class="legend-value">7</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-label"><span class="legend-dot" style="background: #ECAB23;"></span>Completed</span>
+                <span class="legend-value">26</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Impact Bars -->
+        <div class="glass-card" style="padding: 1.5rem;">
+          <div class="widget-header">
+            <div>
+              <div class="overline">Business impact</div>
+              <h3 class="widget-title">POCs by Market</h3>
+            </div>
+            <svg class="widget-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div>
+            <div class="progress-item">
+              <div class="progress-header"><span>Asia</span><span style="font-family: var(--font-mono);">29</span></div>
+              <div class="progress-track"><div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, #ECAB23, #F8D56A);"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-header"><span>Canada / CAN</span><span style="font-family: var(--font-mono);">15</span></div>
+              <div class="progress-track"><div class="progress-fill" style="width: 52%; background: linear-gradient(90deg, #0E5665, #F8D56A);"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-header"><span>SLGS</span><span style="font-family: var(--font-mono);">13</span></div>
+              <div class="progress-track"><div class="progress-fill" style="width: 45%; background: linear-gradient(90deg, #F8D56A, #ECAB23);"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-header"><span>US Ops</span><span style="font-family: var(--font-mono);">4</span></div>
+              <div class="progress-track"><div class="progress-fill" style="width: 14%; background: linear-gradient(90deg, #F8D56A, #ECAB23);"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-header"><span>Other Markets</span><span style="font-family: var(--font-mono);">19</span></div>
+              <div class="progress-track"><div class="progress-fill" style="width: 66%; background: linear-gradient(90deg, #F8D56A, #0E5665);"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity Heatmap -->
+        <div class="glass-card" style="padding: 1.5rem;">
+          <div class="widget-header">
+            <div>
+              <div class="overline">Activity timeline</div>
+              <h3 class="widget-title">Quarterly POC Activity</h3>
+            </div>
+            <svg class="widget-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="heatmap-grid">
+            <span></span>
+            <span class="heatmap-header">Q1</span>
+            <span class="heatmap-header">Q2</span>
+            <span class="heatmap-header">Q3</span>
+            <span class="heatmap-header">Q4</span>
+
+            <span class="heatmap-label">2021</span>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.30);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.10);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.08);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.08);"></div>
+
+            <span class="heatmap-label">2022</span>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.55);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.10);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.08);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.20);"></div>
+
+            <span class="heatmap-label">2023</span>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.70);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.20);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.08);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.10);"></div>
+
+            <span class="heatmap-label">2024</span>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.85);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.75);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.20);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.08);"></div>
+
+            <span class="heatmap-label">2025</span>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.40);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.50);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.08);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.08);"></div>
+
+            <span class="heatmap-label">2026</span>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.08);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.10);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.08);"></div>
+            <div class="heatmap-cell" style="background: rgba(14,86,101,0.08);"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Year over Year Bar Chart -->
+      <div class="glass-card" style="padding: 2rem; margin-bottom: 3rem;">
+        <div class="widget-header">
+          <div>
+            <div class="overline">Trend line</div>
+            <h3 class="widget-title">POCs Delivered — Year over Year</h3>
+          </div>
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(14,86,101,0.1); border-radius: 9999px; padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 700; color: var(--accent-3);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></svg>
+            2025 portfolio peak
+          </div>
+        </div>
+        <div class="bar-chart">
+          <div class="bar-col">
+            <span class="bar-value">18</span>
+            <div class="bar" style="height: 23%;"></div>
+            <span class="bar-label">2023</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-value">38</span>
+            <div class="bar" style="height: 49%;"></div>
+            <span class="bar-label">2024</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-value">80</span>
+            <div class="bar" style="height: 100%;"></div>
+            <span class="bar-label">2025</span>
+          </div>
+          <div class="bar-col">
+            <span class="bar-value">14</span>
+            <div class="bar" style="height: 18%;"></div>
+            <span class="bar-label">2026 YTD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE BAND -->
+  <div class="marquee-band">
+    <div class="marquee-content">
+      <span><span class="marquee-dot" style="background: #ECAB23;"></span>80 POCs tracked</span>
+      <span><span class="marquee-dot" style="background: #0E5665;"></span>12 in production</span>
+      <span><span class="marquee-dot" style="background: #ECAB23;"></span>6 prototypes moving</span>
+      <span><span class="marquee-dot" style="background: #0E5665;"></span>8 markets active</span>
+      <span><span class="marquee-dot" style="background: #ECAB23;"></span>27 Gen AI entries</span>
+      <span><span class="marquee-dot" style="background: #0E5665;"></span>5 core leaders</span>
+      <span><span class="marquee-dot" style="background: #ECAB23;"></span>80 POCs tracked</span>
+      <span><span class="marquee-dot" style="background: #0E5665;"></span>12 in production</span>
+      <span><span class="marquee-dot" style="background: #ECAB23;"></span>6 prototypes moving</span>
+      <span><span class="marquee-dot" style="background: #0E5665;"></span>8 markets active</span>
+      <span><span class="marquee-dot" style="background: #ECAB23;"></span>27 Gen AI entries</span>
+      <span><span class="marquee-dot" style="background: #0E5665;"></span>5 core leaders</span>
+      <span><span class="marquee-dot" style="background: #ECAB23;"></span>80 POCs tracked</span>
+      <span><span class="marquee-dot" style="background: #0E5665;"></span>12 in production</span>
+      <span><span class="marquee-dot" style="background: #ECAB23;"></span>6 prototypes moving</span>
+      <span><span class="marquee-dot" style="background: #0E5665;"></span>8 markets active</span>
+      <span><span class="marquee-dot" style="background: #ECAB23;"></span>27 Gen AI entries</span>
+      <span><span class="marquee-dot" style="background: #0E5665;"></span>5 core leaders</span>
+    </div>
+  </div>
+
+  <!-- DID YOU KNOW -->
+  <div class="dyk" id="dykWidget">
+    <div class="glass-card dyk-card" id="dykCard">
+      <button class="dyk-close" onclick="closeDyk()">&times;</button>
+      <div class="dyk-label">Did you know?</div>
+      <p class="dyk-text" id="dykText">27 out of 80 POCs in our portfolio use Gen AI — making it the single biggest tech stream in SLGS Innovation.</p>
+      <span class="dyk-highlight" id="dykHighlight">Gen AI = #1 stream</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="nav-brand">
+        <div class="nav-logo">IH</div>
+        <span style="font-weight: 700; font-family: var(--font-display); color: var(--text);">SLGS Innovation</span>
+      </div>
+      <span class="footer-text">Built by the Innovation Lab — portfolio view, May 2026</span>
+      <span class="footer-version">v1.1.0</span>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Rotating hero word
+    const words = ["future.", "AI-first.", "useful.", "live.", "scalable."];
+    let wordIndex = 0;
+    const rotatingWord = document.getElementById("rotatingWord");
+
+    setInterval(() => {
+      wordIndex = (wordIndex + 1) % words.length;
+      rotatingWord.style.opacity = "0";
+      rotatingWord.style.transform = "translateY(10px)";
+      setTimeout(() => {
+        rotatingWord.textContent = words[wordIndex];
+        rotatingWord.style.opacity = "1";
+        rotatingWord.style.transform = "translateY(0)";
+      }, 200);
+    }, 2000);
+
+    rotatingWord.style.transition = "opacity 0.2s, transform 0.2s";
+
+    // Ticker rotation
+    const tickerItems = [
+      "Live pulse: 12 POCs in production",
+      "Pipeline: 6 prototypes currently shaping up",
+      "Portfolio: 80 POCs tracked across the innovation pipeline",
+      "Leadership: Sachin Mathur and Prashant Agarwal shaping the innovation path"
+    ];
+    let tickerIndex = 0;
+    const tickerText = document.getElementById("tickerText");
+
+    setInterval(() => {
+      tickerIndex = (tickerIndex + 1) % tickerItems.length;
+      tickerText.style.opacity = "0";
+      setTimeout(() => {
+        tickerText.textContent = tickerItems[tickerIndex];
+        tickerText.style.opacity = "1";
+      }, 200);
+    }, 2400);
+
+    tickerText.style.transition = "opacity 0.2s";
+
+    // Gallery filter
+    function filterCards(category) {
+      const cards = document.querySelectorAll(".gallery-card");
+      const btns = document.querySelectorAll(".filter-btn");
+
+      btns.forEach(btn => btn.classList.remove("active"));
+      event.target.classList.add("active");
+
+      cards.forEach(card => {
+        if (category === "All" || card.dataset.category === category) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    // Did You Know cycling
+    const facts = [
+      { text: "27 out of 80 POCs in our portfolio use Gen AI — making it the single biggest tech stream in SLGS Innovation.", highlight: "Gen AI = #1 stream" },
+      { text: "Audio Analytics for Pinnacle Care went from idea to production in under 12 weeks, now live across US contact centres.", highlight: "12-week sprint" },
+      { text: "Our POCs span 8 markets — Asia, Canada, US, Philippines, Singapore, HK, Indonesia, and SLGS.", highlight: "8 markets reached" },
+      { text: "29 POCs were explored and dropped — that’s how we learn fast. Only the best ideas survive to production.", highlight: "29 smart failures" },
+      { text: "Asset Tokenization was our first Blockchain POC — validating new business models for the Canada market.", highlight: "Web3 experiment" },
+      { text: "Shelza Jindal, Karthik Ramadurai, and Chandan Singh together own the majority of the active portfolio.", highlight: "3 IH owners" },
+      { text: "E-KYC with Onfido reduced customer onboarding time by automating identity document verification in Singapore.", highlight: "Faster KYC" },
+      { text: "The SLGS Innovation team started in 2020 — from a small experiment to 80 POCs tracked in 6 years.", highlight: "6 years of innovation" }
+    ];
+    let factIndex = 0;
+    let dykVisible = true;
+
+    setInterval(() => {
+      if (!dykVisible) return;
+      factIndex = (factIndex + 1) % facts.length;
+      document.getElementById("dykText").textContent = facts[factIndex].text;
+      document.getElementById("dykHighlight").textContent = facts[factIndex].highlight;
+    }, 6000);
+
+    function closeDyk() {
+      dykVisible = false;
+      document.getElementById("dykCard").style.display = "none";
+      const dot = document.createElement("div");
+      dot.className = "dyk-dot";
+      dot.textContent = "?";
+      dot.onclick = () => {
+        factIndex = (factIndex + 1) % facts.length;
+        document.getElementById("dykText").textContent = facts[factIndex].text;
+        document.getElementById("dykHighlight").textContent = facts[factIndex].highlight;
+        document.getElementById("dykCard").style.display = "";
+        dot.remove();
+        dykVisible = true;
+      };
+      document.getElementById("dykWidget").appendChild(dot);
+    }
+
+    // Show DYK after delay
+    document.getElementById("dykCard").style.display = "none";
+    setTimeout(() => {
+      document.getElementById("dykCard").style.display = "";
+    }, 2500);
+  </script>
+
+</body>
+</html>

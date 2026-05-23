@@ -17,11 +17,11 @@ interface Particle {
 }
 
 const COLORS = [
-  "108,92,231",   // purple
-  "162,155,254",  // light purple
-  "0,206,201",    // teal
-  "253,121,168",  // pink
-  "253,203,110",  // gold
+  "236,171,35",   // Sun Life yellow
+  "248,213,106",  // light yellow
+  "255,247,227",  // cream
+  "14,86,101",    // teal
+  "14,56,70",     // Sun Life navy
 ]
 
 export function AntigravityField() {
@@ -173,7 +173,7 @@ export function AntigravityField() {
             ctx.beginPath()
             ctx.moveTo(a.x, a.y)
             ctx.lineTo(b.x, b.y)
-            ctx.strokeStyle = `rgba(108,92,231,${alpha})`
+            ctx.strokeStyle = `rgba(236,171,35,${alpha})`
             ctx.stroke()
           }
         }
@@ -185,9 +185,9 @@ export function AntigravityField() {
           mouse.x, mouse.y, 0,
           mouse.x, mouse.y, INFLUENCE_RADIUS
         )
-        gradient.addColorStop(0, "rgba(108,92,231,0.06)")
-        gradient.addColorStop(0.5, "rgba(0,206,201,0.03)")
-        gradient.addColorStop(1, "rgba(108,92,231,0)")
+        gradient.addColorStop(0, "rgba(236,171,35,0.12)")
+        gradient.addColorStop(0.5, "rgba(248,213,106,0.06)")
+        gradient.addColorStop(1, "rgba(236,171,35,0)")
         ctx.beginPath()
         ctx.arc(mouse.x, mouse.y, INFLUENCE_RADIUS, 0, Math.PI * 2)
         ctx.fillStyle = gradient
@@ -215,53 +215,6 @@ export function AntigravityField() {
         style={{ touchAction: "none" }}
       />
 
-      {/* Floating POC cards overlaid */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-        <div className="flex flex-col gap-4 w-72 pointer-events-auto">
-          {[
-            { icon: Zap, title: "AI Classifier", status: "Live", color: "#00cec9", progress: 100 },
-            { icon: Brain, title: "LLM Pipeline", status: "In Review", color: "#fdcb6e", progress: 75 },
-            { icon: Database, title: "Data Mesh", status: "Live", color: "#00cec9", progress: 100 },
-            { icon: Eye, title: "Vision API", status: "Building", color: "#fd79a8", progress: 40 },
-          ].map((card, i) => (
-            <div
-              key={card.title}
-              className="group cursor-pointer rounded-2xl p-4 transition-all duration-300 hover:scale-105"
-              style={{
-                background: "rgba(255,255,255,0.65)",
-                backdropFilter: "blur(16px)",
-                border: "1px solid rgba(108,92,231,0.12)",
-                boxShadow: "0 4px 24px rgba(108,92,231,0.06)",
-                animationDelay: `${i * 0.15}s`,
-              }}
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <div 
-                  className="flex h-8 w-8 items-center justify-center rounded-lg"
-                  style={{
-                    background: `${card.color}15`,
-                    color: card.color
-                  }}
-                >
-                  <card.icon className="h-4.5 w-4.5" />
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-[#1a1a2e] text-sm">{card.title}</div>
-                  <div className="text-xs font-medium" style={{ color: card.color }}>
-                    ● {card.status}
-                  </div>
-                </div>
-              </div>
-              <div className="h-1.5 rounded-full bg-[#f0effe] overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-1000"
-                  style={{ background: card.color, width: `${card.progress}%` }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }

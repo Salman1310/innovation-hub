@@ -2,8 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { motion } from "framer-motion"
-import { MoveRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { ButtonColorful } from "@/components/ui/button-colorful"
 
 function AnimatedHero() {
@@ -22,20 +20,9 @@ function AnimatedHero() {
 
   return (
     <div className="w-full flex flex-col gap-8 py-20 lg:py-0 items-start justify-center">
-      <div>
-        <Button variant="secondary" size="sm" className="gap-3">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#6c5ce7] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#6c5ce7]"></span>
-          </span>
-          Now open for innovations
-          <MoveRight className="w-4 h-4" />
-        </Button>
-      </div>
-
       <div className="flex gap-3 flex-col">
         <h1
-          className="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight text-[#1a1a2e]"
+          className="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight text-[#1F2A2E]"
           style={{ fontFamily: "var(--font-display)" }}
         >
           <span className="block">We build</span>
@@ -46,10 +33,8 @@ function AnimatedHero() {
                 key={index}
                 className="absolute left-0 top-0 whitespace-nowrap font-extrabold"
                 style={{
-                  background: "linear-gradient(135deg, #6c5ce7 0%, #a29bfe 50%, #00cec9 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
+                  color: "#FFCD00",
+                  WebkitTextFillColor: "#FFCD00",
                 }}
                 initial={{ opacity: 0, y: 80 }}
                 transition={{ type: "spring", stiffness: 60, damping: 15 }}
@@ -66,10 +51,10 @@ function AnimatedHero() {
         </h1>
 
         <p
-          className="text-lg md:text-xl leading-relaxed text-[#555580] max-w-xl"
+          className="text-lg md:text-xl leading-relaxed text-[#5B6770] max-w-xl"
           style={{ fontFamily: "var(--font-main)" }}
         >
-          Sun Life&apos;s Innovation Hub is where breakthrough ideas become real products — fast.
+          Sun Life&apos;s SLGS Innovation is where breakthrough ideas become real products — fast.
           We experiment, prototype, and scale solutions that make insurance smarter, advisors
           sharper, and client experiences effortless.
         </p>
@@ -88,20 +73,20 @@ function AnimatedHero() {
         />
       </div>
 
-      <div className="flex gap-8 pt-4 border-t border-[#6c5ce7]/15 w-full">
+      <div className="flex gap-8 pt-4 border-t border-[#ECAB23]/35 w-full">
         {[
-          { value: "80", label: "POCs Tracked" },
+          { value: "49", label: "Active POCs" },
           { value: "12", label: "In Production" },
-          { value: "8+", label: "Tech Streams" },
+          { value: "16", label: "Gen AI POCs" },
         ].map((stat) => (
           <div key={stat.label} className="flex flex-col gap-1">
             <span
-              className="text-2xl font-bold text-[#6c5ce7]"
+              className="text-2xl font-bold text-[#ECAB23]"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {stat.value}
             </span>
-            <span className="text-sm text-[#555580]">{stat.label}</span>
+            <span className="text-sm text-[#5B6770]">{stat.label}</span>
           </div>
         ))}
       </div>

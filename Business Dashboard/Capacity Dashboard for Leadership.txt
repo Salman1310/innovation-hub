@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLGS Capacity Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1F3A;
+    --navy-mid: #112845;
+    --navy-light: #1a3a5c;
+    --gold: #C9A84C;
+    --gold-light: #e0c278;
+    --gold-pale: rgba(201,168,76,0.12);
+    --green: #4A8C5C;
+    --green-pale: rgba(74,140,92,0.15);
+    --red: #C94C4C;
+    --red-pale: rgba(201,76,76,0.15);
+    --amber: #C97A4C;
+    --amber-pale: rgba(201,122,76,0.15);
+    --surface: #0f2743;
+    --surface2: #162f52;
+    --border: rgba(201,168,76,0.18);
+    --text: #e8eef5;
+    --text-muted: rgba(232,238,245,0.5);
+    --text-dim: rgba(232,238,245,0.3);
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+font-family: ‘DM Sans’, sans-serif;
+background: var(–navy);
+color: var(–text);
+min-height: 100vh;
+font-size: 13px;
+}
+
+/* –– HEADER –– */
+.header {
+background: var(–navy-mid);
+border-bottom: 1px solid var(–border);
+padding: 0 28px;
+height: 56px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+position: sticky; top: 0; z-index: 100;
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.logo-mark {
+width: 32px; height: 32px;
+background: var(–gold);
+border-radius: 6px;
+display: flex; align-items: center; justify-content: center;
+font-weight: 700; font-size: 13px; color: var(–navy);
+letter-spacing: 0.5px;
+}
+.header h1 { font-size: 15px; font-weight: 600; letter-spacing: 0.2px; }
+.header-badge {
+font-family: ‘DM Mono’, monospace;
+font-size: 10px; padding: 2px 8px;
+background: var(–gold-pale); border: 1px solid var(–border);
+border-radius: 20px; color: var(–gold); letter-spacing: 0.5px;
+}
+.header-right { display: flex; align-items: center; gap: 12px; }
+.timestamp { font-size: 11px; color: var(–text-muted); font-family: ‘DM Mono’, monospace; }
+
+/* –– FILTER BAR –– */
+.filter-bar {
+background: var(–surface);
+border-bottom: 1px solid var(–border);
+padding: 10px 28px;
+display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.filter-label { font-size: 11px; color: var(–text-muted); margin-right: 4px; text-transform: uppercase; letter-spacing: 0.8px; }
+.pill {
+padding: 4px 12px; border-radius: 20px;
+font-size: 11px; font-weight: 500; cursor: pointer;
+border: 1px solid var(–border);
+background: transparent; color: var(–text-muted);
+transition: all 0.15s;
+}
+.pill.active { background: var(–gold); color: var(–navy); border-color: var(–gold); font-weight: 600; }
+.pill:hover:not(.active) { border-color: var(–gold); color: var(–gold); }
+.filter-sep { width: 1px; height: 20px; background: var(–border); margin: 0 8px; }
+.view-toggle { display: flex; gap: 0; border: 1px solid var(–border); border-radius: 6px; overflow: hidden; margin-left: auto; }
+.view-btn { padding: 5px 14px; font-size: 11px; cursor: pointer; background: transparent; color: var(–text-muted); border: none; font-family: ‘DM Sans’, sans-serif; }
+.view-btn.active { background: var(–gold-pale); color: var(–gold); }
+
+/* –– MAIN LAYOUT –– */
+.main { padding: 20px 28px; display: flex; flex-direction: column; gap: 16px; }
+
+/* –– KPI ROW –– */
+.kpi-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.kpi-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 10px;
+padding: 14px 16px;
+position: relative; overflow: hidden;
+}
+.kpi-card::before {
+content: ‘’; position: absolute; top: 0; left: 0;
+width: 3px; height: 100%;
+}
+.kpi-card.gold::before { background: var(–gold); }
+.kpi-card.green::before { background: var(–green); }
+.kpi-card.red::before { background: var(–red); }
+.kpi-card.amber::before { background: var(–amber); }
+.kpi-card.blue::before { background: #4a7fc9; }
+.kpi-card.teal::before { background: #4ab8c9; }
+.kpi-label { font-size: 10px; color: var(–text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+.kpi-value { font-size: 26px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.kpi-value.gold { color: var(–gold); }
+.kpi-value.green { color: var(–green); }
+.kpi-value.red { color: var(–red); }
+.kpi-value.amber { color: var(–amber); }
+.kpi-value.blue { color: #4a7fc9; }
+.kpi-value.teal { color: #4ab8c9; }
+.kpi-sub { font-size: 10px; color: var(–text-muted); }
+.kpi-sub span { color: var(–green); }
+.kpi-sub span.neg { color: var(–red); }
+
+/* –– SECTION LABEL –– */
+.section-label {
+font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+color: var(–gold); font-weight: 600; margin-bottom: 2px;
+}
+.section-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+
+/* –– GRID ROWS –– */
+.row-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.row-2b { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+.row-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+.panel {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 10px;
+padding: 16px;
+}
+.panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.panel-title { font-size: 12px; font-weight: 600; letter-spacing: 0.2px; }
+.panel-badge {
+font-size: 10px; padding: 2px 8px; border-radius: 20px;
+background: var(–gold-pale); color: var(–gold); border: 1px solid var(–border);
+font-family: ‘DM Mono’, monospace;
+}
+.panel-badge.green { background: var(–green-pale); color: var(–green); }
+.panel-badge.red { background: var(–red-pale); color: var(–red); }
+
+/* –– CAPACITY PLAN TABLE –– */
+.cap-table { width: 100%; border-collapse: collapse; }
+.cap-table th {
+font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px;
+color: var(–text-muted); font-weight: 500; padding: 6px 10px;
+text-align: center; border-bottom: 1px solid var(–border);
+}
+.cap-table th:first-child { text-align: left; }
+.cap-table td {
+padding: 7px 10px; font-size: 12px;
+border-bottom: 1px solid rgba(201,168,76,0.07);
+text-align: center;
+}
+.cap-table td:first-child { text-align: left; font-weight: 500; color: var(–text); }
+.cap-table tr:last-child td { border-bottom: none; }
+.cap-table tr:hover td { background: rgba(201,168,76,0.04); }
+
+.cell-bar { position: relative; }
+.bar-bg { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-top: 4px; }
+.bar-fill { height: 4px; border-radius: 2px; }
+
+.tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+.tag.over { background: var(–red-pale); color: var(–red); }
+.tag.ok { background: var(–green-pale); color: var(–green); }
+.tag.warn { background: var(–amber-pale); color: var(–amber); }
+
+/* –– HEATMAP –– */
+.heatmap-grid { display: grid; grid-template-columns: auto repeat(12,1fr); gap: 2px; align-items: center; }
+.hm-label { font-size: 10px; color: var(–text-muted); padding-right: 8px; white-space: nowrap; }
+.hm-month { font-size: 9px; color: var(–text-dim); text-align: center; margin-bottom: 4px; }
+.hm-cell {
+height: 22px; border-radius: 3px;
+display: flex; align-items: center; justify-content: center;
+font-size: 9px; font-weight: 600; color: var(–navy);
+cursor: default;
+}
+.hm-0 { background: rgba(201,168,76,0.08); color: var(–text-dim); }
+.hm-1 { background: rgba(74,140,92,0.25); color: var(–green); }
+.hm-2 { background: rgba(74,140,92,0.5); color: #5fbe7a; }
+.hm-3 { background: rgba(74,140,92,0.85); color: #fff; }
+.hm-4 { background: rgba(201,122,76,0.6); color: #fff; }
+.hm-5 { background: rgba(201,76,76,0.75); color: #fff; }
+
+/* –– MINI BAR CHART –– */
+.mini-bars { display: flex; align-items: flex-end; gap: 4px; height: 60px; }
+.mini-bar-group { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.mini-bar { width: 100%; border-radius: 2px 2px 0 0; }
+.mini-bar-lbl { font-size: 9px; color: var(–text-dim); }
+
+/* –– DONUT –– */
+.donut-wrap { display: flex; align-items: center; gap: 16px; }
+.donut-svg { flex-shrink: 0; }
+.donut-legend { display: flex; flex-direction: column; gap: 6px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.legend-val { margin-left: auto; font-weight: 600; font-family: ‘DM Mono’, monospace; }
+
+/* –– POOL TABLE –– */
+.pool-table { width: 100%; border-collapse: collapse; }
+.pool-table th {
+font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+color: var(–text-muted); font-weight: 500; padding: 5px 8px;
+text-align: left; border-bottom: 1px solid var(–border);
+}
+.pool-table td { padding: 7px 8px; font-size: 11px; border-bottom: 1px solid rgba(201,168,76,0.06); vertical-align: middle; }
+.pool-table tr:last-child td { border-bottom: none; }
+.pool-table tr:hover td { background: rgba(201,168,76,0.04); }
+.avatar { width: 22px; height: 22px; border-radius: 50%; background: var(–gold-pale); border: 1px solid var(–border); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(–gold); font-weight: 600; margin-right: -4px; }
+.days-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; width: 80px; overflow: hidden; }
+.days-fill { height: 100%; border-radius: 3px; }
+.skill-chip { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 500; background: var(–gold-pale); color: var(–gold); border: 1px solid rgba(201,168,76,0.2); margin: 1px; }
+.emp-name { font-weight: 500; color: var(–text); }
+.emp-id { font-size: 9px; color: var(–text-dim); font-family: ‘DM Mono’, monospace; }
+
+/* –– SITE SPLIT –– */
+.site-card {
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 8px; padding: 12px; flex: 1;
+}
+.site-name { font-size: 11px; font-weight: 600; margin-bottom: 2px; }
+.site-count { font-size: 22px; font-weight: 700; color: var(–gold); margin-bottom: 6px; }
+.site-bar { height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; margin-bottom: 8px; }
+.site-bar-fill { height: 100%; border-radius: 3px; }
+.site-meta { font-size: 10px; color: var(–text-muted); }
+
+/* –– SKILL AVAILABILITY –– */
+.skill-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.skill-name { font-size: 11px; width: 120px; flex-shrink: 0; color: var(–text); }
+.skill-track { flex: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+.skill-fill { height: 100%; border-radius: 4px; }
+.skill-count { font-size: 10px; color: var(–text-muted); width: 24px; text-align: right; font-family: ‘DM Mono’, monospace; }
+.skill-trend { font-size: 9px; padding: 1px 5px; border-radius: 3px; }
+.skill-trend.up { background: var(–green-pale); color: var(–green); }
+.skill-trend.dn { background: var(–red-pale); color: var(–red); }
+
+/* –– QUARTER TABS –– */
+.q-tabs { display: flex; gap: 4px; margin-bottom: 14px; }
+.q-tab { padding: 5px 14px; font-size: 11px; border-radius: 6px; cursor: pointer; border: 1px solid var(–border); color: var(–text-muted); background: transparent; font-family: ‘DM Sans’, sans-serif; }
+.q-tab.active { background: var(–gold); color: var(–navy); font-weight: 600; border-color: var(–gold); }
+
+/* –– BENCH AGING –– */
+.aging-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.aging-range { font-size: 11px; width: 70px; flex-shrink: 0; color: var(–text-muted); font-family: ‘DM Mono’, monospace; }
+.aging-bar-wrap { flex: 1; height: 18px; background: rgba(255,255,255,0.04); border-radius: 4px; overflow: hidden; position: relative; }
+.aging-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 6px; }
+.aging-n { font-size: 10px; font-weight: 600; color: var(–navy); }
+.aging-pct { font-size: 10px; color: var(–text-muted); }
+
+/* –– REDEPLOYMENT FUNNEL –– */
+.funnel { display: flex; flex-direction: column; gap: 6px; }
+.funnel-step {
+border-radius: 6px; padding: 10px 14px;
+display: flex; align-items: center; justify-content: space-between;
+position: relative; overflow: hidden;
+}
+.funnel-step::after { content: ‘▼’; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(–text-dim); z-index: 2; }
+.funnel-step:last-child::after { display: none; }
+.funnel-label { font-size: 12px; font-weight: 500; }
+.funnel-sub { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+.funnel-count { font-size: 20px; font-weight: 700; font-family: ‘DM Mono’, monospace; }
+
+/* –– RISK FLAGS –– */
+.risk-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px; border-radius: 8px; margin-bottom: 6px; border: 1px solid; }
+.risk-item.high { background: var(–red-pale); border-color: rgba(201,76,76,0.3); }
+.risk-item.med { background: var(–amber-pale); border-color: rgba(201,122,76,0.3); }
+.risk-item.low { background: var(–green-pale); border-color: rgba(74,140,92,0.3); }
+.risk-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.risk-dot.high { background: var(–red); }
+.risk-dot.med { background: var(–amber); }
+.risk-dot.low { background: var(–green); }
+.risk-text { font-size: 11px; line-height: 1.4; }
+.risk-title { font-weight: 600; margin-bottom: 1px; }
+
+/* –– SCROLLABLE –– */
+.scroll-y { overflow-y: auto; max-height: 220px; }
+.scroll-y::-webkit-scrollbar { width: 3px; }
+.scroll-y::-webkit-scrollbar-thumb { background: var(–border); border-radius: 3px; }
+
+/* –– FOOTER –– */
+.footer {
+text-align: center; padding: 16px 28px;
+font-size: 10px; color: var(–text-dim); border-top: 1px solid var(–border);
+font-family: ‘DM Mono’, monospace; letter-spacing: 0.5px;
+}
+
+/* –– MONTH SPARKLINE QUICK VIEW –– */
+.month-quick { display: grid; grid-template-columns: repeat(12,1fr); gap: 4px; }
+.month-col { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.month-n { font-size: 9px; color: var(–text-dim); }
+.month-bar { width: 100%; border-radius: 2px; }
+.month-v { font-size: 9px; color: var(–text-muted); font-family: ‘DM Mono’, monospace; }
+
+/* responsive hint */
+@media(max-width:1100px) { .kpi-row { grid-template-columns: repeat(3,1fr); } }
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo-mark">SL</div>
+    <h1>SLGS Capacity Dashboard</h1>
+    <span class="header-badge">FY 2025–26</span>
+  </div>
+  <div class="header-right">
+    <span class="timestamp">Last refreshed: 20 May 2026 · 09:00 IST</span>
+    <div class="pill active" style="cursor:default">Live</div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+
+<div class="filter-bar">
+  <span class="filter-label">Site</span>
+  <div class="pill active">All</div>
+  <div class="pill">India</div>
+  <div class="pill">Philippines</div>
+  <div class="pill">Vietnam</div>
+
+  <div class="filter-sep"></div>
+  <span class="filter-label">Function</span>
+  <div class="pill active">All</div>
+  <div class="pill">Operations</div>
+  <div class="pill">Technology</div>
+  <div class="pill">BEST</div>
+  <div class="pill">Finance</div>
+  <div class="pill">HR</div>
+  <div class="pill">M&amp;A</div>
+  <div class="pill">Hosted</div>
+
+  <div class="filter-sep"></div>
+  <span class="filter-label">Staff Type</span>
+  <div class="pill active">All</div>
+  <div class="pill">FTE</div>
+  <div class="pill">Contractual</div>
+
+  <div class="view-toggle">
+    <div class="view-btn active">Quarterly</div>
+    <div class="view-btn">Monthly</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+  <!-- KPI ROW -->
+
+  <div class="kpi-row">
+    <div class="kpi-card gold">
+      <div class="kpi-label">Total Headcount</div>
+      <div class="kpi-value gold">5,470</div>
+      <div class="kpi-sub">FTE 4,812 · Contract 658</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Capacity Created</div>
+      <div class="kpi-value green">342</div>
+      <div class="kpi-sub"><span>↑ 18%</span> vs Q3</div>
+    </div>
+    <div class="kpi-card amber">
+      <div class="kpi-label">In Pipeline</div>
+      <div class="kpi-value amber">218</div>
+      <div class="kpi-sub">Redeployment candidates</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">In Bench Pool</div>
+      <div class="kpi-value blue">124</div>
+      <div class="kpi-sub">Avg tenure <span style="color:#4a7fc9">34 days</span></div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">At Risk (&gt;60d)</div>
+      <div class="kpi-value red">29</div>
+      <div class="kpi-sub"><span class="neg">↑ 4</span> vs last month</div>
+    </div>
+    <div class="kpi-card teal">
+      <div class="kpi-label">Redeployed YTD</div>
+      <div class="kpi-value teal">189</div>
+      <div class="kpi-sub">Placement rate <span style="color:#4ab8c9">55%</span></div>
+    </div>
+  </div>
+
+  <!-- ROW: CAPACITY PLAN + SITE SPLIT -->
+
+  <div class="row-2">
+
+```
+<!-- CAPACITY PLAN TABLE -->
+<div class="panel">
+  <div class="panel-header">
+    <div>
+      <div class="section-label">Capacity Plan</div>
+      <div class="panel-title">Quarter-wise · Function Breakdown</div>
+    </div>
+    <div style="display:flex;gap:6px">
+      <div class="q-tab active">Q1</div>
+      <div class="q-tab">Q2</div>
+      <div class="q-tab">Q3</div>
+      <div class="q-tab">Q4</div>
+    </div>
+  </div>
+  <table class="cap-table">
+    <thead>
+      <tr>
+        <th>Function</th>
+        <th>Sanctioned</th>
+        <th>Actual</th>
+        <th>Variance</th>
+        <th>Capacity ↑</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Operations</td>
+        <td>2,550</td>
+        <td>2,510</td>
+        <td style="color:var(--green)">−40</td>
+        <td class="cell-bar">82<div class="bar-bg"><div class="bar-fill" style="width:70%;background:var(--green)"></div></div></td>
+        <td><span class="tag ok">On Track</span></td>
+      </tr>
+      <tr>
+        <td>Technology</td>
+        <td>2,400</td>
+        <td>2,367</td>
+        <td style="color:var(--green)">−33</td>
+        <td class="cell-bar">118<div class="bar-bg"><div class="bar-fill" style="width:85%;background:var(--gold)"></div></div></td>
+        <td><span class="tag ok">On Track</span></td>
+      </tr>
+      <tr>
+        <td>BEST / K-Sol</td>
+        <td>420</td>
+        <td>411</td>
+        <td style="color:var(--green)">−9</td>
+        <td class="cell-bar">44<div class="bar-bg"><div class="bar-fill" style="width:55%;background:var(--green)"></div></div></td>
+        <td><span class="tag warn">Watch</span></td>
+      </tr>
+      <tr>
+        <td>Finance</td>
+        <td>185</td>
+        <td>192</td>
+        <td style="color:var(--red)">+7</td>
+        <td class="cell-bar">12<div class="bar-bg"><div class="bar-fill" style="width:25%;background:var(--red)"></div></div></td>
+        <td><span class="tag over">Over Plan</span></td>
+      </tr>
+      <tr>
+        <td>HR</td>
+        <td>140</td>
+        <td>138</td>
+        <td style="color:var(--green)">−2</td>
+        <td class="cell-bar">18<div class="bar-bg"><div class="bar-fill" style="width:40%;background:var(--green)"></div></div></td>
+        <td><span class="tag ok">On Track</span></td>
+      </tr>
+      <tr>
+        <td>M&amp;A</td>
+        <td>320</td>
+        <td>313</td>
+        <td style="color:var(--green)">−7</td>
+        <td class="cell-bar">38<div class="bar-bg"><div class="bar-fill" style="width:60%;background:var(--amber)"></div></div></td>
+        <td><span class="tag warn">Watch</span></td>
+      </tr>
+      <tr>
+        <td>Hosted</td>
+        <td>155</td>
+        <td>150</td>
+        <td style="color:var(--green)">−5</td>
+        <td class="cell-bar">30<div class="bar-bg"><div class="bar-fill" style="width:50%;background:var(--gold)"></div></div></td>
+        <td><span class="tag ok">On Track</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SITE SPLIT + STAFF TYPE -->
+<div style="display:flex;flex-direction:column;gap:12px">
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Site-wise Capacity Impact</div>
+      <span class="panel-badge">Q1 FY26</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <div class="site-card">
+        <div class="site-name">🇮🇳 India — Gurugram</div>
+        <div class="site-count">198</div>
+        <div class="site-bar"><div class="site-bar-fill" style="width:78%;background:var(--gold)"></div></div>
+        <div class="site-meta">3,278 HC · FTE 2,940 · Contract 338</div>
+      </div>
+      <div class="site-card">
+        <div class="site-name">🇮🇳 India — Bengaluru</div>
+        <div class="site-count">22</div>
+        <div class="site-bar"><div class="site-bar-fill" style="width:22%;background:var(--green)"></div></div>
+        <div class="site-meta">200 HC · FTE 188 · Contract 12</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <div class="site-card">
+        <div class="site-name">🇵🇭 Philippines</div>
+        <div class="site-count">116</div>
+        <div class="site-bar"><div class="site-bar-fill" style="width:62%;background:var(--amber)"></div></div>
+        <div class="site-meta">2,262 HC · FTE 1,672 · Contract 590</div>
+      </div>
+      <div class="site-card">
+        <div class="site-name">🇻🇳 Vietnam</div>
+        <div class="site-count">6</div>
+        <div class="site-bar"><div class="site-bar-fill" style="width:10%;background:var(--green)"></div></div>
+        <div class="site-meta">25+ HC · FTE 25 · Contract 0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FTE vs Contractual Donut -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Impacted Staff by Type</div>
+      <span class="panel-badge green">342 Total</span>
+    </div>
+    <div class="donut-wrap">
+      <svg class="donut-svg" width="80" height="80" viewBox="0 0 80 80">
+        <!-- FTE 68% -->
+        <circle cx="40" cy="40" r="28" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="14"/>
+        <circle cx="40" cy="40" r="28" fill="none" stroke="#C9A84C" stroke-width="14"
+          stroke-dasharray="119.4 175.9" stroke-dashoffset="44" stroke-linecap="round"/>
+        <circle cx="40" cy="40" r="28" fill="none" stroke="#4A8C5C" stroke-width="14"
+          stroke-dasharray="56.5 175.9" stroke-dashoffset="-75.4" stroke-linecap="round"/>
+        <circle cx="40" cy="40" r="28" fill="none" stroke="#C97A4C" stroke-width="14"
+          stroke-dasharray="28.3 175.9" stroke-dashoffset="-131.9" stroke-linecap="round"/>
+        <text x="40" y="36" text-anchor="middle" fill="#e8eef5" font-size="13" font-weight="700" font-family="DM Sans">342</text>
+        <text x="40" y="48" text-anchor="middle" fill="rgba(232,238,245,0.4)" font-size="8" font-family="DM Sans">Impacted</text>
+      </svg>
+      <div class="donut-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>FTE <span class="legend-val" style="color:var(--gold)">232</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Contractual <span class="legend-val" style="color:var(--green)">110</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Freelance <span class="legend-val" style="color:var(--amber)">—</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- HEATMAP ROW -->
+
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <div class="section-label">Heat Map</div>
+        <div class="panel-title">Monthly Capacity Created — Function × Month (FTEs freed)</div>
+      </div>
+      <span class="panel-badge">FY 2025–26</span>
+    </div>
+    <!-- Month headers -->
+    <div style="display:grid;grid-template-columns:110px repeat(12,1fr);gap:2px;margin-bottom:4px">
+      <div></div>
+      <div class="hm-month">Apr</div><div class="hm-month">May</div><div class="hm-month">Jun</div>
+      <div class="hm-month">Jul</div><div class="hm-month">Aug</div><div class="hm-month">Sep</div>
+      <div class="hm-month">Oct</div><div class="hm-month">Nov</div><div class="hm-month">Dec</div>
+      <div class="hm-month">Jan</div><div class="hm-month">Feb</div><div class="hm-month">Mar</div>
+    </div>
+    <!-- Operations -->
+    <div style="display:grid;grid-template-columns:110px repeat(12,1fr);gap:2px;margin-bottom:2px;align-items:center">
+      <div class="hm-label">Operations</div>
+      <div class="hm-cell hm-2">14</div><div class="hm-cell hm-3">22</div><div class="hm-cell hm-1">8</div>
+      <div class="hm-cell hm-4">31</div><div class="hm-cell hm-2">16</div><div class="hm-cell hm-1">6</div>
+      <div class="hm-cell hm-3">24</div><div class="hm-cell hm-5">38</div><div class="hm-cell hm-2">12</div>
+      <div class="hm-cell hm-1">7</div><div class="hm-cell hm-3">19</div><div class="hm-cell hm-0">—</div>
+    </div>
+    <!-- Technology -->
+    <div style="display:grid;grid-template-columns:110px repeat(12,1fr);gap:2px;margin-bottom:2px;align-items:center">
+      <div class="hm-label">Technology</div>
+      <div class="hm-cell hm-3">28</div><div class="hm-cell hm-4">35</div><div class="hm-cell hm-3">21</div>
+      <div class="hm-cell hm-2">15</div><div class="hm-cell hm-5">42</div><div class="hm-cell hm-3">26</div>
+      <div class="hm-cell hm-1">9</div><div class="hm-cell hm-2">18</div><div class="hm-cell hm-4">33</div>
+      <div class="hm-cell hm-3">22</div><div class="hm-cell hm-1">11</div><div class="hm-cell hm-0">—</div>
+    </div>
+    <!-- BEST -->
+    <div style="display:grid;grid-template-columns:110px repeat(12,1fr);gap:2px;margin-bottom:2px;align-items:center">
+      <div class="hm-label">BEST / K-Sol</div>
+      <div class="hm-cell hm-1">5</div><div class="hm-cell hm-2">12</div><div class="hm-cell hm-3">18</div>
+      <div class="hm-cell hm-1">6</div><div class="hm-cell hm-2">10</div><div class="hm-cell hm-3">20</div>
+      <div class="hm-cell hm-2">14</div><div class="hm-cell hm-1">7</div><div class="hm-cell hm-2">13</div>
+      <div class="hm-cell hm-4">28</div><div class="hm-cell hm-3">19</div><div class="hm-cell hm-0">—</div>
+    </div>
+    <!-- Finance -->
+    <div style="display:grid;grid-template-columns:110px repeat(12,1fr);gap:2px;margin-bottom:2px;align-items:center">
+      <div class="hm-label">Finance</div>
+      <div class="hm-cell hm-1">3</div><div class="hm-cell hm-0">—</div><div class="hm-cell hm-2">8</div>
+      <div class="hm-cell hm-1">4</div><div class="hm-cell hm-2">9</div><div class="hm-cell hm-0">—</div>
+      <div class="hm-cell hm-3">14</div><div class="hm-cell hm-2">7</div><div class="hm-cell hm-1">3</div>
+      <div class="hm-cell hm-2">8</div><div class="hm-cell hm-0">—</div><div class="hm-cell hm-0">—</div>
+    </div>
+    <!-- HR -->
+    <div style="display:grid;grid-template-columns:110px repeat(12,1fr);gap:2px;margin-bottom:2px;align-items:center">
+      <div class="hm-label">HR</div>
+      <div class="hm-cell hm-2">6</div><div class="hm-cell hm-1">4</div><div class="hm-cell hm-2">7</div>
+      <div class="hm-cell hm-2">8</div><div class="hm-cell hm-1">3</div><div class="hm-cell hm-2">6</div>
+      <div class="hm-cell hm-1">4</div><div class="hm-cell hm-2">9</div><div class="hm-cell hm-1">3</div>
+      <div class="hm-cell hm-2">7</div><div class="hm-cell hm-1">5</div><div class="hm-cell hm-0">—</div>
+    </div>
+    <!-- M&A -->
+    <div style="display:grid;grid-template-columns:110px repeat(12,1fr);gap:2px;align-items:center">
+      <div class="hm-label">M&amp;A / Hosted</div>
+      <div class="hm-cell hm-2">11</div><div class="hm-cell hm-3">17</div><div class="hm-cell hm-1">5</div>
+      <div class="hm-cell hm-2">10</div><div class="hm-cell hm-1">6</div><div class="hm-cell hm-3">22</div>
+      <div class="hm-cell hm-2">14</div><div class="hm-cell hm-1">8</div><div class="hm-cell hm-2">13</div>
+      <div class="hm-cell hm-1">7</div><div class="hm-cell hm-2">11</div><div class="hm-cell hm-0">—</div>
+    </div>
+    <!-- Legend -->
+    <div style="display:flex;gap:12px;margin-top:12px;align-items:center">
+      <span style="font-size:10px;color:var(--text-muted)">Intensity:</span>
+      <div style="display:flex;align-items:center;gap:4px">
+        <div style="width:16px;height:10px;border-radius:2px" class="hm-1"></div><span style="font-size:9px;color:var(--text-dim)">1–10</span>
+        <div style="width:16px;height:10px;border-radius:2px;margin-left:4px" class="hm-2"></div><span style="font-size:9px;color:var(--text-dim)">11–20</span>
+        <div style="width:16px;height:10px;border-radius:2px;margin-left:4px" class="hm-3"></div><span style="font-size:9px;color:var(--text-dim)">21–30</span>
+        <div style="width:16px;height:10px;border-radius:2px;margin-left:4px" class="hm-4"></div><span style="font-size:9px;color:var(--text-dim)">31–40</span>
+        <div style="width:16px;height:10px;border-radius:2px;margin-left:4px" class="hm-5"></div><span style="font-size:9px;color:var(--text-dim)">40+</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW: FUNNEL + BENCH POOL + AGING -->
+
+  <div class="row-3">
+
+```
+<!-- REDEPLOYMENT FUNNEL -->
+<div class="panel">
+  <div class="panel-header">
+    <div>
+      <div class="section-label">Pipeline</div>
+      <div class="panel-title">Redeployment Funnel</div>
+    </div>
+  </div>
+  <div class="funnel">
+    <div class="funnel-step" style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.25)">
+      <div><div class="funnel-label">Capacity Identified</div><div class="funnel-sub">Automation / Efficiency gains</div></div>
+      <div class="funnel-count" style="color:var(--gold)">342</div>
+    </div>
+    <div style="text-align:center;font-size:10px;color:var(--text-dim);padding:2px 0">▼ notified &amp; assessed</div>
+    <div class="funnel-step" style="background:rgba(201,122,76,0.12);border:1px solid rgba(201,122,76,0.25)">
+      <div><div class="funnel-label">In Pipeline</div><div class="funnel-sub">Skill mapping in progress</div></div>
+      <div class="funnel-count" style="color:var(--amber)">218</div>
+    </div>
+    <div style="text-align:center;font-size:10px;color:var(--text-dim);padding:2px 0">▼ JD matched / interviews</div>
+    <div class="funnel-step" style="background:rgba(74,140,92,0.12);border:1px solid rgba(74,140,92,0.25)">
+      <div><div class="funnel-label">Redeployed YTD</div><div class="funnel-sub">Placed in new role</div></div>
+      <div class="funnel-count" style="color:var(--green)">189</div>
+    </div>
+    <div style="text-align:center;font-size:10px;color:var(--text-dim);padding:2px 0">▼ actively benched</div>
+    <div class="funnel-step" style="background:rgba(74,127,201,0.12);border:1px solid rgba(74,127,201,0.25)">
+      <div><div class="funnel-label">Bench Pool</div><div class="funnel-sub">Available for placement</div></div>
+      <div class="funnel-count" style="color:#4a7fc9">124</div>
+    </div>
+    <div style="text-align:center;font-size:10px;color:var(--text-dim);padding:2px 0">▼ no placement found</div>
+    <div class="funnel-step" style="background:var(--red-pale);border:1px solid rgba(201,76,76,0.25)">
+      <div><div class="funnel-label">At Risk / Escalation</div><div class="funnel-sub">&gt;60 days unplaced</div></div>
+      <div class="funnel-count" style="color:var(--red)">29</div>
+    </div>
+  </div>
+</div>
+
+<!-- BENCH POOL DETAIL -->
+<div class="panel">
+  <div class="panel-header">
+    <div>
+      <div class="section-label">Bench Pool</div>
+      <div class="panel-title">Employee Pool Tracker</div>
+    </div>
+    <span class="panel-badge">124 active</span>
+  </div>
+  <div class="scroll-y" style="max-height:280px">
+    <table class="pool-table">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Function</th>
+          <th>Days</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="emp-name">A. Sharma</div><div class="emp-id">GGN-4421</div></td>
+          <td>Technology</td>
+          <td><div class="days-bar"><div class="days-fill" style="width:95%;background:var(--red)"></div></div><span style="font-size:10px;color:var(--red)">72d</span></td>
+          <td><span class="tag over" style="font-size:9px">FTE</span></td>
+        </tr>
+        <tr>
+          <td><div class="emp-name">P. Cruz</div><div class="emp-id">MNL-2198</div></td>
+          <td>Operations</td>
+          <td><div class="days-bar"><div class="days-fill" style="width:90%;background:var(--red)"></div></div><span style="font-size:10px;color:var(--red)">68d</span></td>
+          <td><span class="tag over" style="font-size:9px">FTE</span></td>
+        </tr>
+        <tr>
+          <td><div class="emp-name">R. Mehta</div><div class="emp-id">GGN-5103</div></td>
+          <td>BEST</td>
+          <td><div class="days-bar"><div class="days-fill" style="width:70%;background:var(--amber)"></div></div><span style="font-size:10px;color:var(--amber)">53d</span></td>
+          <td><span class="tag warn" style="font-size:9px">FTE</span></td>
+        </tr>
+        <tr>
+          <td><div class="emp-name">S. Reyes</div><div class="emp-id">MNL-3301</div></td>
+          <td>Finance</td>
+          <td><div class="days-bar"><div class="days-fill" style="width:60%;background:var(--amber)"></div></div><span style="font-size:10px;color:var(--amber)">45d</span></td>
+          <td><span class="tag warn" style="font-size:9px">Contract</span></td>
+        </tr>
+        <tr>
+          <td><div class="emp-name">K. Nair</div><div class="emp-id">BLR-0214</div></td>
+          <td>Technology</td>
+          <td><div class="days-bar"><div class="days-fill" style="width:45%;background:var(--gold)"></div></div><span style="font-size:10px;color:var(--gold)">34d</span></td>
+          <td><span class="tag ok" style="font-size:9px">FTE</span></td>
+        </tr>
+        <tr>
+          <td><div class="emp-name">M. Santos</div><div class="emp-id">MNL-4477</div></td>
+          <td>Operations</td>
+          <td><div class="days-bar"><div class="days-fill" style="width:40%;background:var(--gold)"></div></div><span style="font-size:10px;color:var(--gold)">30d</span></td>
+          <td><span class="tag ok" style="font-size:9px">Contract</span></td>
+        </tr>
+        <tr>
+          <td><div class="emp-name">V. Gupta</div><div class="emp-id">GGN-2287</div></td>
+          <td>HR</td>
+          <td><div class="days-bar"><div class="days-fill" style="width:28%;background:var(--green)"></div></div><span style="font-size:10px;color:var(--green)">21d</span></td>
+          <td><span class="tag ok" style="font-size:9px">FTE</span></td>
+        </tr>
+        <tr>
+          <td><div class="emp-name">J. Dela Cruz</div><div class="emp-id">MNL-5562</div></td>
+          <td>M&amp;A</td>
+          <td><div class="days-bar"><div class="days-fill" style="width:18%;background:var(--green)"></div></div><span style="font-size:10px;color:var(--green)">14d</span></td>
+          <td><span class="tag ok" style="font-size:9px">FTE</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:10px;display:flex;gap:8px">
+    <div class="tag over">72+ days: 29</div>
+    <div class="tag warn">31–60 days: 54</div>
+    <div class="tag ok">≤30 days: 41</div>
+  </div>
+</div>
+
+<!-- BENCH AGING CHART + SKILL POOL -->
+<div style="display:flex;flex-direction:column;gap:12px">
+  <!-- Aging -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Bench Aging Distribution</div>
+    </div>
+    <div class="aging-row">
+      <div class="aging-range">0–15d</div>
+      <div class="aging-bar-wrap"><div class="aging-fill" style="width:33%;background:var(--green)"><span class="aging-n">41</span></div></div>
+      <div class="aging-pct">33%</div>
+    </div>
+    <div class="aging-row">
+      <div class="aging-range">16–30d</div>
+      <div class="aging-bar-wrap"><div class="aging-fill" style="width:28%;background:var(--gold)"><span class="aging-n">35</span></div></div>
+      <div class="aging-pct">28%</div>
+    </div>
+    <div class="aging-row">
+      <div class="aging-range">31–45d</div>
+      <div class="aging-bar-wrap"><div class="aging-fill" style="width:15%;background:var(--amber)"><span class="aging-n">19</span></div></div>
+      <div class="aging-pct">15%</div>
+    </div>
+    <div class="aging-row">
+      <div class="aging-range">46–60d</div>
+      <div class="aging-bar-wrap"><div class="aging-fill" style="width:15%;background:#c97a4c"><span class="aging-n">—</span></div></div>
+      <div class="aging-pct">15%</div>
+    </div>
+    <div class="aging-row">
+      <div class="aging-range">&gt;60d</div>
+      <div class="aging-bar-wrap"><div class="aging-fill" style="width:23%;background:var(--red)"><span class="aging-n">29</span></div></div>
+      <div class="aging-pct">23%</div>
+    </div>
+  </div>
+
+  <!-- Monthly trend -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Bench Pool Trend</div>
+    </div>
+    <div class="month-quick">
+      <div class="month-col"><div class="month-n">Apr</div><div class="month-bar" style="height:28px;background:var(--gold-pale)"></div><div class="month-v">68</div></div>
+      <div class="month-col"><div class="month-n">May</div><div class="month-bar" style="height:32px;background:var(--gold-pale)"></div><div class="month-v">78</div></div>
+      <div class="month-col"><div class="month-n">Jun</div><div class="month-bar" style="height:25px;background:var(--gold-pale)"></div><div class="month-v">61</div></div>
+      <div class="month-col"><div class="month-n">Jul</div><div class="month-bar" style="height:40px;background:var(--amber);opacity:.7"></div><div class="month-v">98</div></div>
+      <div class="month-col"><div class="month-n">Aug</div><div class="month-bar" style="height:48px;background:var(--amber);opacity:.8"></div><div class="month-v">118</div></div>
+      <div class="month-col"><div class="month-n">Sep</div><div class="month-bar" style="height:38px;background:var(--gold-pale)"></div><div class="month-v">93</div></div>
+      <div class="month-col"><div class="month-n">Oct</div><div class="month-bar" style="height:36px;background:var(--gold-pale)"></div><div class="month-v">88</div></div>
+      <div class="month-col"><div class="month-n">Nov</div><div class="month-bar" style="height:52px;background:var(--red);opacity:.7"></div><div class="month-v">127</div></div>
+      <div class="month-col"><div class="month-n">Dec</div><div class="month-bar" style="height:44px;background:var(--amber);opacity:.7"></div><div class="month-v">108</div></div>
+      <div class="month-col"><div class="month-n">Jan</div><div class="month-bar" style="height:36px;background:var(--gold-pale)"></div><div class="month-v">89</div></div>
+      <div class="month-col"><div class="month-n">Feb</div><div class="month-bar" style="height:40px;background:var(--gold-pale)"></div><div class="month-v">98</div></div>
+      <div class="month-col"><div class="month-n">Mar</div><div class="month-bar" style="height:50px;background:var(--gold);opacity:.85"></div><div class="month-v">124</div></div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- ROW: SKILL POOL + RISK FLAGS -->
+
+  <div class="row-2b">
+
+```
+<!-- SKILL POOL -->
+<div class="panel">
+  <div class="panel-header">
+    <div>
+      <div class="section-label">Skills Intelligence</div>
+      <div class="panel-title">Skill Set in Pool / Getting Freed Up</div>
+    </div>
+    <span class="panel-badge">124 employees</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div>
+      <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.6px">Technology</div>
+      <div class="skill-row">
+        <div class="skill-name">Java / Spring</div>
+        <div class="skill-track"><div class="skill-fill" style="width:75%;background:var(--gold)"></div></div>
+        <div class="skill-count">18</div>
+        <div class="skill-trend up">+3</div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-name">Python / ML</div>
+        <div class="skill-track"><div class="skill-fill" style="width:60%;background:var(--green)"></div></div>
+        <div class="skill-count">14</div>
+        <div class="skill-trend up">+5</div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-name">Cloud / AWS</div>
+        <div class="skill-track"><div class="skill-fill" style="width:50%;background:var(--gold)"></div></div>
+        <div class="skill-count">12</div>
+        <div class="skill-trend up">+2</div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-name">Data / SQL</div>
+        <div class="skill-track"><div class="skill-fill" style="width:45%;background:var(--amber)"></div></div>
+        <div class="skill-count">11</div>
+        <div class="skill-trend dn">−1</div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-name">QA / Testing</div>
+        <div class="skill-track"><div class="skill-fill" style="width:35%;background:var(--gold)"></div></div>
+        <div class="skill-count">8</div>
+        <div class="skill-trend up">+1</div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-name">DevOps / CI</div>
+        <div class="skill-track"><div class="skill-fill" style="width:28%;background:var(--green)"></div></div>
+        <div class="skill-count">7</div>
+        <div class="skill-trend up">+4</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.6px">Operations &amp; Corporate</div>
+      <div class="skill-row">
+        <div class="skill-name">Claims Ops</div>
+        <div class="skill-track"><div class="skill-fill" style="width:65%;background:var(--gold)"></div></div>
+        <div class="skill-count">16</div>
+        <div class="skill-trend dn">−2</div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-name">Underwriting</div>
+        <div class="skill-track"><div class="skill-fill" style="width:50%;background:var(--amber)"></div></div>
+        <div class="skill-count">12</div>
+        <div class="skill-trend dn">−3</div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-name">Finance / FP&amp;A</div>
+        <div class="skill-track"><div class="skill-fill" style="width:30%;background:var(--gold)"></div></div>
+        <div class="skill-count">7</div>
+        <div class="skill-trend up">+1</div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-name">HR / Talent</div>
+        <div class="skill-track"><div class="skill-fill" style="width:25%;background:var(--green)"></div></div>
+        <div class="skill-count">6</div>
+        <div class="skill-trend up">+2</div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-name">Project Mgmt</div>
+        <div class="skill-track"><div class="skill-fill" style="width:22%;background:var(--gold)"></div></div>
+        <div class="skill-count">5</div>
+        <div class="skill-trend up">+1</div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-name">Analytics / BI</div>
+        <div class="skill-track"><div class="skill-fill" style="width:30%;background:var(--green)"></div></div>
+        <div class="skill-count">8</div>
+        <div class="skill-trend up">+5</div>
+      </div>
+    </div>
+  </div>
+  <!-- skill chips -->
+  <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
+    <div style="font-size:10px;color:var(--text-muted);margin-bottom:6px">Top skills in demand (open JDs)</div>
+    <div>
+      <span class="skill-chip">Python</span><span class="skill-chip">Cloud</span><span class="skill-chip">Claims Ops</span>
+      <span class="skill-chip">DevOps</span><span class="skill-chip">Analytics</span><span class="skill-chip">AI/ML</span>
+      <span class="skill-chip">Java</span><span class="skill-chip">HR BP</span><span class="skill-chip">Finance</span>
+      <span class="skill-chip">Underwriting</span>
+    </div>
+  </div>
+</div>
+
+<!-- RISK FLAGS + ACTION ITEMS -->
+<div style="display:flex;flex-direction:column;gap:12px">
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <div class="section-label">Alerts</div>
+        <div class="panel-title">Risk Flags &amp; Actions</div>
+      </div>
+    </div>
+    <div class="risk-item high">
+      <div class="risk-dot high"></div>
+      <div class="risk-text"><div class="risk-title">29 employees &gt;60 days unplaced</div>Immediate escalation to BU leads needed. Risk of attrition or involuntary separation.</div>
+    </div>
+    <div class="risk-item high">
+      <div class="risk-dot high"></div>
+      <div class="risk-text"><div class="risk-title">Finance headcount over plan by 7</div>Actuals exceed sanctioned. Hiring freeze recommended until natural attrition corrects.</div>
+    </div>
+    <div class="risk-item med">
+      <div class="risk-dot med"></div>
+      <div class="risk-text"><div class="risk-title">Philippines contract renewals due in 45d</div>110 contractual staff expiring Jun '26. Decision needed: extend, redeploy or off-board.</div>
+    </div>
+    <div class="risk-item med">
+      <div class="risk-dot med"></div>
+      <div class="risk-text"><div class="risk-title">BEST watch — capacity below target</div>K-Sol capacity creation at 55% of plan. Root cause review required with function head.</div>
+    </div>
+    <div class="risk-item low">
+      <div class="risk-dot low"></div>
+      <div class="risk-text"><div class="risk-title">Tech skills mismatch (legacy stack)</div>8 bench employees with legacy COBOL / mainframe skills. Upskilling roadmap to be initiated.</div>
+    </div>
+  </div>
+
+  <!-- Summary metrics -->
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title">Placement Efficiency</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="background:var(--surface2);border-radius:8px;padding:10px">
+        <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px">Avg time to place</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold)">34d</div>
+        <div style="font-size:10px;color:var(--text-muted)">Target: ≤30d</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px">
+        <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px">Placement rate</div>
+        <div style="font-size:20px;font-weight:700;color:var(--green)">55%</div>
+        <div style="font-size:10px;color:var(--text-muted)">Target: ≥70%</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px">
+        <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px">Internal mobility</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold)">78%</div>
+        <div style="font-size:10px;color:var(--text-muted)">of placements internal</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px">
+        <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px">Reskilled &amp; placed</div>
+        <div style="font-size:20px;font-weight:700;color:var(--green)">42</div>
+        <div style="font-size:10px;color:var(--text-muted)">via learning programs</div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+</div><!-- /main -->
+
+<div class="footer">
+  SLGS Capacity Intelligence · Wireframe v1.0 · FY 2025–26 · Confidential — Internal Use Only
+</div>
+
+<script>
+  // Simple pill toggle behavior
+  document.querySelectorAll('.filter-bar .pill').forEach(pill => {
+    pill.addEventListener('click', function() {
+      // find siblings in same group
+      const bar = this.closest('.filter-bar');
+      // simple toggle for demo
+      const group = [...bar.querySelectorAll('.pill')].filter(p => {
+        return p.previousElementSibling === this.previousElementSibling || p === this;
+      });
+      this.classList.toggle('active');
+    });
+  });
+
+  document.querySelectorAll('.q-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      this.parentElement.querySelectorAll('.q-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.parentElement.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
