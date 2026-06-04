@@ -1,6 +1,5 @@
 "use client"
 import { useEffect, useRef, useCallback } from "react"
-import { Zap, Brain, Database, Eye } from "lucide-react"
 
 interface Particle {
   x: number
@@ -32,7 +31,8 @@ export function AntigravityField() {
   const dprRef = useRef(1)
 
   const initParticles = useCallback((width: number, height: number) => {
-    const count = Math.floor((width * height) / 4500)
+    const isMobile = width < 768
+    const count = Math.floor((width * height) / (isMobile ? 12000 : 4500))
     const particles: Particle[] = []
 
     for (let i = 0; i < count; i++) {

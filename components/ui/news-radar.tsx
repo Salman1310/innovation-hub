@@ -20,6 +20,7 @@ export function NewsRadar() {
   const [sourceErrors, setSourceErrors] = useState<string[]>([])
   const knownIdsRef = useRef<Set<string>>(new Set())
   const nextRefreshRef = useRef<NodeJS.Timeout | null>(null)
+  const referenceTimeMs = fetchedAt?.getTime() ?? 0
 
   const fetchNews = useCallback(async (isBackground = false) => {
     try {
@@ -50,7 +51,13 @@ export function NewsRadar() {
     }
   }, [])
 
-  useEffect(() => { fetchNews(false) }, [fetchNews])
+  useEffect(() => {
+    const loadInitialNews = async () => {
+      await fetchNews(false)
+    }
+
+    void loadInitialNews()
+  }, [fetchNews])
 
   useEffect(() => {
     nextRefreshRef.current = setInterval(() => fetchNews(true), REFRESH_INTERVAL)
@@ -65,7 +72,7 @@ export function NewsRadar() {
   }
 
   const liveCount = articles.filter(
-    (a) => Date.now() - new Date(a.pubDate).getTime() < 24 * 60 * 60 * 1000
+    (a) => referenceTimeMs - new Date(a.pubDate).getTime() < 24 * 60 * 60 * 1000
   ).length
 
   return (
@@ -199,6 +206,7 @@ export function NewsRadar() {
               <GlobeLive
                 articles={articles}
                 sources={NEWS_SOURCES}
+                referenceTimeMs={referenceTimeMs}
                 onSourceClick={handleSourceClick}
                 className="w-full h-full"
               />
@@ -218,6 +226,7 @@ export function NewsRadar() {
             activeTab={activeTab}
             onTabChange={setActiveTab}
             focusedSourceId={focusedSourceId}
+            referenceTimeMs={referenceTimeMs}
           />
         </div>
       </main>

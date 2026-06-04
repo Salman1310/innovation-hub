@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { ArrowRight, Lightbulb, Rocket, PartyPopper } from 'lucide-react';
 import FlowArt, { FlowSection } from '@/components/ui/story-scroll';
 import { ZoomParallax } from '@/components/ui/zoom-parallax';
 
@@ -33,6 +34,24 @@ const PARALLAX_IMAGES = [
   {
     src: 'https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=1280&h=720&fit=crop&auto=format&q=80',
     alt: 'SLGS Innovation — Gen AI, AI/ML, NLP, Blockchain, Computer Vision',
+  },
+];
+
+const CULTURE_NOTES = [
+  {
+    icon: Lightbulb,
+    title: 'Ideas Get Airtime',
+    text: 'The team creates visible space for employees to pitch, prototype, and pressure-test ideas before they disappear into slide decks.',
+  },
+  {
+    icon: Rocket,
+    title: 'Outside Energy Matters',
+    text: 'Startup demos, founder conversations, and expert sessions keep the portfolio connected to how innovation is moving in the real world.',
+  },
+  {
+    icon: PartyPopper,
+    title: 'Momentum Gets Celebrated',
+    text: 'Innovation Month turns experimentation into a shared culture signal with recognition, challenge finales, and visible wins across teams.',
   },
 ];
 
@@ -149,7 +168,7 @@ export default function StoryPage() {
           <hr className="my-[2vw] border-none border-t border-black/15" />
           <div className="flex flex-wrap gap-[3vw]">
             <div className="min-w-[180px] flex-1">
-              <p className="mb-2 text-sm font-bold uppercase tracking-wider">49 Active POCs</p>
+              <p className="mb-2 text-sm font-bold uppercase tracking-wider">51+ Total POCs</p>
               <p className="text-[clamp(0.8rem,1.1vw,0.95rem)] leading-relaxed opacity-75">
                 Delivered across Gen AI, AI/ML, NLP, Computer Vision, Blockchain,
                 and automation — spanning multiple tech streams.
@@ -215,7 +234,7 @@ export default function StoryPage() {
           <hr className="my-[2vw] border-none border-t border-white/20" />
           <div className="flex flex-wrap gap-[3vw]">
             <div className="min-w-[180px] flex-1">
-              <p className="mb-2 text-sm font-bold uppercase tracking-wider">49 Active POCs</p>
+              <p className="mb-2 text-sm font-bold uppercase tracking-wider">51+ Total POCs</p>
               <p className="text-[clamp(0.8rem,1.1vw,0.95rem)] leading-relaxed opacity-75">
                 Tracked across the full pipeline — from exploration to production. 12 live in production today.
               </p>
@@ -310,7 +329,7 @@ export default function StoryPage() {
               className="text-4xl md:text-6xl font-bold text-white"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              49 POCs. 8 Markets. 13 Partners.
+              51+ POCs. 5 Markets. 40+ Partners.
             </h2>
             <p className="mt-4 text-white/60 max-w-lg mx-auto text-sm">
               From Gen AI to Blockchain, from Asia to Canada — building what&apos;s next for Sun Life across every market and tech stream.
@@ -318,6 +337,65 @@ export default function StoryPage() {
           </div>
         </div>
         <ZoomParallax images={PARALLAX_IMAGES} />
+        <section className="border-t border-white/10 px-6 py-24 md:px-10">
+          <div className="mx-auto max-w-6xl">
+            <div className="max-w-3xl">
+              <p
+                className="inline-block rounded-full px-4 py-1.5 text-xs font-semibold"
+                style={{
+                  background: 'rgba(236,171,35,0.2)',
+                  color: '#F8D56A',
+                  border: '1px solid rgba(236,171,35,0.3)',
+                }}
+              >
+                The Culture Behind It
+              </p>
+              <h3
+                className="mt-6 text-3xl font-bold text-white md:text-5xl"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                Innovation here is not just a portfolio. It is a working culture.
+              </h3>
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/65 md:text-base">
+                The team&apos;s operating rhythm is built around experimentation, external learning, and visible celebration of progress. That is what keeps ideas moving from curiosity to proof to real adoption.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-4 md:grid-cols-3">
+              {CULTURE_NOTES.map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_18px_50px_rgba(0,0,0,0.12)] backdrop-blur-sm"
+                >
+                  <div
+                    className="flex h-12 w-12 items-center justify-center rounded-2xl"
+                    style={{ background: 'rgba(255,205,0,0.14)' }}
+                  >
+                    <item.icon className="h-5 w-5 text-[#FFCD00]" />
+                  </div>
+                  <h4 className="mt-5 text-lg font-bold text-white" style={{ fontFamily: 'var(--font-display)' }}>
+                    {item.title}
+                  </h4>
+                  <p className="mt-3 text-sm leading-relaxed text-white/65">{item.text}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-10">
+              <Link
+                href="/culture"
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[#002855] transition-all hover:scale-105"
+                style={{
+                  background: '#FFCD00',
+                  boxShadow: '0 4px 24px rgba(255,205,0,0.25)',
+                }}
+              >
+                Explore Innovation Culture
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
         <div className="h-[30vh] flex items-center justify-center">
           <Link
             href="/"

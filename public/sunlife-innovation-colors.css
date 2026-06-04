@@ -1,0 +1,84 @@
+/* ============================================================
+   Sun Life Innovation Hub — Color System
+   Share this file with other teams for brand-consistent styling.
+   ============================================================ */
+
+/* --- Sun Life Brand Colors --- */
+:root {
+  /* Primary Brand */
+  --sunlife-yellow:          #ECAB23;
+  --sunlife-yellow-light:    #F8D56A;
+  --sunlife-yellow-cream:    #FFF7E3;
+  --sunlife-gold:            #FFCD00;
+
+  /* Primary Dark (Teal / Navy) */
+  --sunlife-teal:            #0E5665;
+  --sunlife-teal-dark:       #0E3846;
+  --sunlife-navy:            #082F3A;
+  --sunlife-navy-deep:       #002855;
+
+  /* Text */
+  --sunlife-text-primary:    #1F2A2E;
+  --sunlife-text-secondary:  #5B6770;
+  --sunlife-text-muted:      #7F98A1;
+
+  /* Backgrounds */
+  --sunlife-bg:              #FFFFFF;
+  --sunlife-bg-light:        #f8f9fc;
+  --sunlife-bg-warm:         #FFF7E3;
+
+  /* --- Dashboard Accent Palette --- */
+  --dash-teal:               #4ECDC4;
+  --dash-coral:              #E85D75;
+  --dash-purple:             #A29BFE;
+  --dash-green:              #0E5665;
+
+  /* --- Status Colors (POC stages) --- */
+  --status-production:       #0E5665;
+  --status-scaling:          #4ECDC4;
+  --status-prototyping:      #F8D56A;
+  --status-exploration:      #E85D75;
+  --status-bookshelf:        #ECAB23;
+  --status-showcase:         #A29BFE;
+
+  /* --- Glass / Surface Effects --- */
+  --glass-bg:                rgba(255, 255, 255, 0.86);
+  --glass-border:            rgba(236, 171, 35, 0.28);
+  --glass-shadow:            0 16px 44px rgba(14, 56, 70, 0.08);
+
+  /* --- Typography --- */
+  --font-display:            "Space Grotesk", sans-serif;
+  --font-body:               "Inter", sans-serif;
+  --font-mono:               "JetBrains Mono", monospace;
+
+  /* --- Spacing / Radius --- */
+  --radius-card:             16px;
+  --radius-button:           9999px;
+  --radius-sm:               10px;
+}
+
+/* --- Utility Classes --- */
+
+.sunlife-gradient-text {
+  background: linear-gradient(135deg, #ECAB23, #F8D56A, #0E5665);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sunlife-glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--glass-shadow);
+}
+
+.sunlife-dark-section {
+  background: linear-gradient(135deg, #1F2A2E 0%, #0E3846 50%, #1F2A2E 100%);
+  color: #ffffff;
+}
+
+.sunlife-warm-section {
+  background: linear-gradient(180deg, #f8f9fc 0%, #FFF7E3 100%);
+}

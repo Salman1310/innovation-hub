@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useCallback, useState } from "react"
+import { useEffect, useRef, useCallback, useMemo, useState } from "react"
 import createGlobe from "cobe"
 import { formatDistanceToNow } from "date-fns"
 import type { NewsArticle } from "@/lib/types"
@@ -9,6 +9,7 @@ import type { NewsSource } from "@/lib/sources"
 interface GlobeLiveProps {
   articles: NewsArticle[]
   sources: NewsSource[]
+  referenceTimeMs: number
   onSourceClick?: (sourceId: string) => void
   className?: string
 }
@@ -68,7 +69,7 @@ function projectMarker(
   return { x: screenX, y: screenY, visible: fz > 0 }
 }
 
-export function GlobeLive({ articles, sources, onSourceClick, className = "" }: GlobeLiveProps) {
+export function GlobeLive({ articles, sources, referenceTimeMs, onSourceClick, className = "" }: GlobeLiveProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
@@ -81,32 +82,36 @@ export function GlobeLive({ articles, sources, onSourceClick, className = "" }: 
   const livePhiRef = useRef(0)
   const liveThetaRef = useRef(0.2)
 
+  const [canvasSize, setCanvasSize] = useState(400)
   const [tooltip, setTooltip] = useState<TooltipState | null>(null)
   const tooltipRef = useRef<TooltipState | null>(null)
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Build active markers: sources that have articles in the last 24 h
-  const cutoff = Date.now() - 24 * 60 * 60 * 1000
-  const markerMap = new Map<string, ActiveMarker>()
+  const activeMarkers = useMemo(() => {
+    const cutoff = referenceTimeMs - 24 * 60 * 60 * 1000
+    const markerMap = new Map<string, ActiveMarker>()
 
-  for (const source of sources) {
-    const sourceArticles = articles
-      .filter((a) => a.sourceId === source.id && new Date(a.pubDate).getTime() > cutoff)
-      .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+    for (const source of sources) {
+      const sourceArticles = articles
+        .filter((a) => a.sourceId === source.id && new Date(a.pubDate).getTime() > cutoff)
+        .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
 
-    if (sourceArticles.length > 0) {
-      markerMap.set(source.id, {
-        sourceId: source.id,
-        sourceName: source.name,
-        location: source.location,
-        category: source.category,
-        city: source.city,
-        count: sourceArticles.length,
-        latestArticles: sourceArticles.slice(0, 3),
-      })
+      if (sourceArticles.length > 0) {
+        markerMap.set(source.id, {
+          sourceId: source.id,
+          sourceName: source.name,
+          location: source.location,
+          category: source.category,
+          city: source.city,
+          count: sourceArticles.length,
+          latestArticles: sourceArticles.slice(0, 3),
+        })
+      }
     }
-  }
-  const activeMarkers = Array.from(markerMap.values())
+
+    return Array.from(markerMap.values())
+  }, [articles, referenceTimeMs, sources])
 
   // DOM refs for each overlay dot — direct manipulation avoids 60fps React re-renders
   const dotRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -144,6 +149,19 @@ export function GlobeLive({ articles, sources, onSourceClick, className = "" }: 
       window.removeEventListener("pointerup", handlePointerUp)
     }
   }, [handlePointerUp])
+
+  useEffect(() => {
+    if (!canvasRef.current) return
+
+    const canvas = canvasRef.current
+    const syncCanvasSize = () => setCanvasSize(canvas.offsetWidth || 400)
+    syncCanvasSize()
+
+    const resizeObserver = new ResizeObserver(() => syncCanvasSize())
+    resizeObserver.observe(canvas)
+
+    return () => resizeObserver.disconnect()
+  }, [])
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -244,11 +262,10 @@ export function GlobeLive({ articles, sources, onSourceClick, className = "" }: 
       if (animationId) cancelAnimationFrame(animationId)
       if (globe) globe.destroy()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [articles.length, sources.length])
+  }, [activeMarkers])
 
   const handleDotEnter = useCallback(
-    (marker: ActiveMarker, i: number) => {
+    (marker: ActiveMarker) => {
       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current)
       const size = canvasRef.current?.offsetWidth ?? 400
       const [lat, lng] = marker.location
@@ -277,7 +294,6 @@ export function GlobeLive({ articles, sources, onSourceClick, className = "" }: 
   }, [])
 
   // Determine tooltip placement: flip left if too close to right edge
-  const canvasSize = canvasRef.current?.offsetWidth ?? 400
   const tooltipOnLeft = tooltip ? tooltip.x > canvasSize * 0.6 : false
 
   return (
@@ -320,7 +336,7 @@ export function GlobeLive({ articles, sources, onSourceClick, className = "" }: 
             <div
               key={marker.sourceId}
               ref={(el) => { dotRefs.current[i] = el }}
-              onMouseEnter={() => handleDotEnter(marker, i)}
+              onMouseEnter={() => handleDotEnter(marker)}
               onMouseLeave={handleDotLeave}
               onClick={() => {
                 onSourceClick?.(marker.sourceId)

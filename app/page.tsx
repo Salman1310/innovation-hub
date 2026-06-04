@@ -2,11 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { AnimatePresence, motion, useInView } from "framer-motion"
-import { ArrowUpRight, BarChart3, Filter, RadioTower } from "lucide-react"
+import { ArrowUpRight, Filter, PieChart, RadioTower } from "lucide-react"
 import { AnimatedHero } from "@/components/ui/animated-hero"
-import { AntigravityField } from "@/components/AntigravityField"
+import { Spotlight } from "@/components/ui/spotlight"
+import { InnovationGlobe } from "@/components/ui/innovation-globe"
 import ScrollExpandMedia from "@/components/ui/scroll-expansion-hero"
 import { AuroraBackground } from "@/components/ui/aurora-background"
 import { DidYouKnow } from "@/components/ui/did-you-know"
@@ -18,9 +18,24 @@ import {
   POCS,
   TREND_BADGES,
   TICKER_ITEMS,
-  FUN_FACTS
+  FUN_FACTS,
+  IMPACT_HIGHLIGHTS,
+  IDEA_TO_IMPACT,
+  PARTNERSHIPS,
+  CULTURE_METRICS,
+  FRAMEWORK_STAGES,
+  FRAMEWORK_GUARDRAILS,
+  FRAMEWORK_OUTPUTS,
+  GUIDING_PRINCIPLES,
+  FUTURE_ROADMAP,
 } from "@/lib/data"
 import type { MarketKey } from "@/lib/data"
+import {
+  Trophy, Shield, Clock, TrendingUp,
+  Lightbulb, Users, Heart, Award,
+  Sparkles, CheckCircle, Megaphone, Target,
+  ArrowRight, Building2, GraduationCap, Rocket, Zap,
+} from "lucide-react"
 
 
 function CountUp({
@@ -62,8 +77,64 @@ function CountUp({
   )
 }
 
-function ImpactBars() {
-  const max = Math.max(...BUSINESS_IMPACT.map((item) => item.value))
+function ImpactPieChart() {
+  const total = BUSINESS_IMPACT.reduce((sum, item) => sum + item.value, 0)
+  const PIE_COLORS = ["#ECAB23", "#0E5665", "#F8D56A", "#E85D75", "#4ECDC4"]
+  const radius = 80
+  const cx = 100
+  const cy = 100
+
+  const slices = BUSINESS_IMPACT.map((item, i) => {
+    const angle = (item.value / total) * 360
+    const startAngle = BUSINESS_IMPACT
+      .slice(0, i)
+      .reduce((sum, currentItem) => sum + (currentItem.value / total) * 360, -90)
+    const endAngle = startAngle + angle
+
+    const startRad = (startAngle * Math.PI) / 180
+    const endRad = (endAngle * Math.PI) / 180
+    const largeArc = angle > 180 ? 1 : 0
+
+    const x1 = cx + radius * Math.cos(startRad)
+    const y1 = cy + radius * Math.sin(startRad)
+    const x2 = cx + radius * Math.cos(endRad)
+    const y2 = cy + radius * Math.sin(endRad)
+
+    const d = `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`
+
+    const midAngle = (startAngle + endAngle) / 2
+    const midRad = (midAngle * Math.PI) / 180
+    const labelRadius = radius * 0.55
+    const labelX = cx + labelRadius * Math.cos(midRad)
+    const labelY = cy + labelRadius * Math.sin(midRad)
+    const pct = Math.round((item.value / total) * 100)
+
+    return (
+      <g key={item.label}>
+        <motion.path
+          d={d}
+          fill={PIE_COLORS[i % PIE_COLORS.length]}
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: i * 0.1 }}
+          className="hover:opacity-80 transition-opacity cursor-pointer"
+        />
+        <text
+          x={labelX}
+          y={labelY}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fill="#fff"
+          fontSize="11"
+          fontWeight="700"
+          style={{ fontFamily: "var(--font-mono)", pointerEvents: "none" }}
+        >
+          {pct}%
+        </text>
+      </g>
+    )
+  })
 
   return (
     <div className="glass-card p-6">
@@ -74,26 +145,26 @@ function ImpactBars() {
             POCs by market and unit
           </h3>
         </div>
-        <BarChart3 className="h-5 w-5 text-[#ECAB23]" />
+        <PieChart className="h-5 w-5 text-[#ECAB23]" />
       </div>
-      <div className="space-y-4">
-        {BUSINESS_IMPACT.map((item) => (
-          <div key={item.label}>
-            <div className="mb-1 flex items-center justify-between text-xs font-semibold text-[#5B6770]">
-              <span>{item.label}</span>
-              <span style={{ fontFamily: "var(--font-mono)" }}>{item.value}</span>
-            </div>
-            <div className="h-3 overflow-hidden rounded-full bg-[#FFF7E3]">
-              <motion.div
-                className="h-full rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${(item.value / max) * 100}%` }}
-                transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-                style={{ background: "linear-gradient(90deg, #ECAB23, #F8D56A)" }}
+      <div className="flex items-center justify-center gap-6">
+        <svg viewBox="0 0 200 200" className="h-48 w-48 shrink-0">
+          {slices}
+        </svg>
+        <div className="space-y-3">
+          {BUSINESS_IMPACT.map((item, i) => (
+            <div key={item.label} className="flex items-center gap-2">
+              <div
+                className="h-3 w-3 rounded-full"
+                style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }}
               />
+              <span className="text-xs font-semibold text-[#5B6770]">{item.label}</span>
+              <span className="text-xs font-bold" style={{ fontFamily: "var(--font-mono)", color: PIE_COLORS[i % PIE_COLORS.length] }}>
+                {item.value}
+              </span>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   )
@@ -138,40 +209,63 @@ function LiveTicker() {
 
 function PocGallery() {
   const [activeMarket, setActiveMarket] = useState<MarketKey>("All")
+  const [activeStatus, setActiveStatus] = useState("All")
   const markets: MarketKey[] = ["All", "Asia", "Canada", "SLGS", "US", "Other"]
+  const statuses = ["All", "In Production", "Scaling into Production", "Prototyping", "Exploration", "Bookshelf", "Showcase"]
   const filteredPocs = useMemo(
-    () => (activeMarket === "All" ? POCS : POCS.filter((poc) => poc.market === activeMarket)),
-    [activeMarket],
+    () => POCS.filter((poc) => {
+      const marketMatch = activeMarket === "All" || poc.market === activeMarket
+      const statusMatch = activeStatus === "All" || poc.status === activeStatus
+      return marketMatch && statusMatch
+    }),
+    [activeMarket, activeStatus],
   )
 
   return (
-    <div className="mb-12">
+    <div id="poc-gallery" className="mb-12">
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">
             <Filter className="h-3.5 w-3.5" />
-            By market
+            Innovation Portfolio
           </p>
           <h3 className="text-2xl font-bold text-[#1F2A2E]" style={{ fontFamily: "var(--font-display)" }}>
-            Innovation Portfolio
+            {filteredPocs.length} POCs
           </h3>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {markets.map((market) => (
-            <button
-              key={market}
-              type="button"
-              onClick={() => setActiveMarket(market)}
-              className="cursor-pointer rounded-full border px-4 py-2 text-xs font-bold transition-all"
-              style={{
-                background: activeMarket === market ? "#ECAB23" : "rgba(255,255,255,0.72)",
-                borderColor: activeMarket === market ? "#ECAB23" : "rgba(236,171,35,0.18)",
-                color: activeMarket === market ? "#fff" : "#5B6770",
-              }}
-            >
-              {market}
-            </button>
-          ))}
+        <div className="flex flex-wrap items-center gap-3">
+          <select
+            value={activeMarket}
+            onChange={(e) => setActiveMarket(e.target.value as MarketKey)}
+            className="cursor-pointer rounded-lg border px-4 py-2 text-xs font-bold outline-none transition-all"
+            style={{
+              background: "rgba(255,255,255,0.72)",
+              borderColor: "rgba(236,171,35,0.18)",
+              color: "#5B6770",
+            }}
+          >
+            {markets.map((market) => (
+              <option key={market} value={market}>
+                {market === "All" ? "All Markets" : market}
+              </option>
+            ))}
+          </select>
+          <select
+            value={activeStatus}
+            onChange={(e) => setActiveStatus(e.target.value)}
+            className="cursor-pointer rounded-lg border px-4 py-2 text-xs font-bold outline-none transition-all"
+            style={{
+              background: "rgba(255,255,255,0.72)",
+              borderColor: "rgba(236,171,35,0.18)",
+              color: "#5B6770",
+            }}
+          >
+            {statuses.map((status) => (
+              <option key={status} value={status}>
+                {status === "All" ? "All Stages" : status}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -219,47 +313,390 @@ function PocGallery() {
   )
 }
 
+const ICON_MAP: Record<string, React.ReactNode> = {
+  trophy: <Trophy className="h-5 w-5" />,
+  shield: <Shield className="h-5 w-5" />,
+  clock: <Clock className="h-5 w-5" />,
+  "trending-up": <TrendingUp className="h-5 w-5" />,
+  lightbulb: <Lightbulb className="h-5 w-5" />,
+  users: <Users className="h-5 w-5" />,
+  heart: <Heart className="h-5 w-5" />,
+  award: <Award className="h-5 w-5" />,
+  sparkles: <Sparkles className="h-5 w-5" />,
+  "check-circle": <CheckCircle className="h-5 w-5" />,
+  megaphone: <Megaphone className="h-5 w-5" />,
+  target: <Target className="h-5 w-5" />,
+}
+
+function ImpactHighlights() {
+  return (
+    <div className="mb-12">
+      <div className="mb-6 text-center">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">Measurable Outcomes</p>
+        <h3 className="text-2xl font-bold text-[#1F2A2E] md:text-3xl" style={{ fontFamily: "var(--font-display)" }}>
+          Impact <span className="gradient-text">Highlights</span>
+        </h3>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {IMPACT_HIGHLIGHTS.map((item, i) => (
+          <motion.div
+            key={item.label}
+            className="glass-card group p-6 text-center transition-all hover:-translate-y-1 hover:shadow-[0_18px_60px_rgba(236,171,35,0.15)]"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: i * 0.1 }}
+          >
+            <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#FFF7E3] text-[#ECAB23]">
+              {ICON_MAP[item.icon]}
+            </div>
+            <p className="mb-1 text-2xl font-bold text-[#0E5665]" style={{ fontFamily: "var(--font-display)" }}>
+              {item.value}
+            </p>
+            <p className="mb-1 text-sm font-bold text-[#1F2A2E]">{item.label}</p>
+            <p className="text-xs text-[#5B6770]">{item.desc}</p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function IdeaToImpactTimeline() {
+  return (
+    <div className="mb-12">
+      <div className="mb-6 text-center">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">Production Journey</p>
+        <h3 className="text-2xl font-bold text-[#1F2A2E] md:text-3xl" style={{ fontFamily: "var(--font-display)" }}>
+          Idea to <span className="gradient-text">Impact</span>
+        </h3>
+        <p className="mx-auto mt-2 max-w-lg text-sm text-[#5B6770]">12 POCs in production — each started as an experiment.</p>
+      </div>
+      <div className="relative">
+        <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-[#ECAB23] via-[#4ECDC4] to-[#0E5665] md:left-1/2" />
+        {IDEA_TO_IMPACT.map((item, i) => (
+          <motion.div
+            key={`${item.year}-${item.name}`}
+            className={`relative mb-6 flex items-start gap-4 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} md:gap-8`}
+            initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: i * 0.05 }}
+          >
+            <div className={`hidden md:block md:w-[calc(50%-2rem)] ${i % 2 === 0 ? "text-right" : "text-left"}`}>
+              <div className="glass-card inline-block p-4">
+                <p className="text-xs font-bold text-[#ECAB23]" style={{ fontFamily: "var(--font-mono)" }}>{item.year}</p>
+                <p className="text-sm font-bold text-[#1F2A2E]">{item.name}</p>
+                <p className="text-xs text-[#5B6770]">{item.desc}</p>
+                <span className="mt-1 inline-block rounded-full bg-[#FFF7E3] px-2 py-0.5 text-[10px] font-medium text-[#ECAB23]">{item.market}</span>
+              </div>
+            </div>
+            <div className="absolute left-6 z-10 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[#ECAB23] bg-white md:left-1/2 md:-translate-x-1/2" />
+            <div className="ml-12 md:hidden">
+              <div className="glass-card p-4">
+                <p className="text-xs font-bold text-[#ECAB23]" style={{ fontFamily: "var(--font-mono)" }}>{item.year}</p>
+                <p className="text-sm font-bold text-[#1F2A2E]">{item.name}</p>
+                <p className="text-xs text-[#5B6770]">{item.desc}</p>
+                <span className="mt-1 inline-block rounded-full bg-[#FFF7E3] px-2 py-0.5 text-[10px] font-medium text-[#ECAB23]">{item.market}</span>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PartnershipEcosystem() {
+  const categories = [
+    { key: "startups" as const, label: "Startups", icon: <Rocket className="h-5 w-5" />, color: "#ECAB23" },
+    { key: "accelerators" as const, label: "Accelerators", icon: <Zap className="h-5 w-5" />, color: "#4ECDC4" },
+    { key: "academia" as const, label: "Academia", icon: <GraduationCap className="h-5 w-5" />, color: "#0E5665" },
+    { key: "enterprise" as const, label: "Enterprise", icon: <Building2 className="h-5 w-5" />, color: "#E85D75" },
+  ]
+
+  return (
+    <section className="px-8 py-24">
+      <div className="container mx-auto max-w-7xl">
+        <motion.div
+          className="mb-12 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">Ecosystem-Led Approach</p>
+          <h2 className="text-4xl font-bold text-[#1F2A2E] md:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+            Partnership <span className="gradient-text">Ecosystem</span>
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-[#5B6770]">
+            Startups for speed, global partners for scale, academia for depth.
+          </p>
+        </motion.div>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {categories.map((cat, i) => {
+            const data = PARTNERSHIPS[cat.key]
+            return (
+              <motion.div
+                key={cat.key}
+                className="glass-card p-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: `${cat.color}18`, color: cat.color }}>
+                    {cat.icon}
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold" style={{ color: cat.color, fontFamily: "var(--font-display)" }}>{data.count}</p>
+                    <p className="text-xs font-semibold text-[#5B6770]">{cat.label}</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {data.examples.map((name) => (
+                    <span key={name} className="rounded-full border px-2 py-0.5 text-[10px] font-medium text-[#5B6770]" style={{ borderColor: `${cat.color}30` }}>
+                      {name}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function CultureSection() {
+  return (
+    <section className="px-8 py-24" style={{ background: "linear-gradient(180deg, #f8f9fc 0%, #FFF7E3 100%)" }}>
+      <div className="container mx-auto max-w-7xl">
+        <motion.div
+          className="mb-12 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">Building from Within</p>
+          <h2 className="text-4xl font-bold text-[#1F2A2E] md:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+            Innovation <span className="gradient-text">Culture</span>
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-[#5B6770]">
+            From zero innovation challenges to 7-8 ideation drives annually — 35% of POCs now built internally.
+          </p>
+        </motion.div>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          {CULTURE_METRICS.map((metric, i) => (
+            <motion.div
+              key={metric.label}
+              className="glass-card p-6 text-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+            >
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#FFF7E3] text-[#ECAB23]">
+                {ICON_MAP[metric.icon]}
+              </div>
+              <p className="text-3xl font-bold text-[#0E5665]" style={{ fontFamily: "var(--font-display)" }}>{metric.value}</p>
+              <p className="mt-1 text-sm font-medium text-[#5B6770]">{metric.label}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function OperatingFramework() {
+  return (
+    <section className="px-8 py-24" style={{ background: "#f8f9fc" }}>
+      <div className="container mx-auto max-w-7xl">
+        <motion.div
+          className="overflow-hidden rounded-2xl border border-[#E6ECEE] bg-white shadow-[0_8px_40px_rgba(14,56,70,0.06)]"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <Image
+            src="/framework.png"
+            alt="Innovation Hub Operating Framework — Ideas Funnel to Exploration to Scaling for Enterprise"
+            width={1920}
+            height={1080}
+            className="h-auto w-full"
+            priority={false}
+          />
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+function GuidingPrinciplesSection() {
+  return (
+    <section className="px-8 py-24" style={{ background: "#f8f9fc" }}>
+      <div className="container mx-auto max-w-7xl">
+        <motion.div
+          className="mb-12 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">Prioritization Criteria</p>
+          <h2 className="text-4xl font-bold text-[#1F2A2E] md:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+            Guiding <span className="gradient-text">Principles</span>
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-[#5B6770]">
+            How we choose opportunities from the pipeline — each evaluated across six dimensions.
+          </p>
+        </motion.div>
+
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {GUIDING_PRINCIPLES.map((principle, i) => (
+            <motion.div
+              key={principle.title}
+              className="glass-card group flex items-start gap-4 p-6 transition-all hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(236,171,35,0.12)]"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+            >
+              <div
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
+                style={{ background: `${principle.color}15`, color: principle.color }}
+              >
+                {ICON_MAP[principle.icon]}
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-[#1F2A2E]">{principle.title}</h4>
+                <p className="mt-1 text-xs leading-relaxed text-[#5B6770]">{principle.desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function FutureRoadmap() {
+  return (
+    <section className="px-8 py-24" style={{ background: "linear-gradient(135deg, #1F2A2E 0%, #0E3846 50%, #1F2A2E 100%)" }}>
+      <div className="container mx-auto max-w-7xl">
+        <motion.div
+          className="mb-12 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#F8D56A]">What&apos;s Next</p>
+          <h2 className="text-4xl font-bold text-white md:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+            Future <span style={{ color: "#ECAB23" }}>Roadmap</span>
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-white/60">
+            Shifting from isolated use cases to building enterprise-level AI capabilities.
+          </p>
+        </motion.div>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {FUTURE_ROADMAP.map((item, i) => (
+            <motion.div
+              key={item.title}
+              className="group rounded-2xl border border-white/10 p-6 transition-all hover:border-[#ECAB23]/30 hover:bg-white/5"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+            >
+              <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#ECAB23]/20 text-sm font-bold text-[#ECAB23]">
+                {i + 1}
+              </div>
+              <h4 className="mb-2 text-lg font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>{item.title}</h4>
+              <p className="text-sm leading-relaxed text-white/60">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function Home() {
+  const cumulativePocSeries = [
+    { year: "2020", value: 4 },
+    { year: "2021", value: 9 },
+    { year: "2022", value: 19 },
+    { year: "2023", value: 24 },
+    { year: "2024", value: 34 },
+    { year: "2025", value: 45 },
+    { year: "2026", value: 51 },
+  ]
+  const cumulativeChartWidth = 620
+  const cumulativeChartHeight = 220
+  const cumulativeChartMargin = { top: 22, right: 30, bottom: 34, left: 30 }
+  const cumulativeChartFloor = cumulativeChartHeight - cumulativeChartMargin.bottom
+  const cumulativeChartRange = cumulativeChartFloor - cumulativeChartMargin.top
+  const cumulativeMaxValue = Math.max(...cumulativePocSeries.map((item) => item.value))
+  const cumulativeChartStep =
+    (cumulativeChartWidth - cumulativeChartMargin.left - cumulativeChartMargin.right) /
+    (cumulativePocSeries.length - 1)
+  const cumulativeChartPoints = cumulativePocSeries.map((item, index) => ({
+    ...item,
+    x: cumulativeChartMargin.left + cumulativeChartStep * index,
+    y: cumulativeChartFloor - (item.value / cumulativeMaxValue) * cumulativeChartRange,
+  }))
+  const cumulativeLinePath = cumulativeChartPoints
+    .map((point, index) => `${index === 0 ? "M" : "L"}${point.x},${point.y}`)
+    .join(" ")
+  const cumulativeAreaPath = `${cumulativeLinePath} L ${cumulativeChartPoints[cumulativeChartPoints.length - 1].x},${cumulativeChartFloor} L ${cumulativeChartPoints[0].x},${cumulativeChartFloor} Z`
+
   return (
     <main className="grain bg-aurora min-h-screen overflow-x-hidden">
-      <nav className="flex items-center justify-between border-b border-[rgba(236,171,35,0.18)] px-8 py-4" style={{ background: "#FFF8EC" }}>
-        <div className="flex items-center">
-          <Image src="/sunlife_logo.png" alt="Sun Life" width={200} height={56} className="h-14 w-auto" priority />
-        </div>
+      <section className="relative h-screen w-full overflow-hidden bg-[#f8f9fc]">
+        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="#ECAB23" />
 
-        <div className="hidden items-center gap-8 text-sm font-medium text-[#5B6770] md:flex">
-          {[
-            { label: "Dashboard", href: "#dashboard" },
-            { label: "Our Story", href: "/story" },
-            { label: "News Feed", href: "/feed" },
-            { label: "Connect", href: "#connect" },
-          ].map((item) =>
-            item.href.startsWith("/") ? (
-              <Link key={item.label} href={item.href} className="transition-colors hover:text-[#ECAB23]">
-                {item.label}
-              </Link>
-            ) : (
-              <a key={item.label} href={item.href} className="transition-colors hover:text-[#ECAB23]">
+        {/* Navbar */}
+        <nav className="absolute left-0 right-0 top-0 z-20 flex items-center justify-between px-6 py-4 md:px-10">
+          <Image src="/sunlife_logo.png" alt="Sun Life" width={140} height={40} className="h-9 w-auto" />
+          <div className="hidden items-center gap-6 md:flex lg:gap-10">
+            {[
+              { label: "Dashboard", href: "#dashboard" },
+              { label: "Our Story", href: "/story" },
+              { label: "Culture", href: "/culture" },
+              { label: "News Feed", href: "/feed" },
+              { label: "Connect", href: "#connect" },
+            ].map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="text-xs font-medium text-[#1F2A2E]/75 transition-colors hover:text-[#ECAB23] md:text-sm"
+              >
                 {item.label}
               </a>
-            ),
-          )}
-        </div>
+            ))}
+          </div>
+        </nav>
 
-      </nav>
+        {/* Hero: left content + right Spline robot */}
+        <div className="relative z-10 flex h-full items-center">
+          <div className="container mx-auto flex max-w-7xl items-center px-6 md:px-10">
+            {/* Left side — text content */}
+            <div className="flex-1">
+              <AnimatedHero />
+            </div>
 
-      <section className="relative min-h-screen pb-12 pt-12">
-        <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-40" />
-
-        <div className="container relative z-10 mx-auto max-w-7xl px-8">
-          <div className="grid min-h-[calc(100vh-6rem)] items-center gap-12 lg:grid-cols-2">
-            <AnimatedHero />
-            <div className="hidden lg:block">
-              <AntigravityField />
+            {/* Right side — Interactive Globe */}
+            <div className="hidden flex-1 lg:block relative">
+              <div className="relative h-[600px] w-full ml-8">
+                <InnovationGlobe />
+              </div>
             </div>
           </div>
         </div>
-
       </section>
 
       <section className="px-8 py-24">
@@ -272,16 +709,18 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl font-bold text-[#1F2A2E] md:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-              Our Key <span className="gradient-text">Focus Areas</span>
+              Key <span className="gradient-text">Themes</span>
             </h2>
+            <p className="mx-auto mt-3 max-w-xl text-[#5B6770]">
+              We focus innovation efforts across three core themes anchored to Sun Life&apos;s purpose and growth agenda.
+            </p>
           </motion.div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
-              { title: "Operational Efficiency", desc: "Aids in reducing/transforming the operational tasks for our ops teams", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&auto=format&fit=crop&q=80" },
-              { title: "Client/Advisor Experience", desc: "Improve clients and advisor experience across all touchpoints", img: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400&auto=format&fit=crop&q=80" },
-              { title: "Tech Modernization", desc: "Upgrade from legacy systems to use modern technology", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop&q=80" },
-              { title: "Sales & Distribution", desc: "Leverage technology for better outreach, sales and overall distribution", img: "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?w=400&auto=format&fit=crop&q=80" },
+              { title: "Client & Advisor Experience", desc: "Improving client onboarding, advisor productivity, and engagement across all touchpoints and markets", img: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400&auto=format&fit=crop&q=80" },
+              { title: "Operational Efficiency", desc: "Reducing and transforming operational tasks through automation, AI, and process innovation", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&auto=format&fit=crop&q=80" },
+              { title: "Strategic Initiatives", desc: "Emerging tech experiments aligned to Sun Life's long-term business strategy and competitive positioning", img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop&q=80" },
             ].map((area, i) => (
               <motion.div
                 key={area.title}
@@ -369,30 +808,45 @@ export default function Home() {
           </div>
 
           <div className="mb-8 grid gap-6 lg:grid-cols-2">
-            <ImpactBars />
+            <ImpactPieChart />
             <div className="glass-card p-6">
               <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ECAB23]">Growth</p>
                   <h3 className="text-xl font-bold text-[#1F2A2E]" style={{ fontFamily: "var(--font-display)" }}>
-                    Cumulative Active POCs
+                    Cumulative POCs Executed
                   </h3>
                 </div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-[#0E5665]/10 px-3 py-1 text-xs font-bold text-[#0E5665]">
                   <RadioTower className="h-3.5 w-3.5" />
-                  2025 portfolio peak
+                  2026 portfolio peak
                 </div>
               </div>
-              <div className="relative h-52 pb-6">
-                <svg viewBox="0 0 600 200" className="h-full w-full" preserveAspectRatio="none" style={{ marginBottom: "24px" }}>
+              <div className="relative h-56 overflow-visible rounded-2xl border border-[#D9E4E7] bg-[linear-gradient(180deg,rgba(255,255,255,0.72)_0%,rgba(255,247,227,0.42)_100%)] px-2 pt-2">
+                <svg viewBox={`0 0 ${cumulativeChartWidth} ${cumulativeChartHeight}`} className="h-full w-full" preserveAspectRatio="xMidYMid meet">
                   <defs>
                     <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="#ECAB23" stopOpacity="0.3" />
                       <stop offset="100%" stopColor="#ECAB23" stopOpacity="0.02" />
                     </linearGradient>
                   </defs>
+                  {[0.25, 0.5, 0.75].map((tick) => {
+                    const y = cumulativeChartFloor - cumulativeChartRange * tick
+
+                    return (
+                      <line
+                        key={tick}
+                        x1={cumulativeChartMargin.left}
+                        x2={cumulativeChartWidth - cumulativeChartMargin.right}
+                        y1={y}
+                        y2={y}
+                        stroke="rgba(14,86,101,0.12)"
+                        strokeDasharray="6 8"
+                      />
+                    )
+                  })}
                   <motion.path
-                    d="M0,195 L85,191 L170,178 L255,148 L340,130 L425,125 L510,120 L600,120 L600,200 L0,200 Z"
+                    d={cumulativeAreaPath}
                     fill="url(#areaGrad)"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
@@ -400,7 +854,7 @@ export default function Home() {
                     transition={{ duration: 1 }}
                   />
                   <motion.path
-                    d="M0,195 L85,191 L170,178 L255,148 L340,130 L425,125 L510,120 L600,120"
+                    d={cumulativeLinePath}
                     fill="none"
                     stroke="#ECAB23"
                     strokeWidth="3"
@@ -411,41 +865,62 @@ export default function Home() {
                     viewport={{ once: true }}
                     transition={{ duration: 1.5, ease: "easeOut" }}
                   />
-                  {[
-                    { x: 0, y: 195, val: "2" },
-                    { x: 85, y: 191, val: "4" },
-                    { x: 170, y: 178, val: "9" },
-                    { x: 255, y: 148, val: "19" },
-                    { x: 340, y: 130, val: "22" },
-                    { x: 425, y: 125, val: "24" },
-                    { x: 510, y: 120, val: "26" },
-                  ].map((pt, i) => (
-                    <motion.circle
-                      key={i}
-                      cx={pt.x}
-                      cy={pt.y}
-                      r="5"
-                      fill="#ECAB23"
-                      stroke="#FFF"
-                      strokeWidth="2"
-                      initial={{ scale: 0 }}
-                      whileInView={{ scale: 1 }}
+                  {cumulativeChartPoints.map((point, index) => (
+                    <motion.g
+                      key={point.year}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
-                      transition={{ delay: 0.2 + i * 0.15, duration: 0.3 }}
-                    />
+                      transition={{ delay: 0.18 + index * 0.12, duration: 0.28 }}
+                    >
+                      <circle
+                        cx={point.x}
+                        cy={point.y}
+                        r="5.5"
+                        fill="#ECAB23"
+                        stroke="#FFF"
+                        strokeWidth="2"
+                      />
+                      <text
+                        x={point.x}
+                        y={point.y - 14}
+                        textAnchor="middle"
+                        fill="#0E5665"
+                        fontSize="11"
+                        fontWeight="700"
+                        style={{ fontFamily: "var(--font-mono)" }}
+                      >
+                        {point.value}
+                      </text>
+                      <text
+                        x={point.x}
+                        y={cumulativeChartHeight - 8}
+                        textAnchor="middle"
+                        fill="#5B6770"
+                        fontSize="10"
+                        fontWeight="500"
+                        style={{ fontFamily: "var(--font-mono)" }}
+                      >
+                        {point.year}
+                      </text>
+                    </motion.g>
                   ))}
                 </svg>
-                <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2 text-[10px] font-medium text-[#5B6770]" style={{ fontFamily: "var(--font-mono)" }}>
-                  {["2019", "2020", "2021", "2022", "2023", "2024", "2025"].map((y) => (
-                    <span key={y}>{y}</span>
-                  ))}
-                </div>
-                <div className="absolute top-0 right-2 rounded-full bg-[#FFF7E3] px-3 py-1 text-xs font-bold text-[#ECAB23]" style={{ fontFamily: "var(--font-mono)" }}>
-                  26 active POCs
-                </div>
               </div>
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#FFF7E3] px-3 py-1.5 text-xs font-bold text-[#ECAB23] shadow-[0_8px_20px_rgba(236,171,35,0.14)]" style={{ fontFamily: "var(--font-mono)" }}>
+                  51+ POCs executed by 2026
+                </div>
+                <p className="text-xs font-medium text-[#5B6770]">
+                  Portfolio grew from 4 POCs in 2020 to 51+ executed in 2026 — 22% adoption rate.
+                </p>
+                </div>
             </div>
           </div>
+
+          <ImpactHighlights />
+
+          <IdeaToImpactTimeline />
 
           {/* Aurora-tinted dashboard content area */}
           <AuroraBackground className="min-h-0 -mx-8 px-8 py-12 rounded-3xl">
@@ -459,6 +934,16 @@ export default function Home() {
 
       <StartupBubbles />
 
+      <OperatingFramework />
+
+      <GuidingPrinciplesSection />
+
+      <PartnershipEcosystem />
+
+      <CultureSection />
+
+      <FutureRoadmap />
+
       <section
         className="overflow-hidden py-6"
         style={{
@@ -468,12 +953,12 @@ export default function Home() {
         <div className="flex gap-12 whitespace-nowrap animate-marquee">
           {[...Array(3)].map((_, repeat) =>
             [
-              "49 active POCs",
+              "51+ POCs executed",
               "12 in production",
-              "6 prototypes moving",
-              "8 markets active",
-              "16 Gen AI entries",
-              "3 scaling to production",
+              "40+ startup partners",
+              "22% adoption rate",
+              "CAD 360M+ fraud prevented",
+              "1,080 hrs capacity saved",
             ].map((item, i) => (
               <span
                 key={`${repeat}-${i}`}
@@ -608,7 +1093,7 @@ function FooterCTA() {
             Don&apos;t wait.<br />
             <span style={{ color: "#FFCD00" }}>Innovate.</span>
           </h2>
-          <p className="max-w-md text-base" style={{ color: "rgba(255,255,255,0.65)" }}>
+          <p className="text-base" style={{ color: "rgba(255,255,255,0.65)" }}>
             Got a breakthrough idea? We prototype fast — bring it to us.
           </p>
           <button

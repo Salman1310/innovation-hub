@@ -10,28 +10,21 @@ export type PocCard = {
   partner: string
 }
 
-export const METRICS = [
-  { value: 49, label: "Total POCs", suffix: "", color: "#ECAB23" },
-  { value: 12, label: "In Production", suffix: "", color: "#0E5665" },
-  { value: 6, label: "Prototyping", suffix: "", color: "#F8D56A" },
-  { value: 8, label: "Markets", suffix: "", color: "#F8D56A" },
-]
+export const BUSINESS_IMPACT_LABELS: Record<string, { label: string; color: string }> = {
+  Asia: { label: "Asia", color: "#ECAB23" },
+  Canada: { label: "Canada", color: "#0E5665" },
+  SLGS: { label: "SLGS", color: "#F8D56A" },
+  US: { label: "US", color: "#E85D75" },
+  Other: { label: "PH, ID & Global", color: "#4ECDC4" },
+}
 
-export const BUSINESS_IMPACT = [
-  { label: "Asia", value: 22, color: "#ECAB23" },
-  { label: "Canada", value: 10, color: "#0E5665" },
-  { label: "SLGS", value: 8, color: "#F8D56A" },
-  { label: "US", value: 3, color: "#F8D56A" },
-  { label: "Other Markets", value: 6, color: "#F8D56A" },
-]
-
-const STATUS_COLORS: Record<string, string> = {
+export const STATUS_COLORS: Record<string, string> = {
   "In Production": "#0E5665",
-  "Scaling into Production": "#0E5665",
+  "Scaling into Production": "#4ECDC4",
   "Prototyping": "#F8D56A",
-  "Exploration": "#F8D56A",
+  "Exploration": "#E85D75",
   "Bookshelf": "#ECAB23",
-  "Showcase": "#ECAB23",
+  "Showcase": "#A29BFE",
 }
 
 export const POCS: PocCard[] = [
@@ -86,35 +79,167 @@ export const POCS: PocCard[] = [
   { name: "PACRAT", desc: "Political Action Committee Research Analysis Tool for regulatory compliance.", status: "In Production", statusColor: STATUS_COLORS["In Production"], market: "US", tech: "API/Python", partner: "In-house" },
   { name: "Audio Analytics - Pinnacle Care", desc: "AI-powered call analytics for advisor coaching and contact-center quality assurance.", status: "In Production", statusColor: STATUS_COLORS["In Production"], market: "US", tech: "Gen AI", partner: "In-house" },
 
-  // === Other (6) ===
+  // === Other (8) ===
   { name: "Gen AI Investment News Search", desc: "Gen AI-powered search for investment news and market intelligence.", status: "Bookshelf", statusColor: STATUS_COLORS["Bookshelf"], market: "Other", tech: "Gen AI", partner: "In-house" },
   { name: "Medical Documents Translation", desc: "Translation service for medical documents across international hubs.", status: "Bookshelf", statusColor: STATUS_COLORS["Bookshelf"], market: "Other", tech: "TBD", partner: "TBD" },
-  { name: "Prevent & Manage Lifestyle Chronic Diseases", desc: "Platform for prevention and management of lifestyle chronic diseases.", status: "In Production", statusColor: STATUS_COLORS["In Production"], market: "Other", tech: "TBD", partner: "TBD" },
-  { name: "Rookie PH Advisor (pgVector)", desc: "AI advisor assistant using pgVector pattern for Philippines market.", status: "In Production", statusColor: STATUS_COLORS["In Production"], market: "Other", tech: "AI/ML", partner: "In-house" },
-  { name: "Indonesia Speech-to-Text", desc: "Speech-to-text solution for Bahasa Indonesia customer interactions.", status: "Showcase", statusColor: STATUS_COLORS["Showcase"], market: "Other", tech: "Gen AI", partner: "In-house" },
+  { name: "Wysa Mental Wellness (Ideation Winner)", desc: "AI-enabled 24/7 mental health platform offering stress, burnout and resilience support — rolled out to ~5K Sun Life employees as a 1-year pilot.", status: "In Production", statusColor: STATUS_COLORS["In Production"], market: "Other", tech: "AI/ML", partner: "Wysa" },
+  { name: "Rookie PH Advisor (pgVector)", desc: "AI advisor assistant using pgVector pattern for Philippines market.", status: "In Production", statusColor: STATUS_COLORS["In Production"], market: "Asia", tech: "AI/ML", partner: "In-house" },
+  { name: "Indonesia Speech-to-Text", desc: "Speech-to-text solution for Bahasa Indonesia customer interactions.", status: "Showcase", statusColor: STATUS_COLORS["Showcase"], market: "Asia", tech: "Gen AI", partner: "In-house" },
   { name: "Third Party Risk Identification using AI", desc: "AI-powered identification and assessment of third-party security risks.", status: "Bookshelf", statusColor: STATUS_COLORS["Bookshelf"], market: "Other", tech: "AI/ML", partner: "In-house" },
+  { name: "Hyper Personalization for Financial Planning", desc: "AI-driven hyper personalization engine for tailored financial planning experiences.", status: "Prototyping", statusColor: STATUS_COLORS["Prototyping"], market: "Other", tech: "Gen AI", partner: "In-house" },
+  { name: "SEO Chatbot for Digital Marketing", desc: "Gen AI chatbot for SEO optimization and digital marketing content generation.", status: "Prototyping", statusColor: STATUS_COLORS["Prototyping"], market: "Asia", tech: "Gen AI", partner: "In-house" },
 ]
 
+// --- Derived metrics (computed from POCS) ---
+const _totalPocs = POCS.length
+const _inProduction = POCS.filter(p => p.status === "In Production").length
+const _prototyping = POCS.filter(p => p.status === "Prototyping").length
+const _scaling = POCS.filter(p => p.status === "Scaling into Production").length
+const _activePocs = _prototyping + _scaling
+const _bookshelf = POCS.filter(p => p.status === "Bookshelf").length
+const _markets = new Set(POCS.map(p => p.market)).size
+const _genAi = POCS.filter(p => p.tech === "Gen AI").length
+
+export const METRICS = [
+  { value: _totalPocs, label: "POCs Executed", suffix: "+", color: "#ECAB23" },
+  { value: _inProduction, label: "In Production", suffix: "", color: "#0E5665" },
+  { value: _activePocs, label: "Active POCs", suffix: "", color: "#4ECDC4" },
+  { value: 22, label: "Adoption Rate", suffix: "%", color: "#E85D75" },
+  { value: 40, label: "Startup Partners", suffix: "+", color: "#F8D56A" },
+  { value: _markets, label: "Markets", suffix: "", color: "#A29BFE" },
+]
+
+export const IMPACT_HIGHLIGHTS = [
+  { value: "CAD 100K", label: "Innovation Success Fee", desc: "First blockchain asset tokenization POC", icon: "trophy" },
+  { value: "CAD 360M+", label: "Fraud Prevention", desc: "60+ high-value claims flagged in HK (each ≥ CAD 6M)", icon: "shield" },
+  { value: "$1.3 Million", label: "Expected Value", desc: "Expected from Canada Dealer Initiatives", icon: "clock" },
+  { value: "$100,000", label: "Operational Value", desc: "Call agent productivity gain per year", icon: "trending-up" },
+]
+
+export const IDEA_TO_IMPACT = [
+  { year: "2020", name: "Sun Canvas", market: "Asia", desc: "Business continuity for advisors during COVID" },
+  { year: "2021", name: "E-KYC (Onfido)", market: "Asia", desc: "Client onboarding & curbing fraudulent documents" },
+  { year: "2022", name: "Metaverse (MootUp)", market: "Asia", desc: "1st VR-enabled philanthropic week & recruitment" },
+  { year: "2023", name: "Fastrack Insights (Denodo)", market: "Asia", desc: "Data virtualization for Asia Data Backbone" },
+  { year: "2023", name: "Document Mgmt (Hyland)", market: "Asia", desc: "Enterprise content management replacing IBM Filenet" },
+  { year: "2024", name: "PH Rookie Advisor", market: "Asia", desc: "GenAI chatbot reducing query wait from days to seconds" },
+  { year: "2024", name: "Advisor Social (DCM)", market: "Asia", desc: "Digital content marketing for Vietnam advisors" },
+  { year: "2024", name: "CSR Automation", market: "Canada", desc: "Fixing data mismatch eliminating ~100 man-years of work" },
+  { year: "2024", name: "PACRAT", market: "US", desc: "Real-time political funding insights for strategic decisions" },
+  { year: "2024", name: "e-Business Card", market: "Asia", desc: "Seamless contact sharing, reducing paper usage" },
+  { year: "2025", name: "Wysa Mental Wellness", market: "SLGS", desc: "24/7 AI mental health for ~5K employees" },
+  { year: "2026", name: "Audio Analytics – Pinnacle Care", market: "US", desc: "Real-time call analytics saving 1,080 hours ($100K)" },
+]
+
+export const PARTNERSHIPS = {
+  startups: { count: "40+", examples: ["Onfido", "Synthesia", "Wysa", "Denodo", "MootUp", "Vertalo", "Wiz.Ai", "Binah.Ai", "Staple.Ai"] },
+  accelerators: { count: "4", examples: ["Accenture Fintech Lab", "Tracxn", "VC Partners", "Angel Investors"] },
+  academia: { count: "3+", examples: ["IIT Madras – Diabetes early detection", "IIT Indore", "IIT Delhi"] },
+  enterprise: { count: "10+", examples: ["AWS", "Hyland", "JIRA", "BDO", "Persistent Technologies"] },
+}
+
+export const CULTURE_METRICS = [
+  { value: "7-8", label: "Ideation Drives / Year", icon: "lightbulb" },
+  { value: "35%", label: "POCs Built Internally", icon: "users" },
+  { value: "1,500+", label: "Employees Engaged", icon: "heart" },
+]
+
+export const FRAMEWORK_STAGES = [
+  {
+    title: "Solution Scan",
+    subtitle: "Ideas Funnel & Prioritization",
+    who: "Region / BU / Accelerators / Academia / IH",
+    question: "What should we experiment with?",
+    activities: ["Ideas & Opportunities", "Market research & sensing", "Problem statements"],
+    color: "#ECAB23",
+  },
+  {
+    title: "Design & Prototyping",
+    subtitle: "Exploration / Prototyping",
+    who: "IH +/- Partners",
+    question: "How do we bring it to life?",
+    activities: ["IH Sandbox environment", "Rapid prototyping", "Partner co-creation"],
+    color: "#4ECDC4",
+  },
+  {
+    title: "Business Validation",
+    subtitle: "Prioritization",
+    who: "Innovation Hub",
+    question: "How should we prioritize?",
+    activities: ["Strategic business impact", "Feasibility assessment", "Competitive edge analysis"],
+    color: "#0E5665",
+  },
+  {
+    title: "Scale for Enterprise",
+    subtitle: "Scaling for Enterprise",
+    who: "SLGS Delivery / Vendor Partner",
+    question: "How do we scale the prototype?",
+    activities: ["Secure business sponsorship", "IT/Delivery handoff", "Knowledge transfer"],
+    color: "#E85D75",
+  },
+]
+
+export const FRAMEWORK_GUARDRAILS = ["Risk & Compliance", "Infosec", "Legal", "PIA"]
+
+export const FRAMEWORK_OUTPUTS = [
+  { label: "Strategic Project", funded: "BU funded" },
+  { label: "Product Marketplace", funded: "SLGS funded" },
+]
+
+export const GUIDING_PRINCIPLES = [
+  { title: "End User Impact", desc: "# of clients, advisors, or employees impacted", icon: "users", color: "#ECAB23" },
+  { title: "Differentiation", desc: "Uniqueness and superiority in functionality", icon: "sparkles", color: "#4ECDC4" },
+  { title: "Feasibility", desc: "Practicability, tech feasibility & alignment to platform principles", icon: "check-circle", color: "#0E5665" },
+  { title: "Branding & PR", desc: "Potential intangible benefits and PR appeal", icon: "megaphone", color: "#A29BFE" },
+  { title: "Legal & Compliance", desc: "Legal and compliance considerations", icon: "shield", color: "#E85D75" },
+  { title: "Brand Alignment", desc: "Alignment to Sun Life brand positioning and purpose", icon: "target", color: "#F8D56A" },
+]
+
+export const FUTURE_ROADMAP = [
+  { title: "Scaling Agentic AI", desc: "Across core workflows — operations, claims, underwriting, and financial processes" },
+  { title: "Reusable AI Patterns", desc: "Moving from POCs to deployable AI patterns across markets" },
+  { title: "Business-Sponsored Innovation", desc: "Markets pull solutions into production — deepening demand-led innovation" },
+  { title: "Ecosystem Expansion", desc: "Earlier startup access, deeper academic collaboration" },
+  { title: "AI Governance & Trust", desc: "Ensuring enterprise-grade deployment with responsible AI practices" },
+]
+
+export const BUSINESS_IMPACT = Object.entries(
+  POCS.reduce<Record<string, number>>((acc, p) => {
+    acc[p.market] = (acc[p.market] || 0) + 1
+    return acc
+  }, {})
+).filter(([k]) => k !== "All").map(([market, value]) => ({
+  label: BUSINESS_IMPACT_LABELS[market]?.label ?? market,
+  value,
+  color: BUSINESS_IMPACT_LABELS[market]?.color ?? "#999",
+}))
+
 export const TREND_BADGES = [
-  { label: "Portfolio scaled from a 2020 team foundation", value: "up", tone: "#0E5665" },
-  { label: "15 active production-scale signals", value: "live", tone: "#ECAB23" },
-  { label: "Gen AI leads the portfolio", value: "16", tone: "#F8D56A" },
+  { label: "Portfolio scaled from 2020 foundation to 51+ POCs", value: "growth", tone: "#0E5665" },
+  { label: `${_activePocs} POCs actively in prototyping or scaling`, value: "active", tone: "#ECAB23" },
+  { label: `Gen AI leads the portfolio with ${_genAi} POCs`, value: "GenAI", tone: "#F8D56A" },
 ]
 
 export const TICKER_ITEMS = [
-  "Live pulse: 12 POCs in production",
-  "Pipeline: 6 prototypes currently shaping up",
-  "Portfolio: 49 active POCs across the innovation pipeline",
-  "Scaling: 3 POCs moving from prototype to production",
+  `${_inProduction} POCs in production across Sun Life markets`,
+  `${_activePocs} POCs active — in prototyping or scaling to production`,
+  `${_totalPocs}+ POCs executed since 2020 across the innovation pipeline`,
+  `40+ startup partners engaged for speed and agility`,
 ]
 
 export const FUN_FACTS = [
-  { text: "16 out of 49 active POCs in our portfolio use Gen AI — making it the single biggest tech stream in SLGS Innovation.", highlight: "Gen AI = #1 stream" },
-  { text: "Audio Analytics for Pinnacle Care went from idea to production in under 12 weeks, now live across US contact centres.", highlight: "12-week sprint" },
-  { text: "Our POCs span 8 markets — Asia, Canada, US, Philippines, Singapore, HK, Indonesia, and SLGS.", highlight: "8 markets reached" },
-  { text: "Asset Tokenization was our first Blockchain POC — validating new business models for the Canada market.", highlight: "Web3 experiment" },
-  { text: "E-KYC with Onfido reduced customer onboarding time by automating identity document verification in Singapore.", highlight: "Faster KYC" },
-  { text: "The SLGS Innovation team started in 2020 — from a small experiment to 49 active POCs tracked in 6 years.", highlight: "6 years of innovation" },
-  { text: "3 POCs are currently scaling from prototype into full production — the next wave of enterprise impact.", highlight: "Scaling up" },
-  { text: "12 POCs are live in production today, delivering real business value across multiple markets.", highlight: "12 live & counting" },
+  { text: `${_genAi} out of ${_totalPocs} POCs executed use Gen AI — the single biggest tech stream in SLGS Innovation.`, highlight: "Gen AI = #1 stream" },
+  { text: "Our team recently supported AET 2026 by showcasing an AI agent platform for business users.", highlight: "AET 2026" },
+  { text: "IH team members support Asia GenAI Spoke, Canada GenAI Spoke, and Corp GenAI Spoke. We work closely with the GenAI COE.", highlight: "GenAI Spokes" },
+  { text: "IH Workload account has been used by 50+ teams for experimentation.", highlight: "50+ teams enabled" },
+  { text: "Our team also supported AMM 2026 showcasing agentic workflows to Sun Life leadership.", highlight: "AMM 2026" },
+  { text: "IH team has conducted agentic AI trainings for 300+ SLGS employees.", highlight: "300+ trained" },
+  { text: "We support the global AI4EA program, AI4SLGS program, and have representation in Sun Life's Responsible AI Committee.", highlight: "Responsible AI" },
+  { text: "We set up Innovation showcase demo booths in Philippines during the APFC Women's Mission.", highlight: "APFC Philippines" },
+  { text: "We have leveraged smart college engineering interns for bringing out-of-the-box thinking to our POCs.", highlight: "Intern talent" },
+  { text: "E-KYC with Onfido reduced customer onboarding time by automating identity document verification in Asia.", highlight: "Faster KYC" },
+  { text: `The SLGS Innovation Hub started in 2020 — from a small experiment to ${_totalPocs}+ POCs executed in 6 years.`, highlight: "6 years of growth" },
+  { text: `${_activePocs} POCs are currently active — in prototyping or scaling into production.`, highlight: `${_activePocs} active now` },
+  { text: `${_inProduction} POCs are live in production today, serving multiple Sun Life markets.`, highlight: `${_inProduction} in production` },
+  { text: "We have an ideation platform for hosting ideation challenges accessible to all Sun Life employees.", highlight: "Ideation platform" },
 ]

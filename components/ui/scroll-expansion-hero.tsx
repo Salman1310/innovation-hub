@@ -87,9 +87,9 @@ function ScrollExpandMedia({
             <div className="absolute inset-0 bg-gradient-to-br from-[#082F3A]/58 via-[#0E3846]/24 to-[#ECAB23]/24" />
             <div className="absolute inset-x-5 bottom-5 grid gap-3 sm:grid-cols-3">
               {[
-                ["49", "Active POCs"],
-                ["12", "In production"],
-                ["16", "Gen AI entries"],
+                ["51+", "Total POCs"],
+                ["12", "In Production"],
+                ["22%", "Adoption Rate"],
               ].map(([value, label]) => (
                 <div key={label} className="rounded-2xl border border-white/15 bg-black/40 p-4 backdrop-blur text-white">
                   <p className="text-3xl font-bold">{value}</p>

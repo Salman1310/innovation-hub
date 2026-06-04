@@ -10,23 +10,24 @@ interface NewsFeedProps {
   activeTab: "live" | "archive"
   onTabChange: (tab: "live" | "archive") => void
   focusedSourceId: string | null
+  referenceTimeMs: number
 }
 
 type Filter = "All" | "AI" | "Insurance"
 
-export function NewsFeed({ articles, newArticleIds, activeTab, onTabChange, focusedSourceId }: NewsFeedProps) {
+const ONE_DAY_MS = 24 * 60 * 60 * 1000
+
+export function NewsFeed({ articles, newArticleIds, activeTab, onTabChange, focusedSourceId, referenceTimeMs }: NewsFeedProps) {
   const [filter, setFilter] = useState<Filter>("All")
-  const cutoff = Date.now() - 24 * 60 * 60 * 1000
+  const cutoff = referenceTimeMs - ONE_DAY_MS
 
   const liveArticles = useMemo(
     () => articles.filter((a) => new Date(a.pubDate).getTime() > cutoff),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [articles]
+    [articles, cutoff]
   )
   const archiveArticles = useMemo(
     () => articles.filter((a) => new Date(a.pubDate).getTime() <= cutoff),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [articles]
+    [articles, cutoff]
   )
 
   const sourceArticles = activeTab === "live" ? liveArticles : archiveArticles
